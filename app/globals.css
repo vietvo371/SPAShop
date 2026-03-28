@@ -16,9 +16,9 @@
   --color-white: #ffffff;
   --color-red: #e53935;
 
-  --font-primary: var(--font-roboto), 'Roboto', sans-serif;
-  --font-heading: var(--font-gotu), 'Gotu', sans-serif;
-  --font-body: var(--font-dongle), 'Dongle', sans-serif;
+  --font-primary: 'Montserrat', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -84,7 +84,7 @@ button {
 /* ===== Section Title ===== */
 .section-title {
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 700;
   font-family: var(--font-heading);
   color: var(--color-primary);
   text-align: center;
@@ -464,8 +464,8 @@ button {
 }
 
 .hero-title {
-  font-size: 4.5rem;
-  font-weight: 400;
+  font-size: 4rem;
+  font-weight: 800;
   font-family: var(--font-heading);
   line-height: 1.1;
   margin-bottom: 20px;
@@ -784,8 +784,8 @@ button {
 }
 
 .service-card-title {
-  font-size: 1.3rem;
-  font-weight: 400;
+  font-size: 1.2rem;
+  font-weight: 700;
   font-family: var(--font-heading);
   margin-bottom: 8px;
   text-transform: uppercase;
@@ -1174,8 +1174,8 @@ button {
 }
 
 .page-hero h1 {
-  font-size: 2.8rem;
-  font-weight: 400;
+  font-size: 2.5rem;
+  font-weight: 800;
   font-family: var(--font-heading);
   margin-bottom: 12px;
 }
