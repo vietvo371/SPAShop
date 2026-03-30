@@ -30,7 +30,7 @@ const products = [
   },
   {
     id: 4,
-    name: "Đai Lưng Hồng Ngoại Xa Chân An",
+    name: "Đai Lưng Hồng Ngoại Xa Tâm An",
     price: "2.800.000₫",
     oldPrice: "3.500.000₫",
     image: "/images/product-fir-mat.png",

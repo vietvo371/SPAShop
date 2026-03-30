@@ -1,8 +1,8 @@
 import ContactForm from "../components/ContactForm";
 
 export const metadata = {
-  title: "Liên Hệ - Chân An Energy Healing",
-  description: "Liên hệ Chân An Energy Healing tại Vũng Tàu. Hotline: +84 824 368 694. Đặt lịch hẹn và tư vấn miễn phí.",
+  title: "Liên Hệ - Tâm An Energy Healing",
+  description: "Liên hệ Tâm An Energy Healing tại Vũng Tàu. Hotline: +84 824 368 694. Đặt lịch hẹn và tư vấn miễn phí.",
 };
 
 export default function ContactPage() {
@@ -75,7 +75,7 @@ export default function ContactPage() {
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
-                  title="Chân An Location"
+                  title="Tâm An Location"
                 />
               </div>
             </div>

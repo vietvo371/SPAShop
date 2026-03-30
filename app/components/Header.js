@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/", label: "Trang chủ" },
-  { href: "/cau-chuyen-chan-an", label: "Về Chân An" },
+  { href: "/cau-chuyen-chan-an", label: "Về Tâm An" },
   { href: "/dich-vu-cham-soc", label: "Dịch vụ chăm sóc" },
   { href: "/san-pham", label: "Sản phẩm công nghệ" },
   { href: "/kien-thuc", label: "Kiến thức" },
@@ -58,16 +58,12 @@ export default function Header() {
           <Link href="/" className="logo">
             <Image
               src="/images/logo.png"
-              alt="Chân An Logo"
-              width={45}
+              alt="Tâm An Logo"
+              width={150}
               height={45}
               className="logo-img"
-              style={{ borderRadius: "50%" }}
+              style={{ objectFit: "contain" }}
             />
-            <div className="logo-text">
-              <span>Chân An</span>
-              <span>Energy Healing</span>
-            </div>
           </Link>
 
           <nav className="nav-desktop">

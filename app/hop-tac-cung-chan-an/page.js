@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Hợp Tác Cùng Chân An - Cơ Hội Kinh Doanh",
-  description: "Cùng Chân An phát triển kinh doanh trong lĩnh vực chăm sóc sức khỏe bằng công nghệ hồng ngoại xa.",
+  title: "Hợp Tác Cùng Tâm An - Cơ Hội Kinh Doanh",
+  description: "Cùng Tâm An phát triển kinh doanh trong lĩnh vực chăm sóc sức khỏe bằng công nghệ hồng ngoại xa.",
 };
 
 const benefits = [
@@ -17,7 +17,7 @@ export default function PartnershipPage() {
     <>
       <section className="page-hero">
         <div className="container">
-          <h1>Hợp Tác Cùng Chân An</h1>
+          <h1>Hợp Tác Cùng Tâm An</h1>
           <p>Cùng nhau kiến tạo sức khỏe — Cùng nhau phát triển</p>
         </div>
       </section>
@@ -26,10 +26,10 @@ export default function PartnershipPage() {
         <div className="container">
           <div style={{ textAlign: "center", marginBottom: "50px" }}>
             <h2 style={{ fontSize: "1.8rem", color: "var(--color-primary)", marginBottom: "16px" }}>
-              Tại Sao Hợp Tác Với Chân An?
+              Tại Sao Hợp Tác Với Tâm An?
             </h2>
             <p style={{ fontSize: "1rem", color: "var(--color-gray)", maxWidth: "700px", margin: "0 auto", lineHeight: 1.7 }}>
-              Chân An Energy Healing mở rộng mạng lưới đối tác trên toàn quốc.
+              Tâm An Energy Healing mở rộng mạng lưới đối tác trên toàn quốc.
               Hãy cùng chúng tôi mang sức khỏe đến mọi gia đình Việt.
             </p>
           </div>

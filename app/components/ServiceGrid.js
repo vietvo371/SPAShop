@@ -28,7 +28,7 @@ export default function ServiceGrid() {
       <div className="container">
         <h2 className="section-title">Dịch Vụ Chăm Sóc</h2>
         <p className="section-subtitle">
-          Trải nghiệm các liệu pháp chăm sóc sức khỏe tiên tiến tại Chân An
+          Trải nghiệm các liệu pháp chăm sóc sức khỏe tiên tiến tại Tâm An
         </p>
         <div className="services-grid">
           {services.map((service) => (

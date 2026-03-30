@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 export const metadata = {
-  title: "Dịch Vụ Chăm Sóc - Chân An Energy Healing",
-  description: "Khám phá các dịch vụ chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Chân An: Điều trị Gout, Soi mạch máu, Đo 12 đường kinh lạc.",
+  title: "Dịch Vụ Chăm Sóc - Tâm An Energy Healing",
+  description: "Khám phá các dịch vụ chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Tâm An: Điều trị Gout, Soi mạch máu, Đo 12 đường kinh lạc.",
 };
 
 const services = [
@@ -35,7 +35,7 @@ export default function ServicesPage() {
       <section className="page-hero">
         <div className="container">
           <h1>Dịch Vụ Chăm Sóc</h1>
-          <p>Các liệu pháp chăm sóc sức khỏe hàng đầu tại Chân An</p>
+          <p>Các liệu pháp chăm sóc sức khỏe hàng đầu tại Tâm An</p>
         </div>
       </section>
 

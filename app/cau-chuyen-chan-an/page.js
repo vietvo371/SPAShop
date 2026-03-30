@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 export const metadata = {
-  title: "Về Chân An - Câu Chuyện Của Chúng Tôi",
-  description: "Tìm hiểu về Chân An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Vũng Tàu.",
+  title: "Về Tâm An - Câu Chuyện Của Chúng Tôi",
+  description: "Tìm hiểu về Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Vũng Tàu.",
 };
 
 export default function AboutPage() {
@@ -10,7 +10,7 @@ export default function AboutPage() {
     <>
       <section className="page-hero">
         <div className="container">
-          <h1>Câu Chuyện Chân An</h1>
+          <h1>Câu Chuyện Tâm An</h1>
           <p>Hành trình mang sức khỏe đến mọi gia đình Việt</p>
         </div>
       </section>
@@ -23,19 +23,19 @@ export default function AboutPage() {
                 Sứ Mệnh Của Chúng Tôi
               </h2>
               <p>
-                Chân An Energy Healing được thành lập với sứ mệnh mang công nghệ chăm sóc sức khỏe tiên tiến đến gần hơn với mọi gia đình Việt Nam. Chúng tôi tin rằng sức khỏe là nền tảng của hạnh phúc, và mỗi người đều xứng đáng được tiếp cận với những phương pháp điều trị tốt nhất.
+                Tâm An Energy Healing được thành lập với sứ mệnh mang công nghệ chăm sóc sức khỏe tiên tiến đến gần hơn với mọi gia đình Việt Nam. Chúng tôi tin rằng sức khỏe là nền tảng của hạnh phúc, và mỗi người đều xứng đáng được tiếp cận với những phương pháp điều trị tốt nhất.
               </p>
               <p>
-                Với đội ngũ chuyên gia giàu kinh nghiệm và trang thiết bị hiện đại, Chân An cam kết cung cấp các dịch vụ chăm sóc sức khỏe chất lượng cao, từ liệu pháp hồng ngoại xa (FIR) đến các phương pháp chẩn đoán tiên tiến.
+                Với đội ngũ chuyên gia giàu kinh nghiệm và trang thiết bị hiện đại, Tâm An cam kết cung cấp các dịch vụ chăm sóc sức khỏe chất lượng cao, từ liệu pháp hồng ngoại xa (FIR) đến các phương pháp chẩn đoán tiên tiến.
               </p>
               <p>
-                Tại Chân An, chúng tôi không chỉ điều trị triệu chứng mà còn hướng đến việc phục hồi sức khỏe toàn diện — <strong>&ldquo;Khỏe Từ Bên Trong&rdquo;</strong>. Đó là triết lý xuyên suốt trong mọi hoạt động của chúng tôi.
+                Tại Tâm An, chúng tôi không chỉ điều trị triệu chứng mà còn hướng đến việc phục hồi sức khỏe toàn diện — <strong>&ldquo;Khỏe Từ Bên Trong&rdquo;</strong>. Đó là triết lý xuyên suốt trong mọi hoạt động của chúng tôi.
               </p>
             </div>
             <div style={{ position: "relative", height: "400px", borderRadius: "var(--radius-md)", overflow: "hidden", boxShadow: "var(--shadow-lg)" }}>
               <Image
                 src="/images/hero-banner.png"
-                alt="Chân An Center"
+                alt="Tâm An Center"
                 fill
                 style={{ objectFit: "cover" }}
               />

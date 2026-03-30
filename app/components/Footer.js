@@ -11,7 +11,7 @@ export default function Footer() {
         allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
-        title="Chân An Location"
+        title="Tâm An Location"
       />
 
       <div className="footer-content">
@@ -21,12 +21,11 @@ export default function Footer() {
             <div className="footer-logo">
               <Image
                 src="/images/logo.png"
-                alt="Chân An Logo"
-                width={50}
+                alt="Tâm An Logo"
+                width={167}
                 height={50}
-                style={{ borderRadius: "50%" }}
+                style={{ objectFit: "contain" }}
               />
-              <div className="footer-logo-text">Chân An Energy Healing</div>
             </div>
             <p className="footer-desc">
               Trung tâm chăm sóc sức khỏe uy tín với công nghệ hồng ngoại xa (FIR) tiên tiến.
@@ -51,7 +50,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="footer-heading">Liên Kết</h3>
-            <Link href="/cau-chuyen-chan-an" className="footer-link">Về Chân An</Link>
+            <Link href="/cau-chuyen-chan-an" className="footer-link">Về Tâm An</Link>
             <Link href="/dich-vu-cham-soc" className="footer-link">Dịch Vụ Chăm Sóc</Link>
             <Link href="/san-pham" className="footer-link">Sản Phẩm Công Nghệ</Link>
             <Link href="/kien-thuc" className="footer-link">Kiến Thức</Link>
@@ -91,7 +90,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        &copy; 2026 Chân An Energy Healing. All rights reserved.
+        &copy; 2026 Tâm An Energy Healing. All rights reserved.
       </div>
     </footer>
   );

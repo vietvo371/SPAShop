@@ -6,7 +6,7 @@ export default function HeroBanner() {
       <div className="hero-bg">
         <Image
           src="/images/hero-banner.png"
-          alt="Chân An Energy Healing Center"
+          alt="Tâm An Energy Healing Center"
           fill
           style={{ objectFit: "cover" }}
           priority
@@ -14,7 +14,7 @@ export default function HeroBanner() {
         />
       </div>
       <div className="hero-content">
-        <div className="hero-badge">CHÂN AN ENERGY HEALING</div>
+        <div className="hero-badge">TÂM AN ENERGY HEALING</div>
         <h1 className="hero-title">
           Khỏe Từ<br />Bên Trong
         </h1>

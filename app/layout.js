@@ -15,13 +15,13 @@ const montserrat = Montserrat({
 export const metadata = {
   metadataBase: new URL("https://www.chanan.vn"),
   title: {
-    default: "Chân An Energy Healing - Khỏe Từ Bên Trong",
-    template: "%s | Chân An Energy Healing",
+    default: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
+    template: "%s | Tâm An Energy Healing",
   },
   description:
-    "Chân An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc. Hotline: +84 824 368 694.",
+    "Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc. Hotline: +84 824 368 694.",
   keywords: [
-    "Chân An",
+    "Tâm An",
     "Energy Healing",
     "hồng ngoại xa",
     "FIR",
@@ -35,9 +35,9 @@ export const metadata = {
     "thảm đá ngọc",
     "trang sức hồng ngoại",
   ],
-  authors: [{ name: "Chân An Energy Healing" }],
-  creator: "Chân An Energy Healing",
-  publisher: "Chân An Energy Healing",
+  authors: [{ name: "Tâm An Energy Healing" }],
+  creator: "Tâm An Energy Healing",
+  publisher: "Tâm An Energy Healing",
   robots: {
     index: true,
     follow: true,
@@ -58,8 +58,8 @@ export const metadata = {
     type: "website",
     locale: "vi_VN",
     url: "https://www.chanan.vn",
-    siteName: "Chân An Energy Healing",
-    title: "Chân An Energy Healing - Khỏe Từ Bên Trong",
+    siteName: "Tâm An Energy Healing",
+    title: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     description:
       "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc.",
     images: [
@@ -67,13 +67,13 @@ export const metadata = {
         url: "/images/hero-banner.png",
         width: 1200,
         height: 630,
-        alt: "Chân An Energy Healing - Trung tâm chăm sóc sức khỏe",
+        alt: "Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Chân An Energy Healing - Khỏe Từ Bên Trong",
+    title: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     description:
       "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu.",
     images: ["/images/hero-banner.png"],

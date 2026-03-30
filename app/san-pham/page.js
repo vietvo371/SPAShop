@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Sản Phẩm Công Nghệ FIR - Chân An Energy Healing",
+  title: "Sản Phẩm Công Nghệ FIR - Tâm An Energy Healing",
   description: "Mua sắm các sản phẩm hồng ngoại xa (FIR) chính hãng: Đèn hồng ngoại, thảm đá ngọc, trang sức năng lượng.",
 };
 
@@ -17,7 +17,7 @@ const products = [
   { id: 1, name: "Đèn Hồng Ngoại Xa FIR Pro Max", price: "3.500.000₫", oldPrice: "4.200.000₫", image: "/images/product-fir-device.png", badge: "-17%", category: "electric" },
   { id: 2, name: "Thảm Đá Ngọc Hồng Ngoại Xa Premium", price: "5.800.000₫", oldPrice: "7.000.000₫", image: "/images/product-fir-mat.png", badge: "-17%", category: "non-electric" },
   { id: 3, name: "Vòng Tay Hồng Ngoại Xa Energy", price: "1.200.000₫", oldPrice: "1.500.000₫", image: "/images/product-fir-jewelry.png", badge: "-20%", category: "jewelry" },
-  { id: 4, name: "Đai Lưng Hồng Ngoại Xa Chân An", price: "2.800.000₫", oldPrice: "3.500.000₫", image: "/images/product-fir-mat.png", badge: "-20%", category: "non-electric" },
+  { id: 4, name: "Đai Lưng Hồng Ngoại Xa Tâm An", price: "2.800.000₫", oldPrice: "3.500.000₫", image: "/images/product-fir-mat.png", badge: "-20%", category: "non-electric" },
   { id: 5, name: "Đèn Hồng Ngoại Mini Gia Đình", price: "1.900.000₫", oldPrice: "2.400.000₫", image: "/images/product-fir-device.png", badge: "-21%", category: "electric" },
   { id: 6, name: "Bộ Trang Sức FIR Cao Cấp", price: "2.500.000₫", oldPrice: "3.200.000₫", image: "/images/product-fir-jewelry.png", badge: "-22%", category: "jewelry" },
   { id: 7, name: "Gối Hồng Ngoại Xa Massage", price: "1.600.000₫", oldPrice: "2.000.000₫", image: "/images/product-fir-mat.png", badge: "-20%", category: "non-electric" },

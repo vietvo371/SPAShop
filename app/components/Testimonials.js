@@ -3,7 +3,7 @@ const testimonials = [
     id: 1,
     name: "Chị Nguyễn Thu Hà",
     role: "Khách hàng tại Vũng Tàu",
-    text: "Sau 2 tuần sử dụng đèn hồng ngoại xa, triệu chứng gout của tôi giảm rõ rệt. Cảm ơn Chân An rất nhiều!",
+    text: "Sau 2 tuần sử dụng đèn hồng ngoại xa, triệu chứng gout của tôi giảm rõ rệt. Cảm ơn Tâm An rất nhiều!",
     initials: "NH",
   },
   {
@@ -28,7 +28,7 @@ export default function Testimonials() {
       <div className="container">
         <h2 className="section-title">Khách Hàng Nói Gì</h2>
         <p className="section-subtitle">
-          Hàng nghìn khách hàng đã tin tưởng và trải nghiệm dịch vụ tại Chân An
+          Hàng nghìn khách hàng đã tin tưởng và trải nghiệm dịch vụ tại Tâm An
         </p>
         <div className="testimonials-grid">
           {testimonials.map((t) => (
