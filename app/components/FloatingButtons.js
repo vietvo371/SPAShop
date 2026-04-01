@@ -4,7 +4,7 @@ export default function FloatingButtons() {
   return (
     <div className="floating-buttons">
       <a
-        href="https://zalo.me/0824368694"
+        href="https://zalo.me/0356308211"
         target="_blank"
         rel="noopener noreferrer"
         className="floating-btn floating-btn-zalo"
@@ -16,7 +16,7 @@ export default function FloatingButtons() {
         </svg>
       </a>
       <a
-        href="tel:+84824368694"
+        href="tel:0356308211"
         className="floating-btn floating-btn-phone"
         aria-label="Gọi điện"
         title="Gọi ngay"

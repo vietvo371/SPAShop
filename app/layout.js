@@ -19,7 +19,7 @@ export const metadata = {
     template: "%s | Tâm An Energy Healing",
   },
   description:
-    "Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc. Hotline: +84 824 368 694.",
+    "Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Quảng Ngãi. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc. Hotline: 035 630 8211.",
   keywords: [
     "Tâm An",
     "Energy Healing",
@@ -27,7 +27,7 @@ export const metadata = {
     "FIR",
     "Far Infrared",
     "sức khỏe",
-    "Vũng Tàu",
+    "Quảng Ngãi",
     "điều trị Gout",
     "soi mạch máu",
     "đường kinh lạc",
@@ -61,7 +61,7 @@ export const metadata = {
     siteName: "Tâm An Energy Healing",
     title: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     description:
-      "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc.",
+      "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Quảng Ngãi. Chuyên điều trị Gout, soi mạch máu, đo 12 đường kinh lạc.",
     images: [
       {
         url: "/images/hero-banner.png",
@@ -75,7 +75,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     description:
-      "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Vũng Tàu.",
+      "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Quảng Ngãi.",
     images: ["/images/hero-banner.png"],
   },
   alternates: {
