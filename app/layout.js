@@ -50,9 +50,9 @@ export const metadata = {
     },
   },
   icons: {
-    icon: "/faci.png",
-    shortcut: "/faci.png",
-    apple: "/faci.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
   openGraph: {
     type: "website",

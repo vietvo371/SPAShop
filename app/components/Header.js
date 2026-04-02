@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/dich-vu-cham-soc", label: "Dịch vụ chăm sóc" },
   { href: "/san-pham", label: "Sản phẩm công nghệ" },
   { href: "/kien-thuc", label: "Kiến thức" },
-  { href: "/hop-tac-cung-chan-an", label: "Hợp tác" },
+  { href: "/hop-tac-cung-chan-an", label: "Tư vấn Liệu Trình" },
   { href: "/lien-he", label: "Liên hệ" },
 ];
 
@@ -57,7 +57,7 @@ export default function Header() {
         <div className="header-main">
           <Link href="/" className="logo">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.png?v=2"
               alt="Tâm An Logo"
               width={150}
               height={45}
