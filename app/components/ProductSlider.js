@@ -6,71 +6,89 @@ import Link from "next/link";
 const products = [
   {
     id: 1,
-    name: "Đèn Hồng Ngoại Xa FIR Pro Max",
-    price: "3.500.000₫",
-    oldPrice: "4.200.000₫",
-    image: "/images/product-fir-device.png",
-    badge: "-17%",
+    name: "Cây Trâm Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "3.800.000đ",
+    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-095708-5542.png",
+    link: "/san-pham/cay-tram-anh-sang-sinh-hoc-hong-ngoai-xa"
   },
   {
     id: 2,
-    name: "Thảm Đá Ngọc Hồng Ngoại Xa Premium",
-    price: "5.800.000₫",
-    oldPrice: "7.000.000₫",
-    image: "/images/product-fir-mat.png",
-    badge: "-17%",
+    name: "Mặt Gốm Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "2.600.000đ",
+    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-100131-7118.png",
+    link: "/san-pham/mat-gom-anh-sang-sinh-hoc-hong-ngoai-xa"
   },
   {
     id: 3,
-    name: "Vòng Tay Hồng Ngoại Xa Energy",
-    price: "1.200.000₫",
-    oldPrice: "1.500.000₫",
-    image: "/images/product-fir-jewelry.png",
-    badge: "-20%",
+    name: "Máy Nén Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "7.800.000đ",
+    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-102941-9735.png",
+    link: "/san-pham/may-nen-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa"
   },
   {
     id: 4,
-    name: "Đai Lưng Hồng Ngoại Xa Tâm An",
-    price: "2.800.000₫",
-    oldPrice: "3.500.000₫",
-    image: "/images/product-fir-mat.png",
-    badge: "-20%",
+    name: "Đai Mắt Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "5.800.000đ",
+    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-102105-4919.png",
+    link: "/san-pham/dai-mat-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa"
   },
   {
     id: 5,
-    name: "Đèn Hồng Ngoại Mini Gia Đình",
-    price: "1.900.000₫",
-    oldPrice: "2.400.000₫",
-    image: "/images/product-fir-device.png",
-    badge: "-21%",
+    name: "Máy Quạt Sưởi Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "23.800.000đ",
+    image: "https://www.chanan.vn/upload/product/z7364053668905aff9f9f272b65c724ce9e7f00cf34068-2991.jpg",
+    link: "/san-pham/may-quat-suoi-hong-ngoai-xa"
   },
   {
     id: 6,
-    name: "Bộ Trang Sức FIR Cao Cấp",
-    price: "2.500.000₫",
-    oldPrice: "3.200.000₫",
-    image: "/images/product-fir-jewelry.png",
-    badge: "-22%",
-  },
+    name: "Thước Massage Ánh Sáng Sinh Học Hồng Ngoại Xa",
+    price: "8.000.000đ",
+    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-101752-7130.png",
+    link: "/san-pham/thuoc-massage-anh-sang-sinh-hoc-hong-ngoai-xa"
+  }
 ];
+
+function NextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow next-arrow`}
+      style={{ ...style }}
+      onClick={onClick}
+    />
+  );
+}
+
+function PrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={`${className} custom-arrow prev-arrow`}
+      style={{ ...style }}
+      onClick={onClick}
+    />
+  );
+}
 
 export default function ProductSlider() {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 600,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 5000,
     pauseOnHover: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
-        breakpoint: 968,
+        breakpoint: 1024,
         settings: { slidesToShow: 2 },
       },
       {
-        breakpoint: 600,
+        breakpoint: 640,
         settings: { slidesToShow: 1 },
       },
     ],
@@ -79,35 +97,26 @@ export default function ProductSlider() {
   return (
     <section className="products-section" id="products">
       <div className="container">
-        <h2 className="section-title">Sản Phẩm Nổi Bật</h2>
+        <h2 className="section-title">Sản Phẩm Công Nghệ</h2>
         <p className="section-subtitle">
-          Công nghệ Hồng ngoại xa (FIR) hàng đầu — Được tin dùng bởi hàng nghìn khách hàng
+          Công nghệ Hồng ngoại xa (FIR) hàng đầu — Khỏe mạnh từ bên trong
         </p>
         <Slider {...settings}>
           {products.map((product) => (
             <div key={product.id}>
               <div className="product-card">
                 <div className="product-image-wrapper">
-                  <Image
+                  <img
                     src={product.image}
                     alt={product.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="(max-width: 600px) 100vw, (max-width: 968px) 50vw, 33vw"
+                    loading="lazy"
                   />
-                  {product.badge && (
-                    <span className="product-badge">{product.badge}</span>
-                  )}
+                  <div className="product-overlay"></div>
                 </div>
                 <div className="product-info">
                   <h3 className="product-name">{product.name}</h3>
-                  <p className="product-price">
-                    {product.price}
-                    {product.oldPrice && (
-                      <span className="product-price-old">{product.oldPrice}</span>
-                    )}
-                  </p>
-                  <Link href="/san-pham" className="product-btn">
+                  <p className="product-price">Giá: {product.price}</p>
+                  <Link href={product.link} className="product-btn">
                     XEM CHI TIẾT
                   </Link>
                 </div>
@@ -119,3 +128,4 @@ export default function ProductSlider() {
     </section>
   );
 }
+
