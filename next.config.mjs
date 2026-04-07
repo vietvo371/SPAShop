@@ -8,6 +8,12 @@ const nextConfig = {
         pathname: "/images/**",
       },
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'www.chanan.vn',
+      },
+    ],
   },
 };
 

@@ -2,6 +2,7 @@
 import Slider from "react-slick";
 import Image from "next/image";
 import Link from "next/link";
+import productsData from "@/data/products.json";
 
 const products = [
   {
@@ -102,27 +103,31 @@ export default function ProductSlider() {
           Công nghệ Hồng ngoại xa (FIR) hàng đầu — Khỏe mạnh từ bên trong
         </p>
         <Slider {...settings}>
-          {products.map((product) => (
-            <div key={product.id}>
-              <div className="product-card">
-                <div className="product-image-wrapper">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    loading="lazy"
+          {productsData.slice(0, 6).map((product, index) => {
+            // Remove thumbnail prefix to get high-res image
+            const hiResImage = product.image_url.replace(/thumbs\/[0-9x]+\//, "");
+            
+            return (
+              <div key={index} className="slider-item" style={{ padding: "0 20px" }}>
+                <Link href={`/san-pham/${product.slug}`} className="slider-product-card">
+                  <div className="slider-image-container">
+                    <Image
+                      src={hiResImage}
+                      alt={product.name}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="product-overlay"></div>
                 </div>
-                <div className="product-info">
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-price">Giá: {product.price}</p>
-                  <Link href={product.link} className="product-btn">
-                    XEM CHI TIẾT
-                  </Link>
+                <div className="slider-overlay-content">
+                  <h3 className="slider-product-name">{product.name}</h3>
+                  <p className="slider-product-price">Giá: {product.price}</p>
+                  <div className="slider-action-btn">XEM CHI TIẾT</div>
                 </div>
-              </div>
+              </Link>
             </div>
-          ))}
+          );
+        })}
         </Slider>
       </div>
     </section>
