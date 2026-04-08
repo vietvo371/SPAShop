@@ -108,7 +108,7 @@ export default function ProductSlider() {
             const hiResImage = product.image_url.replace(/thumbs\/[0-9x]+\//, "");
             
             return (
-              <div key={index} className="slider-item" style={{ padding: "0 20px" }}>
+              <div key={index} className="slider-item">
                 <Link href={`/san-pham/${product.slug}`} className="slider-product-card">
                   <div className="slider-image-container">
                     <Image

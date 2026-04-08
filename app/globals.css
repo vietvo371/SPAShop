@@ -652,13 +652,15 @@ button {
 
 /* ===== Product Slider ===== */
 .products-section {
-  padding: 100px 8%; /* Increased side padding */
+  padding: 100px 8%;
+  /* Increased side padding */
   background: var(--color-white);
   overflow: hidden;
 }
 
 .products-section .container {
-  max-width: 1250px; /* Reduced to bring content more towards center */
+  max-width: 1250px;
+  /* Reduced to bring content more towards center */
   margin: 0 auto;
   position: relative;
 }
@@ -751,21 +753,29 @@ button {
   overflow: hidden;
   text-align: left;
 }
+
 /* --- Product Detail Page --- */
 .detail-hero {
   border-bottom: 1px solid var(--color-beige-dark);
 }
 
 /* ===== Slider Product Card (Specific for Home Slider) ===== */
+.slider-item {
+  padding: 0 15px; /* Spacing between cards */
+  height: 101%; /* Prevent overflow issues */
+}
+
 .slider-product-card {
   position: relative;
   border-radius: 30px;
   overflow: hidden;
-  height: 480px; /* Fixed height for consistency in slider */
+  height: 480px;
+  /* Fixed height for consistency in slider */
   width: 100%;
   display: block;
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Added shadow for separation */
 }
 
 .slider-product-card:hover {
@@ -821,7 +831,7 @@ button {
 }
 
 .slider-action-btn {
-  background: #8b3d2b; 
+  background: #8b3d2b;
   color: white;
   padding: 14px 45px;
   border-radius: 50px;
@@ -846,7 +856,7 @@ button {
   transform: scale(1.05);
 }
 
-.rich-text-content h2, 
+.rich-text-content h2,
 .rich-text-content h3 {
   font-family: var(--font-heading);
   color: var(--color-primary);
@@ -892,6 +902,11 @@ button {
   cursor: pointer;
   position: relative;
   transition: var(--transition);
+  margin-right: 40px;
+}
+
+.tab-btn:hover {
+  color: var(--color-primary);
 }
 
 .tab-btn.active {
@@ -909,14 +924,92 @@ button {
   background: var(--color-primary);
 }
 
+.detail-title {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #000;
+  line-height: 1.2;
+}
+
+.price-current {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #8b3d2b;
+}
+
+.price-old {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.buy-now-btn {
+  flex: 1;
+  padding: 18px;
+  border: none;
+  border-radius: 50px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.buy-now-btn:hover {
+  background: #3a1c5d; /* Darker primary */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.wishlist-btn {
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--color-beige-dark);
+  border-radius: 50%;
+  background: var(--color-beige-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.wishlist-btn:hover {
+  background: #fff;
+  color: var(--color-red);
+}
+
+.specs-highlight {
+  margin-top: 40px;
+  padding: 20px;
+  background: var(--color-beige-light);
+  border-radius: 15px;
+}
+
+.specs-highlight h4 {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.specs-highlight p {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .detail-hero {
     padding: 100px 0 30px !important;
   }
+
   .detail-grid {
     grid-template-columns: 1fr !important;
     gap: 30px !important;
   }
+
   .detail-content h1 {
     font-size: 2rem !important;
   }
@@ -946,7 +1039,8 @@ button {
 }
 
 .product-btn {
-  display: none; /* Removed as per new design which is info-dense and clickable as whole */
+  display: none;
+  /* Removed as per new design which is info-dense and clickable as whole */
 }
 
 /* Custom Slider Arrows */
@@ -1034,8 +1128,10 @@ button {
 .service-info-card {
   background: var(--color-white);
   border-radius: 40px;
-  padding: 40px 35px 50px; /* More bottom padding */
-  height: 550px; /* Increased from 520px to ensure the button fits comfortably */
+  padding: 40px 35px 50px;
+  /* More bottom padding */
+  height: 550px;
+  /* Increased from 520px to ensure the button fits comfortably */
   display: flex;
   flex-direction: column;
   transition: var(--transition-slow);
