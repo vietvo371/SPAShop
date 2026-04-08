@@ -58,61 +58,42 @@ const articles = [
 
 export default function KnowledgePage() {
   return (
-    <>
-      <section className="page-hero">
+    <div className="knowledge-page">
+      <section className="page-hero blog-hero">
         <div className="container">
           <h1>Kiến Thức Sức Khỏe</h1>
           <p>Cập nhật những thông tin hữu ích về sức khỏe và công nghệ FIR</p>
         </div>
       </section>
 
-      <section className="page-content">
+      <section className="page-content blog-section">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "30px" }}>
+          <div className="blog-grid">
             {articles.map((article) => (
-              <article key={article.id} style={{
-                background: "var(--color-white)",
-                borderRadius: "var(--radius-md)",
-                overflow: "hidden",
-                boxShadow: "var(--shadow-sm)",
-                transition: "var(--transition)",
-                display: "flex",
-                flexDirection: "column",
-              }}>
-                <div style={{ position: "relative", height: "200px", flexShrink: 0 }}>
-                  <Image src={article.image} alt={article.title} fill style={{ objectFit: "cover" }} />
-                  <span style={{
-                    position: "absolute",
-                    top: "12px",
-                    left: "12px",
-                    background: "var(--color-primary)",
-                    color: "var(--color-white)",
-                    padding: "4px 12px",
-                    borderRadius: "4px",
-                    fontSize: "0.75rem",
-                    fontWeight: 600,
-                  }}>
+              <article key={article.id} className="blog-card">
+                <div className="blog-card-image">
+                  <Image 
+                    src={article.image} 
+                    alt={article.title} 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: "cover" }} 
+                  />
+                  <span className="blog-category-tag">
                     {article.category}
                   </span>
                 </div>
-                <div style={{ padding: "20px", display: "flex", flexDirection: "column", flex: 1 }}>
-                  <p style={{ fontSize: "0.8rem", color: "var(--color-gray)", marginBottom: "8px" }}>
+                <div className="blog-card-content">
+                  <p className="blog-date">
                     {article.date}
                   </p>
-                  <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-dark)", marginBottom: "10px", lineHeight: 1.4 }}>
+                  <h3 className="blog-title">
                     {article.title}
                   </h3>
-                  <p style={{ fontSize: "0.85rem", color: "var(--color-gray)", lineHeight: 1.6, marginBottom: "16px" }}>
+                  <p className="blog-excerpt">
                     {article.excerpt}
                   </p>
-                  <span style={{
-                    fontSize: "0.8rem",
-                    fontWeight: 700,
-                    color: "var(--color-primary)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.5px",
-                    marginTop: "auto",
-                  }}>
+                  <span className="blog-read-more">
                     Đọc thêm &rarr;
                   </span>
                 </div>
@@ -121,6 +102,6 @@ export default function KnowledgePage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }

@@ -28,15 +28,26 @@ export default async function ProductDetailPage({ params }) {
 
   return (
     <div className="product-detail-page" style={{ background: "#fff", minHeight: "100vh" }}>
-      {/* Banner / Header */}
-      <section className="detail-hero" style={{ padding: "120px 0 40px", background: "var(--color-beige-light)" }}>
+      {/* Adaptive Header / Breadcrumb */}
+      <section className="detail-hero" style={{ padding: "180px 0 30px", background: "var(--color-beige-light)" }}>
         <div className="container">
-          <div style={{ display: "flex", gap: "8px", fontSize: "0.85rem", color: "var(--color-text-muted)", marginBottom: "20px" }}>
-            <Link href="/" style={{ hover: { color: "var(--color-primary)" } }}>Trang chủ</Link>
-            <span>/</span>
-            <Link href="/san-pham">Sản phẩm công nghệ</Link>
-            <span>/</span>
-            <span style={{ color: "var(--color-primary)", fontWeight: 600 }}>{product.name}</span>
+          <div className="breadcrumb-adaptive-wrapper">
+            <nav aria-label="Breadcrumb" className="breadcrumb-nav">
+              <ul className="breadcrumb-list">
+                <li className="breadcrumb-item">
+                  <Link href="/">Trang chủ</Link>
+                </li>
+                <li className="breadcrumb-separator">·</li>
+                <li className="breadcrumb-item">
+                  <Link href="/san-pham">Sản phẩm công nghệ</Link>
+                </li>
+                <li className="breadcrumb-separator">·</li>
+                <li className="breadcrumb-item active">
+                  <span>{product.name}</span>
+                </li>
+              </ul>
+            </nav>
+            <div className="breadcrumb-fade-indicator" />
           </div>
         </div>
       </section>
