@@ -1,0 +1,286 @@
+// Tâm An Energy Healing - Database Schema
+// Next.js Full-Stack với Prisma ORM
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum MessageStatus {
+  NEW
+  READ
+  REPLIED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// ============================================
+// USER MODEL - Người dùng hệ thống
+// ============================================
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          UserRole  @default(CUSTOMER)
+  avatarUrl     String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  appointments      Appointment[]
+  contactMessages    ContactMessage[] @relation("UserReplies")
+  articles           Article[]
+
+  @@map("users")
+}
+
+// ============================================
+// CATEGORY MODEL - Danh mục sản phẩm
+// ============================================
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  orderIndex  Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  products Product[]
+
+  @@map("categories")
+}
+
+// ============================================
+// PRODUCT MODEL - Sản phẩm
+// ============================================
+model Product {
+  id          String    @id @default(cuid())
+  categoryId  String?
+  name        String
+  slug        String    @unique
+  price       String
+  description String?   @db.Text
+  specs       String?   @db.Text
+  imageUrl    String?
+  isFeatured  Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  category       Category?       @relation(fields: [categoryId], references: [id])
+  images         ProductImage[]
+  details        ProductDetail?
+
+  @@map("products")
+}
+
+// ============================================
+// PRODUCT IMAGE MODEL - Hình ảnh sản phẩm
+// ============================================
+model ProductImage {
+  id          String    @id @default(cuid())
+  productId   String
+  url         String
+  isPrimary   Boolean   @default(false)
+  orderIndex  Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// ============================================
+// PRODUCT DETAIL MODEL - Chi tiết sản phẩm (mở rộng)
+// ============================================
+model ProductDetail {
+  id              String   @id @default(cuid())
+  productId       String   @unique
+  galleryImages   Json?    // Mảng URL images
+  fullDescHtml    String?  @db.Text
+  specsDetailed   Json?    // Object { key: value }
+  functionsHtml   String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_details")
+}
+
+// ============================================
+// SERVICE MODEL - Dịch vụ chăm sóc sức khỏe
+// ============================================
+model Service {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?    @db.Text
+  process     String?
+  duration   String?
+  price      String?
+  icon        String?
+  isActive    Boolean   @default(true)
+  orderIndex  Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  appointments Appointment[]
+
+  @@map("services")
+}
+
+// ============================================
+// ARTICLE MODEL - Bài viết kiến thức
+// ============================================
+model Article {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  excerpt       String?       @db.Text
+  contentHtml   String?       @db.Text
+  imageUrl      String?
+  category      String?
+  authorId      String?
+  publishedAt   DateTime?
+  status        ArticleStatus @default(DRAFT)
+  viewCount     Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  author User? @relation(fields: [authorId], references: [id])
+
+  @@map("articles")
+}
+
+// ============================================
+// CONTACT MESSAGE MODEL - Tin nhắn liên hệ
+// ============================================
+model ContactMessage {
+  id          String         @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  message     String         @db.Text
+  status      MessageStatus @default(NEW)
+  repliedById String?
+  repliedAt   DateTime?
+  replyNote   String?        @db.Text
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  repliedBy User? @relation("UserReplies", fields: [repliedById], references: [id])
+
+  @@map("contact_messages")
+}
+
+// ============================================
+// APPOINTMENT MODEL - Lịch hẹn
+// ============================================
+model Appointment {
+  id               String             @id @default(cuid())
+  customerName     String
+  customerPhone    String
+  customerEmail    String?
+  serviceId        String?
+  appointmentDate  DateTime
+  appointmentTime  String?
+  status           AppointmentStatus  @default(PENDING)
+  notes            String?            @db.Text
+  staffId          String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  // Relations
+  service Service? @relation(fields: [serviceId], references: [id])
+  staff   User?    @relation(fields: [staffId], references: [id])
+
+  @@map("appointments")
+}
+
+// ============================================
+// SETTING MODEL - Cấu hình hệ thống
+// ============================================
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String?  @db.Text
+  group     String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// ============================================
+// SLIDER MODEL - Banner/Slider trang chủ
+// ============================================
+model Slider {
+  id          String   @id @default(cuid())
+  title       String?
+  subtitle    String?
+  imageUrl    String
+  linkUrl     String?
+  buttonText  String?
+  orderIndex  Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("sliders")
+}
+
+// ============================================
+// TESTIMONIAL MODEL - Đánh giá khách hàng
+// ============================================
+model Testimonial {
+  id          String   @id @default(cuid())
+  customerName String
+  content     String   @db.Text
+  rating      Int      @default(5)
+  avatarUrl   String?
+  isActive    Boolean  @default(true)
+  orderIndex  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("testimonials")
+}

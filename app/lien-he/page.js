@@ -1,4 +1,4 @@
-import ContactForm from "../components/ContactForm";
+import ContactFormEnhanced from "../components/ContactFormEnhanced";
 
 export const metadata = {
   title: "Liên Hệ - Tâm An Energy Healing",
@@ -26,7 +26,7 @@ export default function ContactPage() {
               <p style={{ fontSize: "0.9rem", color: "var(--color-gray)", marginBottom: "24px" }}>
                 Điền thông tin bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
               </p>
-              <ContactForm />
+              <ContactFormEnhanced />
             </div>
 
             {/* Contact Info */}

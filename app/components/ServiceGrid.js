@@ -5,56 +5,74 @@ import Link from "next/link";
 const services = [
   {
     id: 1,
-    title: "Soi Mạch Máu",
-    desc: "Quan sát trực quan tình trạng tuần hoàn máu, hình thái mạch và lưu thông.",
-    process: "Quan sát qua kính hiển vi công nghệ cao",
+    title: "Khai thông vùng đầu",
+    desc: "Thư giãn chuyên sâu vùng đầu – cổ – vai, giảm đau nhức, giải tỏa căng thẳng, cải thiện giấc ngủ và giúp tinh thần tỉnh táo hơn.",
+    process: "Thăm khám → Làm sạch da đầu → Massage huyệt đạo → Ủ tinh dầu → Thư giãn hoàn tất",
     price: "Đang cập nhật",
-    course: "15 - 20 phút / lần",
+    course: "Combo 5 – 10 buổi, duy trì 2–3 lần/tuần để đạt hiệu quả tối ưu",
     link: "/lien-he"
   },
   {
     id: 2,
-    title: "Đo 12 Đường Kinh Lạc",
-    desc: "Phân tích năng lượng cơ thể, tìm nguyên nhân gốc rễ vấn đề sức khỏe.",
-    process: "Sử dụng máy phân tích năng lượng Đài Loan",
+    title: "Cổ vai gáy",
+    desc: "Liệu trình chuyên sâu giúp giảm đau mỏi, giải phóng căng cơ vùng cổ – vai – gáy, hỗ trợ lưu thông máu và cải thiện giấc ngủ.",
+    process: "Thăm khám → Xông nóng thư giãn → Massage trị liệu → Bấm huyệt → Ủ nóng → Hoàn tất",
     price: "Đang cập nhật",
-    course: "15 phút / lần",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp giảm đau rõ rệt và duy trì hiệu quả lâu dài",
     link: "/lien-he"
   },
   {
     id: 3,
-    title: "Thải Độc Đầu – Mặt",
-    desc: "Nâng cơ trẻ hóa da mặt, giải độc tố vùng da đầu chuyên sâu.",
-    process: "Massage ấn huyệt kết hợp ánh sáng sinh học",
+    title: "Thắt lưng eo",
+    desc: "Giảm đau mỏi vùng thắt lưng – eo, thư giãn cơ sâu, hỗ trợ lưu thông khí huyết và cải thiện vận động linh hoạt.",
+    process: "Thăm khám → Làm nóng vùng lưng → Massage trị liệu → Bấm huyệt → Ủ nóng → Hoàn tất",
     price: "Đang cập nhật",
-    course: "60 phút / liệu trình",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp giảm đau rõ rệt và duy trì hiệu quả lâu dài",
     link: "/lien-he"
   },
   {
     id: 4,
-    title: "Bài Hàn Tử Cung",
-    desc: "Đào thải độc tố, cải thiện tình trạng kinh nguyệt và phục hồi tử cung.",
-    process: "Xông đá muối và chiếu đèn hồng ngoại xa",
+    title: "Hông - Chân",
+    desc: "Giảm đau mỏi hông – chân, tăng tuần hoàn máu, giúp đôi chân nhẹ nhàng và linh hoạt hơn sau ngày dài vận động.",
+    process: "Thăm khám → Ngâm/ủ ấm → Massage trị liệu → Bấm huyệt → Kéo giãn nhẹ → Hoàn tất",
     price: "Đang cập nhật",
-    course: "45 phút / liệu trình",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp giảm mỏi, cải thiện vận động và duy trì hiệu quả lâu dài",
     link: "/lien-he"
   },
   {
     id: 5,
-    title: "Hỗ Trợ Vấn Đề Về Mắt",
-    desc: "Cải thiện mỏi mắt, khô mắt và các vấn đề thị lực.",
-    process: "Đai mắt nhiệt FIR kết hợp thảo dược",
+    title: "Bài độc gan",
+    desc: "Hỗ trợ thanh lọc cơ thể, giải độc gan, giảm nóng trong, mệt mỏi, giúp da sáng và cơ thể nhẹ nhàng hơn.",
+    process: "Thăm khám → Uống thảo dược → Massage vùng gan → Bấm huyệt hỗ trợ đào thải → Ủ ấm → Hoàn tất",
     price: "Đang cập nhật",
-    course: "20 phút / lần",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp cơ thể thanh lọc và duy trì sức khỏe tốt hơn",
     link: "/lien-he"
   },
   {
     id: 6,
-    title: "Chuyên Điều Trị Gout",
-    desc: "Giảm đau, giảm viêm và hỗ trợ đào thải acid uric hiệu quả.",
-    process: "Chiếu đèn hồng ngoại xa kết hợp nén nhiệt",
+    title: "Phục hồi thận khí",
+    desc: "Liệu trình hỗ trợ tăng cường sinh lực, giảm mệt mỏi, cải thiện giấc ngủ và cân bằng cơ thể từ bên trong.",
+    process: "Thăm khám → Làm ấm vùng thắt lưng → Massage – bấm huyệt → Ủ thảo dược → Thư giãn hoàn tất",
     price: "Đang cập nhật",
-    course: "30 - 45 phút / lần",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp cải thiện thể trạng và duy trì năng lượng ổn định",
+    link: "/lien-he"
+  },
+  {
+    id: 7,
+    title: "Dưỡng phế",
+    desc: "Hỗ trợ thanh lọc phổi, giải độc phổi, giảm cảm giác nặng ngực, tăng cường hô hấp và giúp cơ thể dễ chịu, nhẹ nhàng hơn.",
+    process: "Thăm khám → Xông thảo dược → Massage vùng ngực – lưng → Bấm huyệt hỗ trợ hô hấp → Ủ ấm → Hoàn tất",
+    price: "Đang cập nhật",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp cải thiện hô hấp và duy trì sức khỏe lâu dài",
+    link: "/lien-he"
+  },
+  {
+    id: 8,
+    title: "Kiện tuỳ vị",
+    desc: "Hỗ trợ tăng cường tiêu hoá, giảm đầy hơi – khó tiêu, giúp cơ thể hấp thu tốt hơn và nhẹ bụng sau mỗi bữa ăn.",
+    process: "Thăm khám → Làm ấm vùng bụng → Massage tỳ vị → Bấm huyệt hỗ trợ tiêu hoá → Ủ ấm → Hoàn tất",
+    price: "Đang cập nhật",
+    course: "Combo 5 – 10 buổi, 2–3 lần/tuần giúp cải thiện tiêu hoá và duy trì cơ thể khỏe mạnh lâu dài",
     link: "/lien-he"
   }
 ];
