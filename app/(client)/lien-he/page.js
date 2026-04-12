@@ -1,4 +1,4 @@
-import ContactFormEnhanced from "../components/ContactFormEnhanced";
+import ContactFormEnhanced from "../../components/ContactFormEnhanced";
 
 export const metadata = {
   title: "Liên Hệ - Tâm An Energy Healing",

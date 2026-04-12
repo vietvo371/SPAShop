@@ -2,9 +2,6 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import FloatingButtons from "./components/FloatingButtons";
 
 const montserrat = Montserrat({
   subsets: ["latin", "vietnamese"],
@@ -90,10 +87,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="vi">
       <body className={montserrat.className}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <FloatingButtons />
+        {children}
       </body>
     </html>
   );

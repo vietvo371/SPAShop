@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/app/lib/auth";
 import styles from "./admin.module.css";
 
 const adminNavItems = [
@@ -15,7 +17,13 @@ const adminNavItems = [
   },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const user = await getCurrentUser();
+
+  if (!user || user.role !== "ADMIN") {
+    redirect("/admin/login");
+  }
+
   return (
     <div className={styles.adminLayout}>
       {/* Sidebar */}

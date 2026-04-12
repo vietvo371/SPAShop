@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import ProductForm from "../product-form";
 import styles from "../../admin.module.css";
 
 export default function EditProductPage({ params }) {
+  const { id } = use(params);
   const router = useRouter();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ export default function EditProductPage({ params }) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`/api/products/${params.id}`);
+        const response = await fetch(`/api/products/${id}`);
         const result = await response.json();
 
         if (result.success) {
@@ -31,17 +32,17 @@ export default function EditProductPage({ params }) {
       }
     };
 
-    if (params.id) {
+    if (id) {
       fetchProduct();
     }
-  }, [params.id]);
+  }, [id]);
 
   const handleSubmit = async (formData) => {
     setIsSubmitting(true);
     setError("");
 
     try {
-      const response = await fetch(`/api/products/${params.id}`, {
+      const response = await fetch(`/api/products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
