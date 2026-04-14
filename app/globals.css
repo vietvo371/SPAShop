@@ -2621,7 +2621,7 @@ button {
 .partnership-cta-p {
   font-size: 1.05rem;
   color: var(--color-white);
-  opacity: 0.9;
+  opacity: 1;
   margin-bottom: 30px;
   max-width: 500px;
   margin: 0 auto 30px;
