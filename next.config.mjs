@@ -12,6 +12,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'www.chanan.vn',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'chanan.vn',
+        pathname: '/**',
       },
     ],
   },
