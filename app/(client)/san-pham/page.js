@@ -1,6 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import productsData from "@/data/products.json";
+import productDetails from "@/data/product_details.json";
+
+// Helper: lấy ảnh gốc từ gallery (thường là JPG kích thước lớn)
+const getMainImage = (slug) => {
+  const details = productDetails[slug];
+  if (details?.gallery_images?.length > 0) {
+    const jpgImg = details.gallery_images.find(img => img.match(/\.jpe?g$/i));
+    if (jpgImg) return jpgImg;
+    return details.gallery_images[0];
+  }
+  return productsData.find(p => p.slug === slug)?.image_url || "";
+};
 
 export const metadata = {
   title: "Sản phẩm công nghệ - Chân An Hồng Ngoại Xa FIR",
@@ -53,7 +65,7 @@ export default function ProductsPage() {
               <Link href={`/san-pham/${product.slug}`} key={index} className="product-card">
                 <div className="product-image-wrapper">
                   <Image
-                    src={product.image_url}
+                    src={getMainImage(product.slug)}
                     alt={product.name}
                     fill
                     style={{ objectFit: "cover" }}

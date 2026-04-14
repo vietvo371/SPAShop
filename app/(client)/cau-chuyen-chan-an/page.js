@@ -32,7 +32,7 @@ export default function AboutPage() {
             </div>
             <div className="page-image-wrapper">
               <Image
-                src="https://www.chanan.vn/thumbs/500x500x1/upload/news/z690663580039434a639acc214584d0d687750a4a705c6-7743.jpg"
+                src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776184763/chanan/nesb9ha795fnlokag6i2.jpg"
                 alt="Tâm An Center"
                 fill
                 style={{ objectFit: "cover" }}
@@ -68,9 +68,9 @@ export default function AboutPage() {
           
           <div className="certificate-grid">
             {[
-              "https://www.chanan.vn/upload/photo/z61667618707245ac0369ec1d433b4ee41a789733c5baa-43690.jpg",
-              "https://www.chanan.vn/upload/photo/z616676187124936930f67fd0697e5cfbe3ba2220bb20c-44651.jpg",
-              "https://www.chanan.vn/upload/photo/z6166768474878fce489cb85f3c22349e7c5653dcf1768-55020.jpg"
+              "https://res.cloudinary.com/dltbjoii4/image/upload/v1776184765/chanan/tccywrv0gjhua1kklacx.jpg",
+              "https://res.cloudinary.com/dltbjoii4/image/upload/v1776184766/chanan/ujwmakwudqkyqamp3opr.jpg",
+              "https://res.cloudinary.com/dltbjoii4/image/upload/v1776184768/chanan/f3pkbzqsicv3utvp1zeg.jpg"
             ].map((url, index) => (
               <div key={index} className="certificate-card">
                 <div className="certificate-image-wrapper">

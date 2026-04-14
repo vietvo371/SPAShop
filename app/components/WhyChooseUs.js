@@ -16,7 +16,7 @@ export default function WhyChooseUs() {
           <div className="why-choose-image">
             <div className="image-circle">
               <img
-                src="https://www.chanan.vn/thumbs/500x500x1/upload/news/z690663580039434a639acc214584d0d687750a4a705c6-7743.jpg"
+                src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776180743/chanan/iuwrmz65gqmh66lww9vm.jpg"
                 alt="Tại sao chọn Tâm An"
               />
             </div>

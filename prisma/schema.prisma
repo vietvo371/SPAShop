@@ -154,7 +154,11 @@ model Service {
   process     String?
   duration   String?
   price      String?
+  priceMin   Int?       // Giá lẻ (VNĐ)
+  priceMax   Int?       // Giá combo cao nhất
+  comboNote  String?    // Ghi chú combo (VD: "Combo 5 buổi: 1.500.000₫")
   icon        String?
+  imageUrl    String?
   isActive    Boolean   @default(true)
   orderIndex  Int       @default(0)
   createdAt   DateTime  @default(now())

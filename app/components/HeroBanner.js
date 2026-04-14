@@ -5,12 +5,13 @@ export default function HeroBanner() {
     <section className="hero" id="hero">
       <div className="hero-bg">
         <Image
-          src="https://www.chanan.vn/upload/photo/ww-1068.jpg"
+          src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776185156/chanan/sjjnmkvoj6qnwtjoy430.jpg"
           alt="Tâm An Energy Healing Center"
           fill
           style={{ objectFit: "cover" }}
           priority
-          quality={100}
+          sizes="100vw"
+          quality={90}
         />
         <div className="hero-overlay" />
       </div>

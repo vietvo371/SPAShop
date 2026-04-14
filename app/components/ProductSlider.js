@@ -3,51 +3,18 @@ import Slider from "react-slick";
 import Image from "next/image";
 import Link from "next/link";
 import productsData from "@/data/products.json";
+import productDetails from "@/data/product_details.json";
 
-const products = [
-  {
-    id: 1,
-    name: "Cây Trâm Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "3.800.000đ",
-    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-095708-5542.png",
-    link: "/san-pham/cay-tram-anh-sang-sinh-hoc-hong-ngoai-xa"
-  },
-  {
-    id: 2,
-    name: "Mặt Gốm Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "2.600.000đ",
-    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-100131-7118.png",
-    link: "/san-pham/mat-gom-anh-sang-sinh-hoc-hong-ngoai-xa"
-  },
-  {
-    id: 3,
-    name: "Máy Nén Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "7.800.000đ",
-    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-102941-9735.png",
-    link: "/san-pham/may-nen-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa"
-  },
-  {
-    id: 4,
-    name: "Đai Mắt Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "5.800.000đ",
-    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-102105-4919.png",
-    link: "/san-pham/dai-mat-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa"
-  },
-  {
-    id: 5,
-    name: "Máy Quạt Sưởi Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "23.800.000đ",
-    image: "https://www.chanan.vn/upload/product/z7364053668905aff9f9f272b65c724ce9e7f00cf34068-2991.jpg",
-    link: "/san-pham/may-quat-suoi-hong-ngoai-xa"
-  },
-  {
-    id: 6,
-    name: "Thước Massage Ánh Sáng Sinh Học Hồng Ngoại Xa",
-    price: "8.000.000đ",
-    image: "https://www.chanan.vn/upload/product/screenshot-2026-02-22-at-101752-7130.png",
-    link: "/san-pham/thuoc-massage-anh-sang-sinh-hoc-hong-ngoai-xa"
+// Helper: lấy ảnh gốc từ gallery (ưu tiên JPG kích thước lớn)
+const getHiResImage = (slug, fallbackUrl) => {
+  const details = productDetails[slug];
+  if (details?.gallery_images?.length > 0) {
+    const jpgImg = details.gallery_images.find(img => img.match(/\.jpe?g$/i));
+    if (jpgImg) return jpgImg;
+    return details.gallery_images[0];
   }
-];
+  return fallbackUrl || "";
+};
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -104,15 +71,12 @@ export default function ProductSlider() {
         </p>
         <Slider {...settings}>
           {productsData.slice(0, 6).map((product, index) => {
-            // Remove thumbnail prefix to get high-res image
-            const hiResImage = product.image_url.replace(/thumbs\/[0-9x]+\//, "");
-            
             return (
               <div key={index} className="slider-item">
                 <Link href={`/san-pham/${product.slug}`} className="slider-product-card">
                   <div className="slider-image-container">
                     <Image
-                      src={hiResImage}
+                      src={getHiResImage(product.slug, product.image_url)}
                       alt={product.name}
                     fill
                     style={{ objectFit: "cover" }}
@@ -127,7 +91,7 @@ export default function ProductSlider() {
               </Link>
             </div>
           );
-        })}
+          })}
         </Slider>
       </div>
     </section>

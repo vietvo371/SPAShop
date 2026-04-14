@@ -56,12 +56,11 @@ export default function Header() {
 
         <div className="header-main">
           <Link href="/" className="logo">
-            <Image
-              src="/images/logo.png?v=2"
+            <img
+              src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776185343/chanan/lwfwyyscovwb6zunswo9.png"
               alt="Tâm An Logo"
               width={150}
               height={45}
-              className="logo-img"
               style={{ objectFit: "contain" }}
             />
           </Link>

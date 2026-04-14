@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   reactCompiler: true,
   images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 192, 256, 384, 512],
     localPatterns: [
       {
         pathname: "/images/**",
@@ -11,12 +13,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.chanan.vn',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'chanan.vn',
+        hostname: 'res.cloudinary.com',
         pathname: '/**',
       },
     ],

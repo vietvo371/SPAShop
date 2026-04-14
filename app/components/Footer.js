@@ -19,8 +19,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="footer-brand">
             <div className="footer-logo">
-              <Image
-                src="/images/logo.png?v=2"
+              <img
+                src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776185343/chanan/lwfwyyscovwb6zunswo9.png"
                 alt="Tâm An Logo"
                 width={167}
                 height={50}
