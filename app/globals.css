@@ -1,10 +1,10 @@
-@font-face {
+/* @font-face {
   font-family: 'TH Runalto';
   src: url('/fonts/TH-Runalto.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 /* ===== CSS Variables ===== */
 :root {
@@ -35,8 +35,8 @@
   --color-text-main: #333333;
   --color-text-muted: #666666;
 
-  --font-heading: 'TH Runalto', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-heading: var(--font-th-runalto), serif;
+  --font-body: var(--font-th-runalto), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   --font-primary: var(--font-body);
 
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -70,7 +70,10 @@ body {
   background: var(--color-white);
   color: var(--color-dark);
   line-height: 1.6;
+  font-size: 1.15rem;
+  font-weight: 600;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
@@ -1977,6 +1980,7 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
 /* ===== Why Choose Us Section ===== */
 .why-choose-us {
   padding: 100px 5%;
@@ -2000,7 +2004,7 @@ button {
   height: 450px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border: 15px solid white;
 }
 
@@ -2102,7 +2106,7 @@ button {
   font-size: 3rem;
   font-weight: 800;
   margin-bottom: 25px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .banner-desc {
@@ -2135,7 +2139,7 @@ button {
 
 .cta-btn.primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 .cta-btn.outline {
@@ -2167,7 +2171,7 @@ button {
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   transition: var(--transition);
   cursor: pointer;
   border: 1px solid #f5edeb;
@@ -2217,14 +2221,17 @@ button {
     grid-template-columns: 1fr;
     text-align: center;
   }
+
   .image-circle {
     width: 350px;
     height: 350px;
     margin-bottom: 40px;
   }
+
   .why-choose-content {
     padding-right: 0;
   }
+
   .banner-title {
     font-size: 2.2rem;
   }
@@ -2234,15 +2241,18 @@ button {
   .reasons-list {
     grid-template-columns: 1fr;
   }
+
   .banner-actions {
     flex-direction: column;
     gap: 15px;
   }
+
   .faq-question {
     font-size: 1rem;
     padding: 20px;
   }
 }
+
 /* ===== Page Layouts (About / Certificates / etc) ===== */
 /* ===== Page Layouts (About / Certificates / etc) ===== */
 .page-hero {
@@ -2296,7 +2306,8 @@ button {
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow-lg);
-  order: -1; /* Image first on mobile */
+  order: -1;
+  /* Image first on mobile */
 }
 
 .values-section {
@@ -2347,33 +2358,34 @@ button {
   .page-hero {
     padding: 160px 0 60px;
   }
-  
+
   .page-hero h1 {
     font-size: 3rem;
   }
-  
+
   .page-hero p {
     font-size: 1.2rem;
   }
-  
+
   .mission-grid {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
   }
-  
+
   .mission-text {
     padding: 0;
   }
-  
+
   .mission-text h2 {
     font-size: 1.8rem;
   }
-  
+
   .page-image-wrapper {
     height: 450px;
-    order: 0; /* Normal order on tablet/desktop */
+    order: 0;
+    /* Normal order on tablet/desktop */
   }
-  
+
   .values-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2410,7 +2422,7 @@ button {
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
 }
 
@@ -2440,13 +2452,13 @@ button {
   .certificate-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .certificate-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
     border-color: var(--color-primary-light);
   }
-  
+
   .certificate-card:hover .certificate-image-wrapper img {
     transform: scale(1.03);
   }
@@ -2466,7 +2478,7 @@ button {
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
 }
@@ -2539,7 +2551,7 @@ button {
 
 .service-card-footer {
   margin-top: auto;
-  border-top: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   padding-top: 20px;
 }
 
@@ -2577,4 +2589,3 @@ button {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-

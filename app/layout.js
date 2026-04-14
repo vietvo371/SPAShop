@@ -1,12 +1,17 @@
-import { Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const montserrat = Montserrat({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-montserrat",
+
+// const montserrat = Montserrat({
+//   subsets: ["latin", "vietnamese"],
+//   weight: ["300", "400", "500", "600", "700", "800"],
+//   variable: "--font-montserrat",
+const thRunalto = localFont({
+  src: "../public/fonts/TH-Runalto.ttf",
+  variable: "--font-th-runalto",
+  display: "swap",
 });
 
 export const metadata = {
@@ -85,8 +90,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi">
-      <body className={montserrat.className}>
+    <html lang="vi" className={`${thRunalto.variable}`}>
+      <body className={thRunalto.className}>
         {children}
       </body>
     </html>
