@@ -34,7 +34,7 @@ export default function PartnershipPage() {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px", marginBottom: "60px" }}>
+          <div className="partnership-grid">
             {benefits.map((b, i) => (
               <div key={i} style={{
                 background: "var(--color-cream)",
@@ -51,17 +51,11 @@ export default function PartnershipPage() {
             ))}
           </div>
 
-          <div style={{
-            background: "linear-gradient(135deg, var(--color-primary-dark), var(--color-primary))",
-            borderRadius: "var(--radius-lg)",
-            padding: "60px 40px",
-            textAlign: "center",
-            color: "var(--color-white)",
-          }}>
+          <div className="partnership-cta">
             <h2 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "16px" }}>
               Sẵn Sàng Hợp Tác?
             </h2>
-            <p style={{ fontSize: "1.05rem", opacity: 0.9, marginBottom: "30px", maxWidth: "500px", margin: "0 auto 30px" }}>
+            <p className="partnership-cta-p">
               Liên hệ ngay để nhận thông tin chi tiết về chương trình đối tác
             </p>
             <a href="tel:0356308211" style={{

@@ -2589,3 +2589,40 @@ button {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ===== Partnership Page ===== */
+.partnership-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 992px) {
+  .partnership-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .partnership-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.partnership-cta {
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  border-radius: var(--radius-lg);
+  padding: 60px 40px;
+  text-align: center;
+  color: var(--color-white);
+}
+
+.partnership-cta-p {
+  font-size: 1.05rem;
+  color: var(--color-white);
+  opacity: 0.9;
+  margin-bottom: 30px;
+  max-width: 500px;
+  margin: 0 auto 30px;
+}
