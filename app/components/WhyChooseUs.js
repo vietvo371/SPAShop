@@ -3,10 +3,10 @@ import Link from "next/link";
 
 export default function WhyChooseUs() {
   const reasons = [
-    { title: "An toàn - Minh bạch", icon: "🛡️" },
-    { title: "Thiết bị chính hãng", icon: "⚙️" },
-    { title: "Bảo mật riêng tư", icon: "🔒" },
-    { title: "Hài lòng dịch vụ", icon: "⭐" },
+    { title: "An toàn - Minh bạch" },
+    { title: "Thiết bị chính hãng" },
+    { title: "Bảo mật riêng tư" },
+    { title: "Hài lòng dịch vụ" },
   ];
 
   return (
@@ -15,9 +15,9 @@ export default function WhyChooseUs() {
         <div className="why-choose-grid">
           <div className="why-choose-image">
             <div className="image-circle">
-              <img 
-                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800" 
-                alt="Tại sao chọn Tâm An" 
+              <img
+                src="https://www.chanan.vn/thumbs/500x500x1/upload/news/z690663580039434a639acc214584d0d687750a4a705c6-7743.jpg"
+                alt="Tại sao chọn Tâm An"
               />
             </div>
           </div>
@@ -29,7 +29,6 @@ export default function WhyChooseUs() {
             <div className="reasons-list">
               {reasons.map((reason, index) => (
                 <div key={index} className="reason-item">
-                  <span className="reason-icon">{reason.icon}</span>
                   <span className="reason-text">{reason.title}</span>
                 </div>
               ))}
