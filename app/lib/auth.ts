@@ -75,18 +75,33 @@ export async function getCurrentUser() {
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: payload.userId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      avatarUrl: true,
-    },
-  });
+  // Handle fallback admin user
+  if (payload.userId === "dev-1") {
+    return {
+      id: "dev-1",
+      email: payload.email,
+      name: "Admin",
+      role: payload.role,
+      avatarUrl: null,
+    };
+  }
 
-  return user;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        avatarUrl: true,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    return null;
+  }
 }
 
 // Require authentication (throws if not authenticated)

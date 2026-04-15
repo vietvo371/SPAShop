@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import styles from "../admin.module.css";
+import {
+  Plus,
+  Search,
+  Package,
+  Pencil,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+  X
+} from "lucide-react";
+import styles from "../../admin.module.css";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -106,9 +116,7 @@ export default function AdminProductsPage() {
           </p>
         </div>
         <Link href="/admin/products/new" className={`${styles.btn} ${styles.btnPrimary}`}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-          </svg>
+          <Plus size={18} />
           Thêm sản phẩm
         </Link>
       </div>
@@ -118,9 +126,7 @@ export default function AdminProductsPage() {
         <form onSubmit={handleSearch} className={styles.filterForm}>
           <div className={styles.filterRow}>
             <div className={styles.searchWrapper}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className={styles.searchIcon}>
-                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-              </svg>
+              <Search size={18} className={styles.searchIcon} />
               <input
                 type="text"
                 placeholder="Tìm kiếm sản phẩm..."
@@ -162,9 +168,7 @@ export default function AdminProductsPage() {
           </div>
         ) : products.length === 0 ? (
           <div className={styles.emptyState}>
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" opacity="0.3">
-              <path d="M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z"/>
-            </svg>
+            <Package size={48} opacity="0.3" />
             <p>Chưa có sản phẩm nào</p>
             <Link href="/admin/products/new" className={`${styles.btn} ${styles.btnPrimary}`}>
               Thêm sản phẩm đầu tiên
@@ -234,18 +238,14 @@ export default function AdminProductsPage() {
                             className={styles.actionBtn}
                             title="Chỉnh sửa"
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                            </svg>
+                            <Pencil size={16} />
                           </Link>
                           <button
                             onClick={() => setDeleteModal({ open: true, product })}
                             className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
                             title="Xóa"
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
+                            <Trash2 size={16} />
                           </button>
                         </div>
                       </td>
@@ -263,7 +263,7 @@ export default function AdminProductsPage() {
                   disabled={pagination.page === 1}
                   className={styles.paginationBtn}
                 >
-                  ← Trước
+                  <ChevronLeft size={16} /> Trước
                 </button>
 
                 <div className={styles.paginationNumbers}>
@@ -283,7 +283,7 @@ export default function AdminProductsPage() {
                   disabled={pagination.page === pagination.totalPages}
                   className={styles.paginationBtn}
                 >
-                  Sau →
+                  Sau <ChevronRight size={16} />
                 </button>
               </div>
             )}
@@ -301,7 +301,7 @@ export default function AdminProductsPage() {
                 onClick={() => setDeleteModal({ open: false, product: null })}
                 className={styles.modalClose}
               >
-                ×
+                <X size={20} />
               </button>
             </div>
             <div className={styles.modalBody}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import styles from "../admin.module.css";
+import styles from "../../admin.module.css";
 
 const tabs = [
   { id: "general", label: "Thông tin cơ sở" },
@@ -75,13 +75,13 @@ export default function SettingsPage() {
             <p className={styles.settingsDesc}>
               Cập nhật thông tin hiển thị trên website
             </p>
-            
+
             <div className={styles.settingsForm}>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Tên cơ sở</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="businessName"
                     value={formData.businessName}
                     onChange={handleInputChange}
@@ -91,8 +91,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Số điện thoại</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
@@ -102,8 +102,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Email</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -113,8 +113,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Giờ mở cửa</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="openHours"
                     value={formData.openHours}
                     onChange={handleInputChange}
@@ -125,8 +125,8 @@ export default function SettingsPage() {
 
                 <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                   <label className={styles.formLabel}>Địa chỉ</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
@@ -136,8 +136,8 @@ export default function SettingsPage() {
 
                 <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                   <label className={styles.formLabel}>Google Maps Embed URL</label>
-                  <input 
-                    type="url" 
+                  <input
+                    type="url"
                     name="mapsUrl"
                     value={formData.mapsUrl}
                     onChange={handleInputChange}
@@ -147,7 +147,7 @@ export default function SettingsPage() {
               </div>
 
               <div className={styles.formActions}>
-                <button 
+                <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSaveGeneral}
                 >
@@ -165,13 +165,13 @@ export default function SettingsPage() {
             <p className={styles.settingsDesc}>
               Đổi mật khẩu tài khoản quản trị
             </p>
-            
+
             <div className={styles.settingsForm}>
               <div className={styles.formGrid}>
                 <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                   <label className={styles.formLabel}>Mật khẩu hiện tại</label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleInputChange}
@@ -181,8 +181,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Mật khẩu mới</label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleInputChange}
@@ -192,8 +192,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Xác nhận mật khẩu mới</label>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
@@ -203,7 +203,7 @@ export default function SettingsPage() {
               </div>
 
               <div className={styles.formActions}>
-                <button 
+                <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSavePassword}
                 >
@@ -221,13 +221,13 @@ export default function SettingsPage() {
             <p className={styles.settingsDesc}>
               Quản lý mã voucher hiển thị trên website
             </p>
-            
+
             <div className={styles.settingsForm}>
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Mã voucher</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="voucherCode"
                     value={formData.voucherCode}
                     onChange={handleInputChange}
@@ -237,8 +237,8 @@ export default function SettingsPage() {
 
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Giảm giá (%)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     name="voucherDiscount"
                     value={formData.voucherDiscount}
                     onChange={handleInputChange}
@@ -250,8 +250,8 @@ export default function SettingsPage() {
 
                 <div className={`${styles.formGroup} ${styles.fullWidth}`}>
                   <label className={styles.formLabel}>Ngày hết hạn</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     name="voucherExpiry"
                     value={formData.voucherExpiry}
                     onChange={handleInputChange}
@@ -261,7 +261,7 @@ export default function SettingsPage() {
               </div>
 
               <div className={styles.formActions}>
-                <button 
+                <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSaveVoucher}
                 >

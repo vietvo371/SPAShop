@@ -6,15 +6,15 @@ import Link from "next/link";
 import { Cross, ArrowLeft } from "lucide-react";
 import styles from "./login.module.css";
 
+import { toast } from "sonner";
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     try {
@@ -27,13 +27,14 @@ export default function AdminLoginPage() {
       const data = await res.json();
 
       if (res.ok) {
+        toast.success("Đăng nhập thành công! Đang chuyển hướng...");
         router.push("/admin");
         router.refresh();
       } else {
-        setError(data.error || "Đăng nhập thất bại");
+        toast.error(data.error || "Đăng nhập thất bại");
       }
     } catch {
-      setError("Không thể kết nối server");
+      toast.error("Không thể kết nối server");
     } finally {
       setLoading(false);
     }
@@ -49,8 +50,6 @@ export default function AdminLoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className={styles.loginForm}>
-          {error && <div className={styles.error}>{error}</div>}
-
           <div className={styles.formGroup}>
             <label htmlFor="email">Email</label>
             <input

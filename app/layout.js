@@ -88,11 +88,14 @@ export const metadata = {
   },
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="vi" className={`${thRunalto.variable}`}>
       <body className={thRunalto.className}>
         {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

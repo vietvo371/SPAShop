@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
 // GET /api/articles - Lấy danh sách bài viết
@@ -12,8 +13,11 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category");
     const featured = searchParams.get("featured");
 
+    const user = await getCurrentUser();
+    const isAdminMode = user && (user.role === "ADMIN" || user.role === "STAFF");
+
     const where: Record<string, unknown> = {
-      status: "PUBLISHED",
+      ...(isAdminMode ? {} : { status: "PUBLISHED" }),
     };
 
     if (category) {

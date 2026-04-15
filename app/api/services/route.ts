@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
+import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
 // GET /api/services - Lấy danh sách dịch vụ
 // ============================================
 export async function GET(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    const isAdminMode = user && (user.role === "ADMIN" || user.role === "STAFF");
+
     const services = await prisma.service.findMany({
-      where: { isActive: true },
+      where: isAdminMode ? {} : { isActive: true },
       orderBy: { orderIndex: "asc" },
     });
 

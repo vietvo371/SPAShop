@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
-import { productSchema, paginationSchema } from "@/app/lib/validations";
+import { productSchema } from "@/app/lib/validations";
+import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
 // GET /api/products - Lấy danh sách sản phẩm
@@ -16,8 +17,11 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get("sortBy") || "createdAt";
     const sortOrder = searchParams.get("sortOrder") || "desc";
 
+    const user = await getCurrentUser();
+    const isAdminMode = user && (user.role === "ADMIN" || user.role === "STAFF");
+
     const where = {
-      isActive: true,
+      ...(isAdminMode ? {} : { isActive: true }),
       ...(search && {
         OR: [
           { name: { contains: search, mode: "insensitive" as const } },
