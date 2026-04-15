@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "slug": "khai-thong-vung-dau",
+    "name": "Khai thông vùng đầu",
+    "description": "Thải độc chuyên sâu vùng đầu và mặt bằng công nghệ ánh sáng sinh học (FIR), giúp trẻ hóa và giảm căng thẳng thần kinh hiệu quả.",
+    "image": "/images/services/head_face_detox.png",
+    "features": ["Nâng cơ mặt, trẻ hóa da", "Detox da đầu, giảm mụn/nám", "Giảm đau đầu & stress"],
+    "process": [
+      { "title": "Chẩn đoán", "desc": "Soi mạch máu và đo kinh lạc để xác định tình trạng" },
+      { "title": "Thư giãn", "desc": "Massage nhẹ nhàng vùng đầu và mặt" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu ánh sáng hồng ngoại xa lên vùng đầu" },
+      { "title": "Dưỡng da", "desc": "Thoa serum và dưỡng chất phục hồi" }
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "co-vai-gay",
+    "name": "Cổ vai gáy",
+    "description": "Trị liệu chuyên sâu giúp giải tỏa cơn đau mỏi, co cứng cơ vùng cổ vai gáy, cải thiện đáng kể tình trạng tê bì tay chân.",
+    "image": "/images/services/neck_shoulder.png",
+    "features": ["Khơi thông kinh lạc", "Giảm co cứng cơ", "Tăng tuần hoàn máu não"],
+    "process": [
+      { "title": "Đánh giá", "desc": "Xác định vị trí đau và mức độ" },
+      { "title": "Xoa bóp", "desc": "Massage chuyên sâu vùng cổ vai gáy" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu hồng ngoại xa làm nóng sâu" },
+      { "title": "Kéo giãn", "desc": "Bài tập kéo giãn cơ cổ" }
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "that-lung-eo",
+    "name": "Thắt lưng eo",
+    "description": "Hỗ trợ phục hồi và giảm áp lực lên cột sống thắt lưng, vùng eo, giúp cơ thể linh hoạt và giảm thiểu các cơn đau mãn tính.",
+    "image": "/images/services/back_waist.png",
+    "features": ["Hỗ trợ thoát vị đĩa đệm", "Giảm đau lưng mãn tính", "Cải thiện độ linh hoạt"],
+    "process": [
+      { "title": "Kiểm tra", "desc": "Đánh giá tình trạng cột sống" },
+      { "title": "Nhiệt trị liệu", "desc": "Làm nóng vùng lưng bằng FIR" },
+      { "title": "Trị liệu", "desc": "Matrix điện và xoa bóp chuyên sâu" },
+      { "title": "Hướng dẫn", "desc": "Bài tập và tư thế sinh hoạt đúng" }
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "hong-chan",
+    "name": "Hông - Chân",
+    "description": "Đặc trị các vấn đề về thần kinh và khớp từ vùng hông xuống chân, đặc biệt hiệu quả với người bị đau thần kinh tọa.",
+    "image": "/images/services/hip_leg.png",
+    "features": ["Giảm đau thần kinh tọa", "Trị tê bì chân tay", "Tăng sức mạnh khớp hông"],
+    "process": [
+      { "title": "Chẩn đoán", "desc": "Đo kinh lạc và kiểm tra thần kinh" },
+      { "title": "Giãn cơ", "desc": "Kỹ thuật giãn cơ chuyên nghiệp" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu hồng ngoại xa dọc chân" },
+      { "title": "Phục hồi", "desc": "Bài tập phục hồi chức năng" }
+    ]
+  },
+  {
+    "id": 5,
+    "slug": "bai-doc-gan",
+    "name": "Bài độc gan",
+    "description": "Liệu pháp thanh lọc gan tự nhiên, giúp đào thải độc tố tích tụ, hỗ trợ cải thiện các bệnh lý về gan và hệ tiêu hóa.",
+    "image": "/images/services/liver_detox.png",
+    "features": ["Thải độc tố tích tụ", "Giảm mỡ máu", "Cải thiện tiêu hóa"],
+    "process": [
+      { "title": "Đo kinh lạc", "desc": "Xác định tình trạng gan qua 12 đường kinh" },
+      { "title": "Xoa bóp", "desc": "Massage vùng gan và bụng" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu hồng ngoại vùng gan" },
+      { "title": "Dinh dưỡng", "desc": "Tư vấn chế độ ăn thanh lọc" }
+    ]
+  },
+  {
+    "id": 6,
+    "slug": "phuc-hoi-than-khi",
+    "name": "Phục hồi thận khí",
+    "description": "Tăng cường chức năng thận, cải thiện tình trạng tiểu đêm, mệt mỏi và phục hồi sinh lực từ gốc bằng liệu pháp không xâm lấn.",
+    "image": "/images/services/kidney_recovery.png",
+    "features": ["Giảm tiểu đêm", "Tăng chất lượng giấc ngủ", "Phục hồi sinh lực"],
+    "process": [
+      { "title": "Soi mạch", "desc": "Chẩn đoán tình trạng thận qua mạch" },
+      { "title": "Xoa bóp", "desc": "Massage vùng thận và lưng dưới" },
+      { "title": "Bổ sung FIR", "desc": "Trị liệu hồng ngoại xa vùng thận" },
+      { "title": "Đánh giá", "desc": "Theo dõi kết quả sau liệu trình" }
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "duong-phe",
+    "name": "Dưỡng phế",
+    "description": "Chăm sóc và tăng cường sức khỏe hệ hô hấp, giúp giảm dị ứng thời tiết và tăng khả năng kháng khuẩn tự nhiên cho phổi.",
+    "image": "/images/services/lung_care.png",
+    "features": ["Tăng sức đề kháng", "Giảm dị ứng thời tiết", "Phục hồi hệ hô hấp"],
+    "process": [
+      { "title": "Đo kinh lạc", "desc": "Xác định tình trạng phổi" },
+      { "title": "Xoa bóp", "desc": "Massage vùng ngực và lưng trên" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu hồng ngoại vùng phổi" },
+      { "title": "Tập thở", "desc": "Hướng dẫn bài tập thở" }
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "kien-tu-vi",
+    "name": "Kiện tỳ vị",
+    "description": "Cân bằng hệ tiêu hóa, giúp cơ thể hấp thụ dưỡng chất tốt hơn và tăng cường hệ miễn dịch tổng quát từ tỳ vị.",
+    "image": "/images/services/spleen_stomach.png",
+    "features": ["Cải thiện đường ruột", "Giúp ăn ngon ngủ tốt", "Tăng cường miễn dịch"],
+    "process": [
+      { "title": "Chẩn đoán", "desc": "Đo kinh lạc xác định tỳ vị" },
+      { "title": "Xoa bóp", "desc": "Massage bụng chuyên sâu" },
+      { "title": "Trị liệu FIR", "desc": "Chiếu hồng ngoại vùng bụng" },
+      { "title": "Dinh dưỡng", "desc": "Tư vấn thực đơn phù hợp" }
+    ]
+  }
+]

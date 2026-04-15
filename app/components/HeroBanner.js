@@ -5,7 +5,7 @@ export default function HeroBanner() {
     <section className="hero" id="hero">
       <div className="hero-bg">
         <Image
-          src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776185156/chanan/sjjnmkvoj6qnwtjoy430.jpg"
+          src="https://res.cloudinary.com/dltbjoii4/image/upload/q_auto/f_auto/v1776259605/ugl6vke7tgmc8cxitazx.png"
           alt="Tâm An Energy Healing Center"
           fill
           style={{ objectFit: "cover" }}

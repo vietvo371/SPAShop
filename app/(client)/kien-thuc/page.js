@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
   title: "Kiến Thức Sức Khỏe - Tâm An Energy Healing",
@@ -93,9 +94,9 @@ export default function KnowledgePage() {
                   <p className="blog-excerpt">
                     {article.excerpt}
                   </p>
-                  <span className="blog-read-more">
+                  <Link href={`/kien-thuc/${article.slug}`} className="blog-read-more">
                     Đọc thêm &rarr;
-                  </span>
+                  </Link>
                 </div>
               </article>
             ))}

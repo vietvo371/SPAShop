@@ -1,23 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/app/lib/prisma";
-import { removeAuthCookie } from "@/app/lib/auth";
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-// ============================================
-// POST /api/auth/logout - Đăng xuất
-// ============================================
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    await removeAuthCookie();
+    const cookieStore = await cookies();
+    
+    // Xóa cookie auth token
+    cookieStore.delete("chanan_auth_token");
 
-    return NextResponse.json({
-      success: true,
-      message: "Đăng xuất thành công",
-    });
+    // Redirect về trang login
+    return NextResponse.redirect(new URL("/admin/login", process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"));
   } catch (error) {
     console.error("Logout error:", error);
-    return NextResponse.json(
-      { success: false, error: "Lỗi khi đăng xuất" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Lỗi server" }, { status: 500 });
   }
 }

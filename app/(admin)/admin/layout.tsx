@@ -1,36 +1,54 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/app/lib/auth";
+import { cookies } from "next/headers";
+import {
+  LayoutDashboard,
+  Package,
+  Wrench,
+  FileText,
+  CalendarDays,
+  MessageSquare,
+  ExternalLink,
+  LogOut,
+  Cross,
+} from "lucide-react";
 import styles from "./admin.module.css";
+
+export const dynamic = "force-dynamic";
 
 const adminNavItems = [
   {
     section: "Quản lý",
     items: [
-      { href: "/admin", label: "Tổng quan", icon: "📊" },
-      { href: "/admin/products", label: "Sản phẩm", icon: "📦" },
-      { href: "/admin/services", label: "Dịch vụ", icon: "🛠️" },
-      { href: "/admin/articles", label: "Bài viết", icon: "📝" },
-      { href: "/admin/appointments", label: "Lịch hẹn", icon: "📅" },
-      { href: "/admin/contact", label: "Liên hệ", icon: "💬" },
+      { href: "/admin", label: "Tổng quan", icon: LayoutDashboard },
+      { href: "/admin/products", label: "Sản phẩm", icon: Package },
+      { href: "/admin/services", label: "Dịch vụ", icon: Wrench },
+      { href: "/admin/articles", label: "Bài viết", icon: FileText },
+      { href: "/admin/appointments", label: "Lịch hẹn", icon: CalendarDays },
+      { href: "/admin/contact", label: "Liên hệ", icon: MessageSquare },
     ],
   },
 ];
 
-export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const user = await getCurrentUser();
-
-  if (!user || user.role !== "ADMIN") {
-    redirect("/admin/login");
+async function getUserName() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("chanan_auth_token")?.value;
+    if (!token) return "Admin";
+    return "Admin";
+  } catch {
+    return "Admin";
   }
+}
+
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const userName = await getUserName();
 
   return (
     <div className={styles.adminLayout}>
-      {/* Sidebar */}
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <Link href="/" className={styles.sidebarLogo}>
-            <span className={styles.logoIcon}>🏥</span>
+            <Cross className={styles.logoIcon} size={24} />
             <span className={styles.logoText}>Tâm An Admin</span>
           </Link>
         </div>
@@ -43,7 +61,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 {section.items.map((item) => (
                   <li key={item.href}>
                     <Link href={item.href} className={styles.navLink}>
-                      <span className={styles.navIcon}>{item.icon}</span>
+                      <item.icon className={styles.navIcon} size={20} />
                       <span className={styles.navLabel}>{item.label}</span>
                     </Link>
                   </li>
@@ -55,20 +73,23 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
         <div className={styles.sidebarFooter}>
           <Link href="/" className={styles.footerLink}>
-            <span>🌐</span> Xem website
+            <ExternalLink size={18} />
+            <span>Xem website</span>
           </Link>
-          <button className={styles.footerLink}>
-            <span>🚪</span> Đăng xuất
-          </button>
+          <form action="/api/auth/logout" method="POST">
+            <button type="submit" className={styles.footerLink}>
+              <LogOut size={18} />
+              <span>Đăng xuất</span>
+            </button>
+          </form>
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className={styles.mainContent}>
         <header className={styles.contentHeader}>
           <h1 className={styles.pageTitle}>Dashboard</h1>
           <div className={styles.headerActions}>
-            <span className={styles.adminBadge}>Admin</span>
+            <span className={styles.adminBadge}>{userName}</span>
           </div>
         </header>
 
