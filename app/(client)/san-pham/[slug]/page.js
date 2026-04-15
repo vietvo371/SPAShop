@@ -1,30 +1,50 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import products from "@/data/products.json";
-import productDetails from "@/data/product_details.json";
 import ProductDetailClient from "@/app/components/ProductDetailClient";
 
+// Fetch data from internal API for SSR/SSG
+async function getProductData(slug) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products/slug/${slug}`, {
+    cache: 'no-store'
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+async function getRelatedProducts(excludeSlug) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products?limit=5`, {
+    cache: 'no-store'
+  });
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.data.filter(p => p.slug !== excludeSlug);
+}
+
 export async function generateStaticParams() {
-  return products.map((product) => ({
-    slug: product.slug,
-  }));
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products?limit=1000`);
+    const data = await res.json();
+    if (!data.success) return [];
+    return data.data.map((product) => ({
+      slug: product.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
-  const details = productDetails[slug];
+  const productData = await getProductData(slug);
 
-  if (!product) {
+  if (!productData || !productData.success) {
     notFound();
   }
 
-  // Related products (random 5)
-  const relatedProducts = products
-    .filter((p) => p.slug !== slug)
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 5);
+  const product = productData.data;
+  const relatedProducts = await getRelatedProducts(slug);
 
   return (
     <div className="product-detail-page" style={{ background: "#fff", minHeight: "100vh" }}>
@@ -52,10 +72,10 @@ export default async function ProductDetailPage({ params }) {
         </div>
       </section>
 
-      <ProductDetailClient 
-        product={product} 
-        details={details} 
-        relatedProducts={relatedProducts} 
+      <ProductDetailClient
+        product={product}
+        details={product.details}
+        relatedProducts={relatedProducts}
       />
     </div>
   );

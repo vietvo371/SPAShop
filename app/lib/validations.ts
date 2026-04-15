@@ -28,6 +28,12 @@ export const productSchema = z.object({
   categoryId: z.string().optional(),
   isFeatured: z.boolean().optional(),
   isActive: z.boolean().optional(),
+  images: z.array(z.object({
+    id: z.string().optional(),
+    url: z.string().url("Đường dẫn hình ảnh không hợp lệ"),
+    isPrimary: z.boolean().default(false),
+    orderIndex: z.number().default(0),
+  })).optional(),
 });
 
 export const productDetailSchema = z.object({

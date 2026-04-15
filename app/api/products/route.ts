@@ -86,19 +86,42 @@ export async function POST(request: NextRequest) {
     const validatedData = productSchema.parse(body);
 
     // Check if slug already exists
-    const existing = await prisma.product.findUnique({
+    const slugExists = await prisma.product.findUnique({
       where: { slug: validatedData.slug },
     });
 
-    if (existing) {
+    if (slugExists) {
       return NextResponse.json(
         { success: false, error: "Slug đã tồn tại" },
         { status: 400 }
       );
     }
 
+    // Check if name already exists
+    const nameExists = await prisma.product.findFirst({
+      where: { name: validatedData.name },
+    });
+
+    if (nameExists) {
+      return NextResponse.json(
+        { success: false, error: "Tên sản phẩm đã tồn tại" },
+        { status: 400 }
+      );
+    }
+
+    const { images, ...productData } = validatedData;
+
     const product = await prisma.product.create({
-      data: validatedData,
+      data: {
+        ...productData,
+        images: images ? {
+          create: images.map(img => ({
+            url: img.url,
+            isPrimary: img.isPrimary,
+            orderIndex: img.orderIndex
+          }))
+        } : undefined
+      },
       include: {
         category: true,
         images: true,

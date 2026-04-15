@@ -1,32 +1,51 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import productsData from "@/data/products.json";
-import productDetails from "@/data/product_details.json";
-
-// Helper: lấy ảnh gốc từ gallery (thường là JPG kích thước lớn)
-const getMainImage = (slug) => {
-  const details = productDetails[slug];
-  if (details?.gallery_images?.length > 0) {
-    const jpgImg = details.gallery_images.find(img => img.match(/\.jpe?g$/i));
-    if (jpgImg) return jpgImg;
-    return details.gallery_images[0];
-  }
-  return productsData.find(p => p.slug === slug)?.image_url || "";
-};
-
-export const metadata = {
-  title: "Sản phẩm công nghệ - Chân An Hồng Ngoại Xa FIR",
-  description: "Khám phá danh mục sản phẩm công nghệ hồng ngoại xa (FIR) ứng dụng nano bán dẫn từ Đài Loan chính hãng tại Chân An.",
-};
-
-const categories = [
-  { id: "all", name: "Tất cả sản phẩm" },
-  { id: "electric", name: "Máy hồng ngoại xa có điện" },
-  { id: "non-electric", name: "Thiết bị FIR không dùng điện" },
-  { id: "jewelry", name: "Trang sức hồng ngoại xa" },
-];
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([
+    { id: "all", name: "Tất cả sản phẩm" },
+  ]);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Fetch categories
+        const catRes = await fetch("/api/categories");
+        const catData = await catRes.json();
+        if (catData.success) {
+          setCategories([
+            { id: "all", name: "Tất cả sản phẩm" },
+            ...catData.data.map(c => ({ id: c.id, name: c.name }))
+          ]);
+        }
+
+        // Fetch products
+        const url = activeCategory === "all"
+          ? "/api/products?limit=100"
+          : `/api/products?categoryId=${activeCategory}&limit=100`;
+
+        const prodRes = await fetch(url);
+        const prodData = await prodRes.json();
+        if (prodData.success) {
+          setProducts(prodData.data);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [activeCategory]);
+
   return (
     <>
       <section className="page-hero" style={{ padding: "120px 0 60px", background: "var(--color-beige-light)" }}>
@@ -43,45 +62,53 @@ export default function ProductsPage() {
           {/* Category filters */}
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "48px", justifyContent: "center" }}>
             {categories.map((cat) => (
-              <button key={cat.id} style={{
-                padding: "10px 24px",
-                borderRadius: "50px",
-                border: "1px solid var(--color-beige-dark)",
-                background: cat.id === "all" ? "var(--color-primary)" : "var(--color-beige-light)",
-                color: cat.id === "all" ? "var(--color-white)" : "var(--color-text-main)",
-                fontSize: "0.85rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "var(--transition)",
-              }}>
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                style={{
+                  padding: "10px 24px",
+                  borderRadius: "50px",
+                  border: "1px solid var(--color-beige-dark)",
+                  background: cat.id === activeCategory ? "var(--color-primary)" : "var(--color-beige-light)",
+                  color: cat.id === activeCategory ? "var(--color-white)" : "var(--color-text-main)",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "var(--transition)",
+                }}
+              >
                 {cat.name}
               </button>
             ))}
           </div>
 
-          {/* Products grid */}
-          <div className="products-page-grid">
-            {productsData.map((product, index) => (
-              <Link href={`/san-pham/${product.slug}`} key={index} className="product-card">
-                <div className="product-image-wrapper">
-                  <Image
-                    src={getMainImage(product.slug)}
-                    alt={product.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="(max-width: 480px) 100vw, (max-width: 968px) 50vw, 33vw"
-                  />
-                  {/* Badge example - could be logic-based later */}
-                  {index < 3 && <span className="product-badge">Bán chạy</span>}
-                </div>
-                <div className="product-info">
-                  <h3 className="product-name">{product.name}</h3>
-                  <p className="product-desc">{product.description}</p>
-                  <p className="product-price">{product.price}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "40px" }}>Đang tải sản phẩm...</div>
+          ) : products.length > 0 ? (
+            <div className="products-page-grid">
+              {products.map((product, index) => (
+                <Link href={`/san-pham/${product.slug}`} key={product.id} className="product-card">
+                  <div className="product-image-wrapper">
+                    <Image
+                      src={product.primaryImage || product.imageUrl}
+                      alt={product.name}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="(max-width: 480px) 100vw, (max-width: 968px) 50vw, 33vw"
+                    />
+                    {product.isFeatured && <span className="product-badge">Bán chạy</span>}
+                  </div>
+                  <div className="product-info">
+                    <h3 className="product-name">{product.name}</h3>
+                    <p className="product-desc">{product.description}</p>
+                    <p className="product-price">{product.price}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: "40px" }}>Không có sản phẩm nào.</div>
+          )}
         </div>
       </section>
     </>

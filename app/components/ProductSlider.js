@@ -1,20 +1,8 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
 import Link from "next/link";
-import productsData from "@/data/products.json";
-import productDetails from "@/data/product_details.json";
-
-// Helper: lấy ảnh gốc từ gallery (ưu tiên JPG kích thước lớn)
-const getHiResImage = (slug, fallbackUrl) => {
-  const details = productDetails[slug];
-  if (details?.gallery_images?.length > 0) {
-    const jpgImg = details.gallery_images.find(img => img.match(/\.jpe?g$/i));
-    if (jpgImg) return jpgImg;
-    return details.gallery_images[0];
-  }
-  return fallbackUrl || "";
-};
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -39,6 +27,26 @@ function PrevArrow(props) {
 }
 
 export default function ProductSlider() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products?limit=6&isFeatured=true");
+        const data = await res.json();
+        if (data.success) {
+          setProducts(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching slider products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -69,32 +77,36 @@ export default function ProductSlider() {
         <p className="section-subtitle">
           Công nghệ Hồng ngoại xa (FIR) hàng đầu — Khỏe mạnh từ bên trong
         </p>
-        <Slider {...settings}>
-          {productsData.slice(0, 6).map((product, index) => {
-            return (
-              <div key={index} className="slider-item">
+
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "40px" }}>Đang tải sản phẩm...</div>
+        ) : products.length > 0 ? (
+          <Slider {...settings}>
+            {products.map((product) => (
+              <div key={product.id} className="slider-item">
                 <Link href={`/san-pham/${product.slug}`} className="slider-product-card">
                   <div className="slider-image-container">
                     <Image
-                      src={getHiResImage(product.slug, product.image_url)}
+                      src={product.primaryImage || product.imageUrl}
                       alt={product.name}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-                <div className="slider-overlay-content">
-                  <h3 className="slider-product-name">{product.name}</h3>
-                  <p className="slider-product-price">Giá: {product.price}</p>
-                  <div className="slider-action-btn">XEM CHI TIẾT</div>
-                </div>
-              </Link>
-            </div>
-          );
-          })}
-        </Slider>
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                  </div>
+                  <div className="slider-overlay-content">
+                    <h3 className="slider-product-name">{product.name}</h3>
+                    <p className="slider-product-price">Giá: {product.price}</p>
+                    <div className="slider-action-btn">XEM CHI TIẾT</div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </Slider>
+        ) : (
+          <div style={{ textAlign: "center", padding: "40px" }}>Không có sản phẩm nổi bật nào.</div>
+        )}
       </div>
     </section>
   );
 }
-

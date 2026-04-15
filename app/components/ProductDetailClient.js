@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Slider from "react-slick";
-import productDetails from "@/data/product_details.json";
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -27,30 +26,17 @@ function PrevArrow(props) {
   );
 }
 
-// Helper: lấy ảnh gốc từ gallery (ưu tiên JPG kích thước lớn)
-const getHiResImage = (slug, fallbackUrl) => {
-  const details = productDetails[slug];
-  if (details?.gallery_images?.length > 0) {
-    const jpgImg = details.gallery_images.find(img => img.match(/\.jpe?g$/i));
-    if (jpgImg) return jpgImg;
-    return details.gallery_images[0];
-  }
-  return fallbackUrl || "";
-};
-
 export default function ProductDetailClient({ product, details, relatedProducts }) {
-  // Sắp xếp gallery theo kích thước giảm dần để lấy ảnh lớn nhất làm main
-  const gallery = (details?.gallery_images || []).sort((a, b) => {
-    const aIsJpg = a.match(/\.jpe?g$/i);
-    const bIsJpg = b.match(/\.jpe?g$/i);
-    if (aIsJpg && !bIsJpg) return -1;
-    if (!aIsJpg && bIsJpg) return 1;
-    return 0;
-  });
-  
-  // Main image = ảnh JPG đầu tiên trong gallery (thường là ảnh gốc kích thước lớn)
-  const mainProductImage = gallery.find(img => img.match(/\.jpe?g$/i)) || gallery[0] || getHiResImage(product.slug, product.image_url);
-  
+  // Use images from relation or galleryImages from details
+  const galleryUrls = product.images?.length > 0
+    ? product.images.map(img => img.url)
+    : (details?.galleryImages || []);
+
+  // Priority for main image
+  const mainProductImage = product.images?.find(img => img.isPrimary)?.url
+    || galleryUrls[0]
+    || product.imageUrl;
+
   const [activeImage, setActiveImage] = useState(mainProductImage);
   const [activeTab, setActiveTab] = useState("details");
 
@@ -90,22 +76,22 @@ export default function ProductDetailClient({ product, details, relatedProducts 
                   priority
                 />
               </div>
-              {gallery.length > 0 && (
+              {galleryUrls.length > 0 && (
                 <div className="thumb-container">
                   <div className="thumb-scroll">
-                    {gallery.map((img, i) => (
-                      <div 
-                        key={i} 
+                    {galleryUrls.map((img, i) => (
+                      <div
+                        key={i}
                         onMouseEnter={() => setActiveImage(img)}
                         className={`thumb-item ${activeImage === img ? "active" : ""}`}
-                        style={{ 
+                        style={{
                           flex: "0 0 80px",
-                          position: "relative", 
-                          aspectRatio: "1/1", 
-                          borderRadius: "10px", 
-                          overflow: "hidden", 
-                          cursor: "pointer", 
-                          border: activeImage === img ? "2px solid var(--color-primary)" : "1px solid var(--color-beige-dark)" 
+                          position: "relative",
+                          aspectRatio: "1/1",
+                          borderRadius: "10px",
+                          overflow: "hidden",
+                          cursor: "pointer",
+                          border: activeImage === img ? "2px solid var(--color-primary)" : "1px solid var(--color-beige-dark)"
                         }}
                       >
                         <Image src={img} alt={`${product.name} ${i}`} fill style={{ objectFit: "cover" }} />
@@ -113,7 +99,8 @@ export default function ProductDetailClient({ product, details, relatedProducts 
                     ))}
                   </div>
                 </div>
-              )}
+              )
+              }
             </div>
 
             {/* Right: Info */}
@@ -123,7 +110,7 @@ export default function ProductDetailClient({ product, details, relatedProducts 
                 <span className="price-current">{product.price}</span>
                 {product.oldPrice && <span className="price-old">{product.oldPrice}</span>}
               </div>
-              
+
               <div className="description-preview" style={{ padding: "25px 0", borderTop: "1px solid var(--color-beige-dark)", borderBottom: "1px solid var(--color-beige-dark)", marginBottom: "30px" }}>
                 <p style={{ color: "var(--color-text-muted)", lineHeight: "1.8", margin: 0 }}>
                   {product.description}
@@ -166,51 +153,51 @@ export default function ProductDetailClient({ product, details, relatedProducts 
         <div className="container">
           <div className="tabs-container">
             <div className="tabs-header" style={{ display: "flex", gap: "40px", borderBottom: "1px solid var(--color-beige-dark)" }}>
-              <button 
+              <button
                 onClick={() => setActiveTab("details")}
                 className={`tab-btn ${activeTab === "details" ? "active" : ""}`}
               >
                 THÔNG TIN SẢN PHẨM
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab("specs")}
                 className={`tab-btn ${activeTab === "specs" ? "active" : ""}`}
               >
                 THÔNG SỐ KỸ THUẬT
               </button>
-              <button 
+              <button
                 onClick={() => setActiveTab("functions")}
                 className={`tab-btn ${activeTab === "functions" ? "active" : ""}`}
               >
                 CHỨC NĂNG
               </button>
             </div>
-            
+
             <div className="tab-content" style={{ padding: "40px 0" }}>
               {activeTab === "details" && (
-                <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: details?.full_description || "<p>Nội dung đang được cập nhật...</p>" }} />
+                <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: details?.fullDescHtml || "<p>Nội dung đang được cập nhật...</p>" }} />
               )}
               {activeTab === "specs" && (
                 <div className="specs-detailed">
                   <h3 style={{ marginBottom: "25px" }}>Thông số kỹ thuật chi tiết</h3>
-                  {details?.specs_detailed ? (
+                  {details?.specsDetailed && Object.keys(details.specsDetailed).length > 0 ? (
                     <div style={{ display: "grid", gap: "15px" }}>
-                      {Object.entries(details.specs_detailed).map(([key, value]) => (
+                      {Object.entries(details.specsDetailed).map(([key, value]) => (
                         <div key={key} style={{ display: "grid", gridTemplateColumns: "200px 1fr", padding: "15px 0", borderBottom: "1px solid var(--color-beige-dark)" }}>
                           <span style={{ fontWeight: 600, color: "var(--color-text-muted)" }}>{key}:</span>
-                          <span>{value}</span>
+                          <span>{String(value)}</span>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p>{details?.specs || "Đang cập nhật..."}</p>
+                    <p>{product.specs || "Đang cập nhật..."}</p>
                   )}
                 </div>
               )}
               {activeTab === "functions" && (
                 <div className="functions-content">
-                  {details?.functions_content ? (
-                    <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: details.functions_content }} />
+                  {details?.functionsHtml ? (
+                    <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: details.functionsHtml }} />
                   ) : (
                     <div className="rich-text-content">
                       <h3>Công Nghệ Nano Bán Dẫn</h3>
@@ -234,7 +221,7 @@ export default function ProductDetailClient({ product, details, relatedProducts 
               <div key={index} className="slider-item">
                 <Link href={`/san-pham/${p.slug}`} className="slider-product-card">
                   <div className="slider-image-container">
-                    <Image src={getHiResImage(p.slug, p.image_url)} alt={p.name} fill style={{ objectFit: "cover" }} />
+                    <Image src={p.primaryImage || p.imageUrl} alt={p.name} fill style={{ objectFit: "cover" }} />
                   </div>
                   <div className="slider-overlay-content">
                     <h3 className="slider-product-name">{p.name}</h3>

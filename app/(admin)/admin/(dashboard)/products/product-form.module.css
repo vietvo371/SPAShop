@@ -97,6 +97,12 @@
   color: #dc2626;
 }
 
+.readOnlyInput {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  color: #6b7280;
+}
+
 .hint {
   font-size: 0.75rem;
   color: #6b7280;
@@ -188,35 +194,64 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.imagePreview {
+.imageGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.imageItem {
   position: relative;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-  border-radius: 12px;
+  aspect-ratio: 1;
+  border-radius: 8px;
   overflow: hidden;
+  border: 2px solid #e5e7eb;
+  transition: var(--transition);
 }
 
-.previewImage {
+.imageItem.primary {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(104, 10, 178, 0.1);
+}
+
+.galleryImage {
   width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 12px;
+  height: 100%;
+  object-fit: cover;
 }
 
-.removeImageBtn {
+.imageOverlay {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.imageItem:hover .imageOverlay {
+  opacity: 1;
+}
+
+.imageActionBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   border: none;
+  background: white;
+  color: #374151;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -224,8 +259,27 @@
   transition: var(--transition);
 }
 
-.removeImageBtn:hover {
-  background: rgba(220, 38, 38, 0.9);
+.imageActionBtn:hover {
+  background: #f3f4f6;
+  color: var(--color-primary);
+}
+
+.imageActionBtn.remove:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.primaryBadge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: var(--color-primary);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 5;
 }
 
 /* Form Actions */

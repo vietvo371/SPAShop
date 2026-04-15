@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { productSchema } from "@/app/lib/validations";
+import { getCurrentUser } from "@/app/lib/auth";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -12,11 +13,14 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    
+
+    const user = await getCurrentUser();
+    const isAdminMode = user && (user.role === "ADMIN" || user.role === "STAFF");
+
     const product = await prisma.product.findUnique({
-      where: { 
+      where: {
         id,
-        isActive: true 
+        ...(isAdminMode ? {} : { isActive: true })
       },
       include: {
         category: true,
@@ -81,14 +85,56 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       }
     }
 
-    const product = await prisma.product.update({
-      where: { id },
-      data: validatedData,
-      include: {
-        category: true,
-        images: true,
-        details: true,
-      },
+    // Check name uniqueness if changing
+    if (validatedData.name && validatedData.name !== existing.name) {
+      const nameExists = await prisma.product.findFirst({
+        where: { name: validatedData.name },
+      });
+      if (nameExists) {
+        return NextResponse.json(
+          { success: false, error: "Tên sản phẩm đã tồn tại" },
+          { status: 400 }
+        );
+      }
+    }
+
+    const { images, ...productUpdateData } = validatedData;
+
+    const product = await prisma.$transaction(async (tx) => {
+      // 1. Update basic info
+      const updated = await tx.product.update({
+        where: { id },
+        data: productUpdateData,
+      });
+
+      // 2. Sync images if provided
+      if (images) {
+        // Delete current images
+        await tx.productImage.deleteMany({
+          where: { productId: id },
+        });
+
+        // Create new ones
+        if (images.length > 0) {
+          await tx.productImage.createMany({
+            data: images.map((img) => ({
+              productId: id,
+              url: img.url,
+              isPrimary: img.isPrimary,
+              orderIndex: img.orderIndex,
+            })),
+          });
+        }
+      }
+
+      return tx.product.findUnique({
+        where: { id },
+        include: {
+          category: true,
+          images: true,
+          details: true,
+        },
+      });
     });
 
     return NextResponse.json({

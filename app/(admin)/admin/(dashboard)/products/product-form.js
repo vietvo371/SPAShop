@@ -14,6 +14,7 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
     imageUrl: "",
     categoryId: "",
     isFeatured: false,
+    images: [],
   });
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
@@ -21,6 +22,16 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
 
   useEffect(() => {
     if (product) {
+      // If product has no gallery images but has a primary imageUrl, create a virtual gallery
+      let initialImages = product.images || [];
+      if (initialImages.length === 0 && product.imageUrl) {
+        initialImages = [{
+          url: product.imageUrl,
+          isPrimary: true,
+          orderIndex: 0
+        }];
+      }
+
       setFormData({
         name: product.name || "",
         slug: product.slug || "",
@@ -30,6 +41,7 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
         imageUrl: product.imageUrl || "",
         categoryId: product.categoryId || "",
         isFeatured: product.isFeatured || false,
+        images: initialImages,
       });
     }
   }, [product]);
@@ -58,7 +70,7 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
     }));
 
     // Auto-generate slug from name
-    if (name === "name" && !product) {
+    if (name === "name") {
       const slug = value
         .toLowerCase()
         .normalize("NFD")
@@ -78,47 +90,89 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
   };
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
 
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      setErrors((prev) => ({ ...prev, imageUrl: "Vui lòng chọn file hình ảnh" }));
-      return;
-    }
-
-    // Validate file size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setErrors((prev) => ({ ...prev, imageUrl: "Kích thước file không được vượt quá 5MB" }));
-      return;
+    // Validate files
+    for (const file of files) {
+      if (!file.type.startsWith("image/")) {
+        setErrors((prev) => ({ ...prev, images: "Vui lòng chỉ chọn file hình ảnh" }));
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({ ...prev, images: "Kích thước file không được vượt quá 5MB" }));
+        return;
+      }
     }
 
     setUploading(true);
-    setErrors((prev) => ({ ...prev, imageUrl: null }));
+    setErrors((prev) => ({ ...prev, images: null }));
 
     try {
-      const formDataUpload = new FormData();
-      formDataUpload.append("file", file);
-      formDataUpload.append("folder", "products");
+      const newImages = [...formData.images];
 
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formDataUpload,
-      });
+      for (const file of files) {
+        const formDataUpload = new FormData();
+        formDataUpload.append("file", file);
+        formDataUpload.append("folder", "products");
 
-      const result = await response.json();
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formDataUpload,
+        });
 
-      if (result.success) {
-        setFormData((prev) => ({ ...prev, imageUrl: result.url }));
-      } else {
-        setErrors((prev) => ({ ...prev, imageUrl: result.error || "Upload thất bại" }));
+        const result = await response.json();
+
+        if (result.success) {
+          newImages.push({
+            url: result.url,
+            isPrimary: newImages.length === 0, // First image is primary by default
+            orderIndex: newImages.length,
+          });
+        }
       }
+
+      setFormData((prev) => ({ ...prev, images: newImages }));
+
+      // Also update legacy imageUrl if it's currently empty
+      if (!formData.imageUrl && newImages.length > 0) {
+        const primary = newImages.find(img => img.isPrimary) || newImages[0];
+        setFormData(prev => ({ ...prev, imageUrl: primary.url }));
+      }
+
     } catch (error) {
       console.error("Upload error:", error);
-      setErrors((prev) => ({ ...prev, imageUrl: "Lỗi khi upload hình ảnh" }));
+      setErrors((prev) => ({ ...prev, images: "Lỗi khi upload hình ảnh" }));
     } finally {
       setUploading(false);
     }
+  };
+
+  const setPrimaryImage = (index) => {
+    const updatedImages = formData.images.map((img, i) => ({
+      ...img,
+      isPrimary: i === index,
+    }));
+    setFormData((prev) => ({
+      ...prev,
+      images: updatedImages,
+      imageUrl: updatedImages[index].url // Update legacy field too
+    }));
+  };
+
+  const removeImage = (index) => {
+    const updatedImages = formData.images.filter((_, i) => i !== index);
+
+    // If we removed the primary image, set a new one
+    if (formData.images[index]?.isPrimary && updatedImages.length > 0) {
+      updatedImages[0].isPrimary = true;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      images: updatedImages,
+      imageUrl: updatedImages.length > 0 ? updatedImages.find(img => img.isPrimary)?.url || updatedImages[0].url : ""
+    }));
   };
 
   const validateForm = () => {
@@ -180,9 +234,9 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
                 type="text"
                 name="slug"
                 value={formData.slug}
-                onChange={handleChange}
-                placeholder="slug-san-pham"
-                className={`${styles.input} ${errors.slug ? styles.inputError : ""}`}
+                readOnly
+                placeholder="slug-tu-dong-sinh-ra"
+                className={`${styles.input} ${styles.readOnlyInput}`}
               />
               <span className={styles.hint}>URL thân thiện: /san-pham/{formData.slug || "..."}</span>
               {errors.slug && <span className={styles.errorText}>{errors.slug}</span>}
@@ -241,47 +295,67 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
             <h3 className={styles.sectionTitle}>Hình ảnh</h3>
 
             <div className={styles.imageUploadArea}>
-              {formData.imageUrl ? (
-                <div className={styles.imagePreview}>
-                  <img src={formData.imageUrl} alt="Preview" className={styles.previewImage} />
-                  <button
-                    type="button"
-                    onClick={() => setFormData((prev) => ({ ...prev, imageUrl: "" }))}
-                    className={styles.removeImageBtn}
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-                    </svg>
-                  </button>
+              <label className={styles.uploadLabel}>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className={styles.fileInput}
+                  disabled={uploading}
+                />
+                <div className={styles.uploadContent}>
+                  {uploading ? (
+                    <>
+                      <div className={styles.uploadSpinner}></div>
+                      <span>Đang upload...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" opacity="0.4">
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                      </svg>
+                      <span>Click để chọn hoặc kéo thả nhiều hình ảnh</span>
+                    </>
+                  )}
                 </div>
-              ) : (
-                <label className={styles.uploadLabel}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className={styles.fileInput}
-                    disabled={uploading}
-                  />
-                  <div className={styles.uploadContent}>
-                    {uploading ? (
-                      <>
-                        <div className={styles.uploadSpinner}></div>
-                        <span>Đang upload...</span>
-                      </>
-                    ) : (
-                      <>
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" opacity="0.4">
-                          <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
+              </label>
+              {errors.images && <span className={styles.errorText}>{errors.images}</span>}
+
+              {/* Gallery Preview */}
+              <div className={styles.imageGallery}>
+                {formData.images.map((img, index) => (
+                  <div key={index} className={`${styles.imageItem} ${img.isPrimary ? styles.primary : ""}`}>
+                    {img.isPrimary && <span className={styles.primaryBadge}>Chính</span>}
+                    <img src={img.url} alt={`Product ${index}`} className={styles.galleryImage} />
+
+                    <div className={styles.imageOverlay}>
+                      {!img.isPrimary && (
+                        <button
+                          type="button"
+                          onClick={() => setPrimaryImage(index)}
+                          className={styles.imageActionBtn}
+                          title="Đặt làm ảnh chính"
+                        >
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className={`${styles.imageActionBtn} ${styles.remove}`}
+                        title="Xóa ảnh"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                         </svg>
-                        <span>Kéo thả hình ảnh hoặc click để chọn</span>
-                        <span className={styles.uploadHint}>PNG, JPG, GIF (tối đa 5MB)</span>
-                      </>
-                    )}
+                      </button>
+                    </div>
                   </div>
-                </label>
-              )}
-              {errors.imageUrl && <span className={styles.errorText}>{errors.imageUrl}</span>}
+                ))}
+              </div>
             </div>
           </div>
 
