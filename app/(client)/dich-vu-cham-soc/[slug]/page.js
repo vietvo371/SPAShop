@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import services from "@/data/services.json";
+import styles from "./service-detail.module.css";
 
 export async function generateStaticParams() {
   return services.map((service) => ({
@@ -12,7 +13,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const service = services.find((s) => s.slug === slug);
-  
+
   if (!service) {
     return { title: "Dịch vụ không tìm thấy" };
   }
@@ -62,17 +63,17 @@ export default async function ServiceDetailPage({ params }) {
       {/* Service Hero */}
       <section style={{ padding: "40px 0 80px", background: "white" }}>
         <div className="container">
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "1fr 1fr", 
-            gap: "60px", 
-            alignItems: "center" 
+          <div className={styles.heroGrid} style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "60px",
+            alignItems: "center"
           }}>
             {/* Image */}
-            <div style={{ 
-              position: "relative", 
-              height: "450px", 
-              borderRadius: "var(--radius-lg)", 
+            <div style={{
+              position: "relative",
+              height: "450px",
+              borderRadius: "var(--radius-lg)",
               overflow: "hidden",
               boxShadow: "var(--shadow-lg)"
             }}>
@@ -88,58 +89,58 @@ export default async function ServiceDetailPage({ params }) {
 
             {/* Content */}
             <div>
-              <h1 style={{ 
-                fontSize: "2.5rem", 
-                fontWeight: 800, 
+              <h1 style={{
+                fontSize: "2.5rem",
+                fontWeight: 800,
                 fontFamily: "var(--font-heading)",
-                color: "var(--color-primary)", 
+                color: "var(--color-primary)",
                 marginBottom: "20px",
                 lineHeight: 1.2
               }}>
                 {service.name}
               </h1>
-              
-              <p style={{ 
-                fontSize: "1.1rem", 
-                color: "var(--color-text-muted)", 
-                lineHeight: 1.8, 
-                marginBottom: "30px" 
+
+              <p style={{
+                fontSize: "1.1rem",
+                color: "var(--color-text-muted)",
+                lineHeight: 1.8,
+                marginBottom: "30px"
               }}>
                 {service.description}
               </p>
 
               {/* Features */}
               <div style={{ marginBottom: "40px" }}>
-                <h3 style={{ 
-                  fontSize: "1rem", 
-                  fontWeight: 700, 
-                  textTransform: "uppercase", 
-                  letterSpacing: "1px", 
+                <h3 style={{
+                  fontSize: "1rem",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
                   color: "var(--color-primary)",
-                  marginBottom: "16px" 
+                  marginBottom: "16px"
                 }}>
                   Lợi ích nổi bật
                 </h3>
-                <ul style={{ 
-                  display: "grid", 
-                  gridTemplateColumns: "1fr 1fr", 
+                <ul style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
                   gap: "12px",
                   listStyle: "none",
                   padding: 0
                 }}>
                   {service.features.map((feature, i) => (
-                    <li key={i} style={{ 
-                      display: "flex", 
-                      alignItems: "center", 
+                    <li key={i} style={{
+                      display: "flex",
+                      alignItems: "center",
                       gap: "10px",
                       fontSize: "0.95rem",
                       color: "var(--color-dark)"
                     }}>
-                      <span style={{ 
-                        width: "24px", 
-                        height: "24px", 
-                        borderRadius: "50%", 
-                        background: "var(--color-primary)", 
+                      <span style={{
+                        width: "24px",
+                        height: "24px",
+                        borderRadius: "50%",
+                        background: "var(--color-primary)",
                         color: "white",
                         display: "flex",
                         alignItems: "center",
@@ -156,7 +157,7 @@ export default async function ServiceDetailPage({ params }) {
               </div>
 
               {/* CTA Button */}
-              <a href="tel:+84356308211" style={{ 
+              <a href="tel:+84356308211" style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "12px",
@@ -182,26 +183,26 @@ export default async function ServiceDetailPage({ params }) {
 
       {/* Process Section */}
       {service.process && (
-        <section style={{ 
-          padding: "80px 0", 
-          background: "var(--color-cream)" 
+        <section style={{
+          padding: "80px 0",
+          background: "var(--color-cream)"
         }}>
           <div className="container">
-            <h2 style={{ 
-              fontSize: "2rem", 
-              fontWeight: 800, 
+            <h2 style={{
+              fontSize: "2rem",
+              fontWeight: 800,
               fontFamily: "var(--font-heading)",
-              color: "var(--color-primary)", 
+              color: "var(--color-primary)",
               textAlign: "center",
               marginBottom: "50px"
             }}>
               Quy Trình Thực Hiện
             </h2>
-            
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(4, 1fr)", 
-              gap: "30px" 
+
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: "30px"
             }}>
               {service.process.map((step, i) => (
                 <div key={i} style={{
@@ -252,18 +253,18 @@ export default async function ServiceDetailPage({ params }) {
       {/* Related Services */}
       <section style={{ padding: "80px 0", background: "white" }}>
         <div className="container">
-          <h2 style={{ 
-            fontSize: "2rem", 
-            fontWeight: 800, 
+          <h2 style={{
+            fontSize: "2rem",
+            fontWeight: 800,
             fontFamily: "var(--font-heading)",
-            color: "var(--color-primary)", 
+            color: "var(--color-primary)",
             textAlign: "center",
             marginBottom: "50px"
           }}>
             Dịch Vụ Liên Quan
           </h2>
 
-          <div className="service-grid">
+          <div className={styles.serviceGrid}>
             {relatedServices.map((s) => (
               <div key={s.slug} className="service-card">
                 <div className="service-card-image">
@@ -290,28 +291,6 @@ export default async function ServiceDetailPage({ params }) {
         </div>
       </section>
 
-      <style jsx>{`
-        @media (max-width: 968px) {
-          .service-detail-page > section:nth-child(2) > div > div {
-            grid-template-columns: 1fr !important;
-          }
-        }
-        .service-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 30px;
-        }
-        @media (max-width: 992px) {
-          .service-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        @media (max-width: 600px) {
-          .service-grid {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </div>
   );
 }
