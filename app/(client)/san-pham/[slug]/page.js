@@ -1,34 +1,15 @@
-import Image from "next/image";
+import { prisma } from "@/app/lib/prisma";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductDetailClient from "@/app/components/ProductDetailClient";
 
-// Fetch data from internal API for SSR/SSG
-async function getProductData(slug) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products/slug/${slug}`, {
-    cache: 'no-store'
-  });
-  if (!res.ok) return null;
-  return res.json();
-}
-
-async function getRelatedProducts(excludeSlug) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products?limit=5`, {
-    cache: 'no-store'
-  });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.data.filter(p => p.slug !== excludeSlug);
-}
-
 export async function generateStaticParams() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/products?limit=1000`);
-    const data = await res.json();
-    if (!data.success) return [];
-    return data.data.map((product) => ({
-      slug: product.slug,
-    }));
+    const products = await prisma.product.findMany({
+      where: { isActive: true },
+      select: { slug: true }
+    });
+    return products.map((p) => ({ slug: p.slug }));
   } catch (error) {
     console.error("Error generating static params:", error);
     return [];
@@ -37,14 +18,45 @@ export async function generateStaticParams() {
 
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
-  const productData = await getProductData(slug);
 
-  if (!productData || !productData.success) {
+  const product = await prisma.product.findUnique({
+    where: {
+      slug,
+      isActive: true
+    },
+    include: {
+      category: true,
+      images: {
+        orderBy: [{ isPrimary: "desc" }, { orderIndex: "asc" }],
+      },
+      details: true,
+    },
+  });
+
+  if (!product) {
     notFound();
   }
 
-  const product = productData.data;
-  const relatedProducts = await getRelatedProducts(slug);
+  const relatedProducts = await prisma.product.findMany({
+    where: {
+      categoryId: product.categoryId,
+      slug: { not: slug },
+      isActive: true
+    },
+    take: 4,
+    include: {
+      images: {
+        where: { isPrimary: true },
+        take: 1
+      }
+    }
+  });
+
+  // Transform for ProductDetailClient format
+  const sanitizedRelated = relatedProducts.map(p => ({
+    ...p,
+    imageUrl: p.images[0]?.url || '/images/hero-banner.png'
+  }));
 
   return (
     <div className="product-detail-page" style={{ background: "#fff", minHeight: "100vh" }}>
@@ -75,7 +87,7 @@ export default async function ProductDetailPage({ params }) {
       <ProductDetailClient
         product={product}
         details={product.details}
-        relatedProducts={relatedProducts}
+        relatedProducts={sanitizedRelated}
       />
     </div>
   );
