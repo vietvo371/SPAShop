@@ -349,3 +349,20 @@ model Testimonial {
 
   @@map("testimonials")
 }
+
+// ============================================
+// CONSULTATION LEAD MODEL - Khách hàng tư vấn liệu trình
+// ============================================
+model ConsultationLead {
+  id          String         @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  answers     Json?          // Lưu các câu trả lời Quiz dưới dạng JSON
+  status      MessageStatus  @default(NEW)
+  note        String?        @db.Text
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("consultation_leads")
+}

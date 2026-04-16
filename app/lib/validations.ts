@@ -158,6 +158,18 @@ export const testimonialSchema = z.object({
 });
 
 // ============================================
+// CONSULTATION LEAD SCHEMAS
+// ============================================
+export const consultationLeadSchema = z.object({
+  name: z.string().min(1, "Tên không được trống"),
+  phone: z.string().min(10, "Số điện thoại không hợp lệ"),
+  email: z.string().email().optional().or(z.literal("")),
+  answers: z.record(z.string(), z.any()).optional(),
+  status: z.enum(["NEW", "READ", "REPLIED"]).optional(),
+  note: z.string().optional(),
+});
+
+// ============================================
 // UTILITY SCHEMAS
 // ============================================
 export const paginationSchema = z.object({

@@ -30,6 +30,7 @@ const adminNavItems = [
             { href: "/admin/articles", label: "Bài viết", icon: FileText },
             { href: "/admin/appointments", label: "Lịch hẹn", icon: CalendarDays },
             { href: "/admin/contact", label: "Liên hệ", icon: MessageSquare },
+            { href: "/admin/consultations", label: "Khách Tư Vấn", icon: FileText },
         ],
     },
 ];
