@@ -7,10 +7,12 @@ import VideoGuides from "../components/VideoGuides";
 import WhyChooseUs from "../components/WhyChooseUs";
 import BannerCTA from "../components/BannerCTA";
 import FAQ from "../components/FAQ";
+import PromotionPopup from "../components/PromotionPopup";
 
 export default function Home() {
   return (
     <>
+      <PromotionPopup />
       <HeroBanner />
       <PromoBanner />
       <ProductSlider />
