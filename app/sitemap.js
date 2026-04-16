@@ -58,7 +58,7 @@ export default async function sitemap() {
       priority: 0.7,
     },
     {
-      url: `${BASE_URL}/hop-tac-cung-chan-an`,
+      url: `${BASE_URL}/tu-van-lieu-trinh`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,

@@ -101,14 +101,6 @@ export default function ConsultationQuizPage() {
 
   const handleOptionSelect = (optionId) => {
     setAnswers({ ...answers, [steps[currentStep].id]: optionId });
-    // Auto next after selection for better UX (optional, but premium feel)
-    setTimeout(() => {
-      if (currentStep < steps.length - 1) {
-        setCurrentStep(prev => prev + 1);
-      } else {
-        setIsFinished(true);
-      }
-    }, 400);
   };
 
   const handleBack = () => {

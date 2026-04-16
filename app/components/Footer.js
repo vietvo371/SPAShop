@@ -54,7 +54,7 @@ export default function Footer() {
             <Link href="/dich-vu-cham-soc" className="footer-link">Dịch Vụ Chăm Sóc</Link>
             <Link href="/san-pham" className="footer-link">Sản Phẩm Công Nghệ</Link>
             <Link href="/kien-thuc" className="footer-link">Kiến Thức</Link>
-            <Link href="/hop-tac-cung-chan-an" className="footer-link">Hợp Tác</Link>
+            <Link href="/tu-van-lieu-trinh" className="footer-link">Tư Vấn Liệu Trình</Link>
             <Link href="/lien-he" className="footer-link">Liên Hệ</Link>
           </div>
 

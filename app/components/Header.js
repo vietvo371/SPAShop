@@ -12,7 +12,7 @@ const navLinks = [
   { href: "/dich-vu-cham-soc", label: "Dịch vụ chăm sóc" },
   { href: "/san-pham", label: "Sản phẩm công nghệ" },
   { href: "/kien-thuc", label: "Kiến thức" },
-  { href: "/hop-tac-cung-chan-an", label: "Tư vấn Liệu Trình" },
+  { href: "/tu-van-lieu-trinh", label: "Tư vấn Liệu Trình" },
   { href: "/lien-he", label: "Liên hệ" },
 ];
 
