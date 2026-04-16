@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Slider from "react-slick";
+import { useCart } from "../context/CartContext";
+import { toast } from "sonner";
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -60,8 +63,23 @@ export default function ProductDetailClient({ product, details, relatedProducts 
     ]
   };
 
+  const router = useRouter();
+  const { addToCart, openCart, setBuyNow } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product, 1);
+    openCart();
+    toast.success(`Đã thêm ${product.name} vào giỏ hàng`);
+  };
+
+  const handleBuyNow = () => {
+    setBuyNow(product, 1);
+    router.push("/gio-hang?mode=buy-now");
+  };
+
   return (
     <div className="product-detail-wrapper">
+
       <section className="product-main-info" style={{ padding: "40px 0" }}>
         <div className="container">
           <div className="detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px" }}>
@@ -129,10 +147,18 @@ export default function ProductDetailClient({ product, details, relatedProducts 
               </div>
 
               <div className="action-buttons" style={{ display: "flex", gap: "15px", marginBottom: "30px" }}>
-                <button className="add-to-cart-btn" style={{ flex: 1, padding: "18px", borderRadius: "50px", border: "2px solid var(--color-primary)", background: "transparent", color: "var(--color-primary)", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}>
+                <button
+                  onClick={handleAddToCart}
+                  className="add-to-cart-btn"
+                  style={{ flex: 1, padding: "18px", borderRadius: "50px", border: "2px solid var(--color-primary)", background: "transparent", color: "var(--color-primary)", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
+                >
                   THÊM VÀO GIỎ
                 </button>
-                <button className="order-now-btn" style={{ flex: 1.5, padding: "18px", borderRadius: "50px", border: "none", background: "var(--color-primary)", color: "#fff", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}>
+                <button
+                  onClick={handleBuyNow}
+                  className="order-now-btn"
+                  style={{ flex: 1.5, padding: "18px", borderRadius: "50px", border: "none", background: "var(--color-primary)", color: "#fff", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
+                >
                   ĐẶT HÀNG NGAY
                 </button>
               </div>

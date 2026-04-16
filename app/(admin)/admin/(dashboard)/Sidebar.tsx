@@ -9,6 +9,7 @@ import {
     Wrench,
     FileText,
     CalendarDays,
+    ShoppingCart,
     MessageSquare,
     ExternalLink,
     LogOut,
@@ -24,6 +25,7 @@ const adminNavItems = [
         items: [
             { href: "/admin", label: "Tổng quan", icon: LayoutDashboard },
             { href: "/admin/products", label: "Sản phẩm", icon: Package },
+            { href: "/admin/orders", label: "Đơn hàng", icon: ShoppingCart },
             { href: "/admin/services", label: "Dịch vụ", icon: Wrench },
             { href: "/admin/articles", label: "Bài viết", icon: FileText },
             { href: "/admin/appointments", label: "Lịch hẹn", icon: CalendarDays },

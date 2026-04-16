@@ -39,6 +39,20 @@ enum ArticleStatus {
   ARCHIVED
 }
 
+enum OrderStatus {
+  PENDING    // Chờ xử lý (Mới)
+  CONFIRMED  // Đã xác nhận / Đang xử lý
+  SHIPPING   // Đang giao hàng
+  COMPLETED  // Đã hoàn thành
+  CANCELLED  // Đã hủy
+}
+
+enum PaymentMethod {
+  COD       // Thanh toán khi nhận hàng
+  TRANSFER  // Chuyển khoản ngân hàng
+  OFFLINE   // Thanh toán tại cửa hàng / Khác
+}
+
 // ============================================
 // USER MODEL - Người dùng hệ thống
 // ============================================
@@ -103,8 +117,55 @@ model Product {
   category       Category?       @relation(fields: [categoryId], references: [id])
   images         ProductImage[]
   details        ProductDetail?
+  orderItems     OrderItem[]
 
   @@map("products")
+}
+
+// ============================================
+// ORDER MODEL - Đơn hàng
+// ============================================
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique // Số đơn hàng (VD: CA123456)
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  customerAddress String?       @db.Text
+  province        String?       // Tỉnh/Thành
+  district        String?       // Quận/Huyện
+  ward            String?       // Phường/Xã
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod @default(COD)
+  totalAmount     Decimal       @db.Decimal(15, 2)
+  notes           String?       @db.Text
+  staffNote       String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relations
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+// ============================================
+// ORDER ITEM MODEL - Chi tiết đơn hàng
+// ============================================
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String?
+  productName String
+  price       Decimal  @db.Decimal(15, 2)
+  quantity    Int      @default(1)
+  imageUrl    String?
+
+  // Relations
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("order_items")
 }
 
 // ============================================

@@ -2,6 +2,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Toaster } from "sonner";
+import { CartProvider } from "./context/CartContext";
+import GlobalCart from "./components/GlobalCart";
 
 
 // const montserrat = Montserrat({
@@ -88,14 +91,15 @@ export const metadata = {
   },
 };
 
-import { Toaster } from "sonner";
-
 export default function RootLayout({ children }) {
   return (
     <html lang="vi" className={`${thRunalto.variable}`}>
       <body className={thRunalto.className}>
-        {children}
-        <Toaster position="top-right" richColors />
+        <CartProvider>
+          {children}
+          <Toaster position="top-right" richColors />
+          <GlobalCart />
+        </CartProvider>
       </body>
     </html>
   );

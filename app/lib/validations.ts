@@ -108,6 +108,31 @@ export const categorySchema = z.object({
 });
 
 // ============================================
+// ORDER SCHEMAS
+// ============================================
+export const orderItemSchema = z.object({
+  productId: z.string().optional(),
+  productName: z.string().min(1, "Tên sản phẩm không được trống"),
+  price: z.number().min(0),
+  quantity: z.number().min(1),
+  imageUrl: z.string().optional(),
+});
+
+export const orderSchema = z.object({
+  customerName: z.string().min(1, "Tên khách hàng không được trống"),
+  customerPhone: z.string().min(10, "Số điện thoại không hợp lệ"),
+  customerEmail: z.string().email().optional().or(z.literal("")),
+  customerAddress: z.string().min(1, "Địa chỉ không được trống"),
+  province: z.string().min(1, "Tỉnh/Thành không được trống"),
+  district: z.string().min(1, "Quận/Huyện không được trống"),
+  ward: z.string().min(1, "Phường/Xã không được trống"),
+  notes: z.string().optional(),
+  paymentMethod: z.enum(["COD", "TRANSFER"]).default("COD"),
+  items: z.array(orderItemSchema).min(1, "Giỏ hàng không được trống"),
+  totalAmount: z.number().optional(),
+});
+
+// ============================================
 // SLIDER SCHEMAS
 // ============================================
 export const sliderSchema = z.object({
