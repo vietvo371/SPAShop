@@ -48,27 +48,35 @@ export default function ProductSlider() {
     fetchProducts();
   }, []);
 
+  const [slidesToShow, setSlidesToShow] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setSlidesToShow(1);
+      } else if (window.innerWidth < 1024) {
+        setSlidesToShow(2);
+      } else {
+        setSlidesToShow(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
     speed: 600,
-    slidesToShow: 3,
+    slidesToShow: slidesToShow,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 1 },
-      },
-    ],
   };
 
   return (
@@ -82,7 +90,7 @@ export default function ProductSlider() {
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px" }}>Đang tải sản phẩm...</div>
         ) : products.length > 0 ? (
-          <Slider {...settings}>
+          <Slider key={`product-slider-${slidesToShow}`} {...settings}>
             {products.map((product) => (
               <div key={product.id} className="slider-item">
                 <Link href={`/san-pham/${product.slug}`} className="slider-product-card">

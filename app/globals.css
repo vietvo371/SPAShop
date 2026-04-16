@@ -890,7 +890,20 @@ button {
   cursor: pointer;
   transition: var(--transition);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  /* Added shadow for separation */
+}
+
+@media (max-width: 768px) {
+  .slider-product-card {
+    height: 420px;
+  }
+
+  .slider-overlay-content {
+    padding: 30px 15px !important;
+  }
+
+  .slider-product-name {
+    font-size: 1.25rem !important;
+  }
 }
 
 .slider-product-card:hover {
@@ -1489,34 +1502,37 @@ button {
   height: 100%;
 }
 
-.service-slider-wrapper .slick-track {
-  display: flex !important;
-}
-
-.service-slider-wrapper .slick-slide {
-  height: inherit !important;
-  display: flex !important;
-}
-
-.service-slider-wrapper .slick-slide>div {
-  display: flex;
-  width: 100%;
-}
+/* Removed conflicting flex overrides that broke slick responsiveness */
 
 .service-info-card {
   background: var(--color-white);
   border-radius: 40px;
   padding: 40px 35px 50px;
-  /* More bottom padding */
   height: 100%;
   min-height: 600px;
-  /* Adjust height to accommodate new content */
   display: flex;
   margin-bottom: 20px;
   flex-direction: column;
   transition: var(--transition-slow);
   border: 1px solid rgba(139, 61, 43, 0.08);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 768px) {
+  .service-info-card {
+    min-height: 520px;
+    padding: 30px 20px 40px;
+    border-radius: 30px;
+  }
+
+  .service-card-title {
+    font-size: 1.25rem !important;
+  }
+
+  .service-card-header {
+    min-height: auto !important;
+    margin-bottom: 15px !important;
+  }
 }
 
 .service-info-card:hover {

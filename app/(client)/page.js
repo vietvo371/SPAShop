@@ -13,9 +13,9 @@ export default function Home() {
     <>
       <HeroBanner />
       <PromoBanner />
-      <WhyChooseUs />
       <ProductSlider />
       <ServiceGrid />
+      <WhyChooseUs />
       <Testimonials />
       <BannerCTA />
       <FAQ />

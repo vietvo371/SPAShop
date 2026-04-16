@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -43,25 +43,32 @@ export default function ProductDetailClient({ product, details, relatedProducts 
 
   const [activeImage, setActiveImage] = useState(mainProductImage);
   const [activeTab, setActiveTab] = useState("details");
+  const [slidesToShow, setSlidesToShow] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setSlidesToShow(1);
+      } else if (window.innerWidth < 1024) {
+        setSlidesToShow(2);
+      } else {
+        setSlidesToShow(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const sliderSettings = {
     dots: false,
-    infinite: relatedProducts.length > 3,
+    infinite: relatedProducts.length > slidesToShow,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: slidesToShow,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 }
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 1 }
-      }
-    ]
   };
 
   const router = useRouter();
@@ -270,7 +277,7 @@ export default function ProductDetailClient({ product, details, relatedProducts 
       <section className="related-products-slider" style={{ padding: "80px 0" }}>
         <div className="container">
           <h2 className="section-title" style={{ textAlign: "center", marginBottom: "50px" }}>Sản phẩm tương tự</h2>
-          <Slider {...sliderSettings}>
+          <Slider key={`related-slider-${slidesToShow}`} {...sliderSettings}>
             {relatedProducts.map((p, index) => (
               <div key={index} className="slider-item">
                 <Link href={`/san-pham/${p.slug}`} className="slider-product-card">
