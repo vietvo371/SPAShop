@@ -6,96 +6,120 @@ export const metadata = {
   description: "Cập nhật kiến thức về công nghệ hồng ngoại xa (FIR), tips chăm sóc sức khỏe và bài viết hữu ích từ chuyên gia.",
 };
 
-const articles = [
-  {
-    id: 1,
-    title: "Hồng ngoại xa (FIR) là gì? Tác dụng đối với sức khỏe",
-    excerpt: "Tìm hiểu về công nghệ hồng ngoại xa và những lợi ích tuyệt vời mà FIR mang lại cho sức khỏe con người...",
-    date: "25/03/2026",
-    category: "Kiến thức FIR",
-    image: "/images/hero-banner.png",
-  },
-  {
-    id: 2,
-    title: "5 cách chăm sóc sức khỏe tại nhà với hồng ngoại xa",
-    excerpt: "Hướng dẫn chi tiết cách sử dụng các thiết bị FIR tại nhà để cải thiện sức khỏe toàn diện...",
-    date: "22/03/2026",
-    category: "Hướng dẫn",
-    image: "/images/service-meridian.png",
-  },
-  {
-    id: 3,
-    title: "Điều trị Gout bằng hồng ngoại xa: Giải pháp từ thiên nhiên",
-    excerpt: "Liệu pháp hồng ngoại xa đã được chứng minh hiệu quả trong việc hỗ trợ điều trị bệnh Gout...",
-    date: "20/03/2026",
-    category: "Sức khỏe",
-    image: "/images/service-blood.png",
-  },
-  {
-    id: 4,
-    title: "Vai trò của vi tuần hoàn máu đối với sức khỏe",
-    excerpt: "Vi tuần hoàn máu đóng vai trò quan trọng trong việc vận chuyển dưỡng chất đến các tế bào...",
-    date: "18/03/2026",
-    category: "Kiến thức FIR",
-    image: "/images/service-blood.png",
-  },
-  {
-    id: 5,
-    title: "12 Đường Kinh Lạc và ý nghĩa trong y học cổ truyền",
-    excerpt: "Hệ thống 12 đường kinh lạc là nền tảng của y học cổ truyền phương Đông, giúp chẩn đoán và điều trị bệnh...",
-    date: "15/03/2026",
-    category: "Y học cổ truyền",
-    image: "/images/service-meridian.png",
-  },
-  {
-    id: 6,
-    title: "Trang sức hồng ngoại xa: Vừa đẹp vừa tốt cho sức khỏe",
-    excerpt: "Khám phá bộ sưu tập trang sức FIR cao cấp — Sự kết hợp hoàn hảo giữa thời trang và sức khỏe...",
-    date: "12/03/2026",
-    category: "Sản phẩm",
-    image: "/images/product-fir-jewelry.png",
-  },
-];
+import articles from "@/data/articles.json";
+
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
+import { MoveRight } from "lucide-react";
 
 export default function KnowledgePage() {
   return (
     <div className="knowledge-page">
-      <section className="page-hero blog-hero">
-        <div className="container">
-          <h1>Kiến Thức Sức Khỏe</h1>
-          <p>Cập nhật những thông tin hữu ích về sức khỏe và công nghệ FIR</p>
+      <Header />
+
+      <section className="blog-hero" style={{
+        padding: "180px 0 80px",
+        background: "linear-gradient(135deg, var(--color-primary-dark), var(--color-primary))",
+        color: "white",
+        textAlign: "center"
+      }}>
+        <div className="container" style={{ maxWidth: "800px" }}>
+          <h1 style={{
+            fontSize: "clamp(2.5rem, 8vw, 4rem)",
+            fontWeight: 800,
+            fontFamily: "var(--font-heading)",
+            lineHeight: 1.1,
+            marginBottom: "20px"
+          }}>Kiến Thức Sức Khỏe</h1>
+          <p style={{
+            fontSize: "1.2rem",
+            opacity: 0.9,
+            maxWidth: "600px",
+            margin: "0 auto",
+            lineHeight: 1.6
+          }}>Khám phá những bí quyết chăm sóc sức khỏe chủ động từ chuyên gia và công nghệ hồng ngoại xa đột phá.</p>
         </div>
       </section>
 
-      <section className="page-content blog-section">
+      <section className="blog-section" style={{ padding: "80px 0", background: "#fafafa" }}>
         <div className="container">
           <div className="blog-grid">
             {articles.map((article) => (
-              <article key={article.id} className="blog-card">
-                <div className="blog-card-image">
-                  <Image 
-                    src={article.image} 
-                    alt={article.title} 
-                    fill 
+              <article key={article.slug} className="blog-card" style={{
+                background: "white",
+                borderRadius: "var(--radius-lg)",
+                overflow: "hidden",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                display: "flex",
+                flexDirection: "column",
+                border: "1px solid #f0f0f0",
+                height: "100%"
+              }}>
+                <div className="blog-card-image" style={{ height: "240px", position: "relative" }}>
+                  <Image
+                    src={article.image || "/images/hero-banner.png"}
+                    alt={article.title}
+                    fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }} 
+                    style={{ objectFit: "cover" }}
                   />
-                  <span className="blog-category-tag">
+                  <span className="blog-category-tag" style={{
+                    position: "absolute",
+                    top: "20px",
+                    left: "20px",
+                    background: "var(--color-primary)",
+                    color: "white",
+                    padding: "6px 14px",
+                    borderRadius: "50px",
+                    fontSize: "0.7rem",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "1px"
+                  }}>
                     {article.category}
                   </span>
                 </div>
-                <div className="blog-card-content">
-                  <p className="blog-date">
+                <div className="blog-card-content" style={{ padding: "30px", flex: 1, display: "flex", flexDirection: "column" }}>
+                  <p className="blog-date" style={{ fontSize: "0.85rem", color: "#888", marginBottom: "12px" }}>
                     {article.date}
                   </p>
-                  <h3 className="blog-title">
+                  <h3 className="blog-title" style={{
+                    fontSize: "1.25rem",
+                    fontWeight: 700,
+                    marginBottom: "15px",
+                    lineHeight: 1.4,
+                    color: "var(--color-dark)"
+                  }}>
                     {article.title}
                   </h3>
-                  <p className="blog-excerpt">
+                  <p className="blog-excerpt" style={{
+                    fontSize: "0.95rem",
+                    color: "#666",
+                    marginBottom: "25px",
+                    lineHeight: 1.6,
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden"
+                  }}>
                     {article.excerpt}
                   </p>
-                  <Link href={`/kien-thuc/${article.slug}`} className="blog-read-more">
-                    Đọc thêm &rarr;
+                  <Link
+                    href={`/kien-thuc/${article.slug}`}
+                    className="blog-read-more"
+                    style={{
+                      marginTop: "auto",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      color: "var(--color-primary)",
+                      fontWeight: 700,
+                      fontSize: "0.9rem",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.5px"
+                    }}
+                  >
+                    Xem chi tiết <MoveRight size={18} />
                   </Link>
                 </div>
               </article>
@@ -103,6 +127,8 @@ export default function KnowledgePage() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 }
