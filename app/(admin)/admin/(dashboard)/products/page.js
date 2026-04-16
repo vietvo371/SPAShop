@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import styles from "../../admin.module.css";
 import { formatPrice } from "@/app/lib/utils";
+import { toast } from "sonner";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -91,9 +92,14 @@ export default function AdminProductsPage() {
       if (response.ok) {
         setProducts(products.filter((p) => p.id !== deleteModal.product.id));
         setDeleteModal({ open: false, product: null });
+        toast.success("Đã xóa sản phẩm thành công");
+      } else {
+        const result = await response.json();
+        toast.error(result.error || "Không thể xóa sản phẩm");
       }
     } catch (error) {
       console.error("Failed to delete product:", error);
+      toast.error("Đã có lỗi xảy ra khi xóa sản phẩm");
     } finally {
       setIsDeleting(false);
     }

@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
 
-export default function NewServicePage() {
+export default function EditServicePage({ params }) {
+  const { id } = use(params);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -15,6 +20,37 @@ export default function NewServicePage() {
     imageUrl: "",
     isActive: true,
   });
+
+  useEffect(() => {
+    const fetchService = async () => {
+      try {
+        const response = await fetch(`/api/services/${id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          const service = result.data;
+          setFormData({
+            name: service.name || "",
+            slug: service.slug || "",
+            description: service.description || "",
+            price: service.price || "",
+            duration: service.duration || "",
+            features: service.process || "", // Mapping process to features
+            imageUrl: service.imageUrl || "",
+            isActive: service.isActive ?? true,
+          });
+        }
+      } catch (err) {
+        toast.error("Không tìm thấy dịch vụ");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchService();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -35,28 +71,45 @@ export default function NewServicePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      const res = await fetch("/api/services", {
-        method: "POST",
+      const res = await fetch(`/api/services/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const result = await res.json();
       if (result.success) {
-        toast.success("Đã tạo dịch vụ mới!");
-        window.location.href = "/admin/services";
+        toast.success("Đã cập nhật dịch vụ thành công!");
+        router.push("/admin/services");
       } else {
-        toast.error(result.error || "Tạo thất bại");
+        toast.error(result.error || "Cập nhật thất bại");
       }
     } catch (error) {
-      toast.error("Lỗi khi tạo dịch vụ");
+      toast.error("Lỗi khi cập nhật dịch vụ");
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.spinner}></div>
+        <p>Đang tải...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.pageHeader}>
-        <h1>Thêm Dịch vụ Mới</h1>
+        <div className={styles.breadcrumb}>
+          <a href="/admin/services" className={styles.breadcrumbLink}>Dịch vụ</a>
+          <span className={styles.breadcrumbSeparator}>/</span>
+          <span>Chỉnh sửa</span>
+        </div>
+        <h1>Chỉnh sửa dịch vụ</h1>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.settingsContent}>
@@ -71,7 +124,6 @@ export default function NewServicePage() {
               onBlur={handleSlugAuto}
               required
               className={styles.formInput}
-              placeholder="VD: Khai thông vùng đầu"
             />
           </div>
 
@@ -83,7 +135,6 @@ export default function NewServicePage() {
               value={formData.slug}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="khai-thong-vung-dau"
             />
           </div>
 
@@ -95,7 +146,6 @@ export default function NewServicePage() {
               value={formData.price}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="280.000"
             />
           </div>
 
@@ -107,7 +157,6 @@ export default function NewServicePage() {
               value={formData.duration}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="45-60 phút"
             />
           </div>
 
@@ -119,7 +168,6 @@ export default function NewServicePage() {
               onChange={handleChange}
               className={styles.formTextarea}
               rows={4}
-              placeholder="Mô tả chi tiết dịch vụ..."
             />
           </div>
 
@@ -131,7 +179,6 @@ export default function NewServicePage() {
               onChange={handleChange}
               className={styles.formTextarea}
               rows={4}
-              placeholder="Nâng cơ mặt, trẻ hóa da&#10;Detox da đầu, giảm mụn&#10;Giảm đau đầu & stress"
             />
           </div>
 
@@ -143,7 +190,6 @@ export default function NewServicePage() {
               value={formData.imageUrl}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="https://..."
             />
           </div>
 
@@ -164,8 +210,8 @@ export default function NewServicePage() {
           <a href="/admin/services" className={`${styles.btn} ${styles.btnSecondary}`}>
             ← Hủy
           </a>
-          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
-            💾 Tạo dịch vụ
+          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={isSubmitting}>
+            {isSubmitting ? "Đang lưu..." : "💾 Cập nhật dịch vụ"}
           </button>
         </div>
       </form>
@@ -181,24 +227,12 @@ export default function NewServicePage() {
           transition: var(--transition);
         }
 
-        .formTextarea:focus {
-          outline: none;
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px rgba(104, 10, 178, 0.1);
-        }
-
         .checkboxLabel {
           display: flex;
           align-items: center;
           gap: 8px;
           cursor: pointer;
           font-size: 0.9rem;
-          color: #374151;
-        }
-
-        .checkboxLabel input {
-          width: 18px;
-          height: 18px;
         }
 
         .formActions {
@@ -214,6 +248,35 @@ export default function NewServicePage() {
           border-radius: 12px;
           padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .formGrid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        .fullWidth {
+          grid-column: span 2;
+        }
+
+        .formGroup {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .formLabel {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        .formInput {
+          padding: 10px 14px;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          font-size: 0.9rem;
         }
       `}</style>
     </div>

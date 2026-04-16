@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../../admin.module.css";
+import { toast } from "sonner";
 
 const tabs = [
   { id: "general", label: "Thông tin cơ sở" },
@@ -11,40 +12,112 @@ const tabs = [
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("general");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    businessName: "Tâm An Energy Healing",
-    address: "02 Phan Long Bằng, Quảng Ngãi",
-    phone: "035 630 8211",
-    email: "contact@chanan.vn",
-    openHours: "Thứ 2 - Chủ nhật: 8:00 - 20:00",
-    mapsUrl: "https://www.google.com/maps?q=02+Phan+Long+Băng,+Quảng+Ngãi&output=embed",
+    businessName: "",
+    address: "",
+    phone: "",
+    email: "",
+    openHours: "",
+    mapsUrl: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    voucherCode: "TAMAN50",
-    voucherDiscount: "50",
-    voucherExpiry: "2026-12-31",
+    voucherCode: "",
+    voucherDiscount: "",
+    voucherExpiry: "",
   });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/admin/settings");
+        const result = await res.json();
+        if (result.success) {
+          setFormData(prev => ({
+            ...prev,
+            ...result.data
+          }));
+        }
+      } catch (error) {
+        toast.error("Không thể tải cài đặt");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveGeneral = () => {
-    alert("Đã lưu thông tin cơ sở!");
+  const handleSave = async (dataToSave, successMsg = "Đã lưu cài đặt!") => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSave),
+      });
+      const result = await res.json();
+      if (result.success) {
+        toast.success(successMsg);
+      } else {
+        toast.error(result.error || "Lưu thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi kết nối máy chủ");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleSavePassword = () => {
-    if (formData.newPassword !== formData.confirmPassword) {
-      alert("Mật khẩu xác nhận không khớp!");
+  const handleSaveGeneral = () => {
+    const { businessName, address, phone, email, openHours, mapsUrl } = formData;
+    handleSave({ businessName, address, phone, email, openHours, mapsUrl }, "Đã lưu thông tin cơ sở!");
+  };
+
+  const handleSavePassword = async () => {
+    if (!formData.currentPassword || !formData.newPassword) {
+      toast.error("Vui lòng nhập đầy đủ mật khẩu");
       return;
     }
-    alert("Đã đổi mật khẩu!");
+    if (formData.newPassword !== formData.confirmPassword) {
+      toast.error("Mật khẩu xác nhận không khớp!");
+      return;
+    }
+    
+    setSaving(true);
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword: formData.currentPassword,
+          newPassword: formData.newPassword
+        }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        toast.success("Đã đổi mật khẩu thành công!");
+        setFormData(prev => ({ ...prev, currentPassword: "", newPassword: "", confirmPassword: "" }));
+      } else {
+        toast.error(result.error || "Đổi mật khẩu thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi đổi mật khẩu");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleSaveVoucher = () => {
-    alert("Đã lưu cài đặt voucher!");
+    const { voucherCode, voucherDiscount, voucherExpiry } = formData;
+    handleSave({ voucherCode, voucherDiscount, voucherExpiry }, "Đã lưu cài đặt voucher!");
   };
 
   return (

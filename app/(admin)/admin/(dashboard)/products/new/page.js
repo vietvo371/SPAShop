@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ProductForm from "../product-form";
 import styles from "../../../admin.module.css";
+import { toast } from "sonner";
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -24,13 +25,18 @@ export default function NewProductPage() {
       const result = await response.json();
 
       if (result.success) {
+        toast.success("Đã tạo sản phẩm thành công");
         router.push("/admin/products");
       } else {
-        setError(result.error || "Có lỗi xảy ra");
+        const errorMsg = result.error || "Có lỗi xảy ra";
+        setError(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (err) {
       console.error("Submit error:", err);
-      setError("Có lỗi xảy ra. Vui lòng thử lại.");
+      const errorMsg = "Có lỗi xảy ra. Vui lòng thử lại.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
     }

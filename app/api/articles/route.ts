@@ -57,3 +57,50 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+// ============================================
+// POST /api/articles - Tạo bài viết mới
+// ============================================
+export async function POST(request: NextRequest) {
+  try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { title, slug, excerpt, content, imageUrl, category, status } = body;
+
+    if (!title || !slug) {
+      return NextResponse.json({ success: false, error: "Thiếu thông tin bắt buộc" }, { status: 400 });
+    }
+
+    const article = await prisma.article.create({
+      data: {
+        title,
+        slug,
+        excerpt,
+        contentHtml: content,
+        imageUrl,
+        category,
+        authorId: user.id,
+        status: status || "DRAFT",
+        publishedAt: status === "PUBLISHED" ? new Date() : null,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: article,
+    });
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return NextResponse.json({ success: false, error: "Slug đã tồn tại" }, { status: 400 });
+    }
+    console.error("Articles POST error:", error);
+    return NextResponse.json(
+      { success: false, error: "Lỗi khi tạo bài viết" },
+      { status: 500 }
+    );
+  }
+}

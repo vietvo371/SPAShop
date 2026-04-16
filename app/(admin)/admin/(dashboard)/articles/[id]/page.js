@@ -1,10 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
 
-export default function NewArticlePage() {
+export default function EditArticlePage({ params }) {
+  const { id } = use(params);
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -14,6 +19,36 @@ export default function NewArticlePage() {
     category: "Kiến thức FIR",
     status: "DRAFT",
   });
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await fetch(`/api/articles/${id}`);
+        const result = await response.json();
+
+        if (result.success) {
+          const article = result.data;
+          setFormData({
+            title: article.title || "",
+            slug: article.slug || "",
+            excerpt: article.excerpt || "",
+            content: article.contentHtml || "",
+            imageUrl: article.imageUrl || "",
+            category: article.category || "Kiến thức FIR",
+            status: article.status || "DRAFT",
+          });
+        }
+      } catch (err) {
+        toast.error("Không tìm thấy bài viết");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchArticle();
+    }
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,28 +66,45 @@ export default function NewArticlePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      const res = await fetch("/api/articles", {
-        method: "POST",
+      const res = await fetch(`/api/articles/${id}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const result = await res.json();
       if (result.success) {
-        toast.success("Đã tạo bài viết mới!");
-        window.location.href = "/admin/articles";
+        toast.success("Đã cập nhật bài viết thành công!");
+        router.push("/admin/articles");
       } else {
-        toast.error(result.error || "Tạo thất bại");
+        toast.error(result.error || "Cập nhật thất bại");
       }
     } catch (error) {
-      toast.error("Lỗi khi tạo bài viết");
+      toast.error("Lỗi khi cập nhật bài viết");
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.spinner}></div>
+        <p>Đang tải...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.pageHeader}>
-        <h1>Viết Bài Mới</h1>
+        <div className={styles.breadcrumb}>
+          <a href="/admin/articles" className={styles.breadcrumbLink}>Bài viết</a>
+          <span className={styles.breadcrumbSeparator}>/</span>
+          <span>Chỉnh sửa</span>
+        </div>
+        <h1>Chỉnh sửa bài viết</h1>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.settingsContent}>
@@ -67,7 +119,6 @@ export default function NewArticlePage() {
               onBlur={handleSlugAuto}
               required
               className={styles.formInput}
-              placeholder="VD: Hồng ngoại xa là gì?"
             />
           </div>
 
@@ -79,7 +130,6 @@ export default function NewArticlePage() {
               value={formData.slug}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="hong-ngoai-xa-la-gi"
             />
           </div>
 
@@ -109,6 +159,7 @@ export default function NewArticlePage() {
             >
               <option value="DRAFT">Bản nháp</option>
               <option value="PUBLISHED">Xuất bản</option>
+              <option value="ARCHIVED">Lưu trữ</option>
             </select>
           </div>
 
@@ -120,7 +171,6 @@ export default function NewArticlePage() {
               onChange={handleChange}
               className={styles.formTextarea}
               rows={3}
-              placeholder="Tóm tắt ngắn gọn nội dung bài viết..."
             />
           </div>
 
@@ -131,8 +181,7 @@ export default function NewArticlePage() {
               value={formData.content}
               onChange={handleChange}
               className={styles.formTextarea}
-              rows={10}
-              placeholder="<h2>Tiêu đề</h2>&#10;<p>Nội dung...</p>"
+              rows={15}
             />
           </div>
 
@@ -144,7 +193,6 @@ export default function NewArticlePage() {
               value={formData.imageUrl}
               onChange={handleChange}
               className={styles.formInput}
-              placeholder="https://..."
             />
           </div>
         </div>
@@ -153,8 +201,8 @@ export default function NewArticlePage() {
           <a href="/admin/articles" className={`${styles.btn} ${styles.btnSecondary}`}>
             ← Hủy
           </a>
-          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
-            💾 Tạo bài viết
+          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={isSubmitting}>
+            {isSubmitting ? "Đang lưu..." : "💾 Cập nhật bài viết"}
           </button>
         </div>
       </form>
@@ -170,28 +218,12 @@ export default function NewArticlePage() {
           transition: var(--transition);
         }
 
-        .formTextarea:focus {
-          outline: none;
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px rgba(104, 10, 178, 0.1);
-        }
-
         .formSelect {
-          padding: 10px 36px 10px 14px;
+          padding: 10px 14px;
           border: 1px solid #d1d5db;
           border-radius: 8px;
           font-size: 0.9rem;
           background: white;
-          cursor: pointer;
-          appearance: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 12px center;
-        }
-
-        .formSelect:focus {
-          outline: none;
-          border-color: var(--color-primary);
         }
 
         .formActions {
@@ -207,6 +239,35 @@ export default function NewArticlePage() {
           border-radius: 12px;
           padding: 24px;
           box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .formGrid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        .fullWidth {
+          grid-column: span 2;
+        }
+
+        .formGroup {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .formLabel {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #374151;
+        }
+
+        .formInput {
+          padding: 10px 14px;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          font-size: 0.9rem;
         }
       `}</style>
     </div>

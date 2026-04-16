@@ -86,6 +86,13 @@
 .navLink.active {
   background: var(--color-primary);
   color: white;
+  box-shadow: 0 4px 12px rgba(104, 10, 178, 0.25);
+  border-radius: 0 25px 25px 0;
+  margin-right: 12px;
+}
+
+.navLink.active .navIcon {
+  color: white;
 }
 
 .navIcon {
