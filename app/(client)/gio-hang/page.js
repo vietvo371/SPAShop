@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import styles from "./checkout.module.css";
+import { formatPrice } from "@/app/lib/utils";
 
 function CheckoutContent() {
     const { cartItems, cartTotal, cartCount, updateQuantity, removeFromCart, clearCart, isInitialized, buyNowItem, clearBuyNow } = useCart();
@@ -22,7 +23,7 @@ function CheckoutContent() {
 
     // Recalculate totals if in buy-now mode
     const displayTotal = isBuyNow
-        ? (buyNowItem ? (parseInt(buyNowItem.price.replace(/[^0-9]/g, "")) || 0) * buyNowItem.quantity : 0)
+        ? (buyNowItem ? Number(buyNowItem.price || 0) * buyNowItem.quantity : 0)
         : cartTotal;
 
     const displayCount = isBuyNow
@@ -164,7 +165,7 @@ function CheckoutContent() {
                     items: displayItems.map(item => ({
                         productId: item.id,
                         productName: item.name,
-                        price: parseInt(item.price.replace(/[^0-9]/g, "")) || 0,
+                        price: Number(item.price || 0),
                         quantity: item.quantity,
                         imageUrl: item.imageUrl
                     })),
@@ -382,7 +383,7 @@ function CheckoutContent() {
                                                         <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                                                     </div>
                                                 </div>
-                                                <span className={styles.itemPrice}>{item.price}</span>
+                                                <span className={styles.itemPrice}>{formatPrice(item.price)}</span>
                                             </div>
                                             <button className={styles.removeBtn} onClick={() => removeFromCart(item.id)}>
                                                 <Trash2 size={14} /> Xóa
@@ -408,7 +409,7 @@ function CheckoutContent() {
                             <div className={styles.totals}>
                                 <div className={styles.totalRow}>
                                     <span>Tạm tính</span>
-                                    <span>{displayTotal.toLocaleString("vi-VN")}đ</span>
+                                    <span>{formatPrice(displayTotal)}</span>
                                 </div>
                                 <div className={styles.totalRow}>
                                     <span>Phí vận chuyển</span>
@@ -416,7 +417,7 @@ function CheckoutContent() {
                                 </div>
                                 <div className={`${styles.totalRow} ${styles.grandTotal}`}>
                                     <span>TỔNG CỘNG</span>
-                                    <span>{displayTotal.toLocaleString("vi-VN")}đ</span>
+                                    <span>{formatPrice(displayTotal)}</span>
                                 </div>
                             </div>
 

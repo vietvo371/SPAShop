@@ -85,9 +85,7 @@ export function CartProvider({ children }) {
     };
 
     const cartTotal = cartItems.reduce((total, item) => {
-        // Parse price string like "3.800.000đ" to number
-        const priceNum = parseInt(item.price.replace(/[^0-9]/g, "")) || 0;
-        return total + priceNum * item.quantity;
+        return total + Number(item.price || 0) * item.quantity;
     }, 0);
 
     const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);

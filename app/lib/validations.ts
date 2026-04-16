@@ -21,7 +21,7 @@ export const registerSchema = z.object({
 export const productSchema = z.object({
   name: z.string().min(1, "Tên sản phẩm không được trống"),
   slug: z.string().min(1, "Slug không được trống"),
-  price: z.string().min(1, "Giá không được trống"),
+  price: z.coerce.number().min(0, "Giá không được nhỏ hơn 0"),
   description: z.string().optional(),
   specs: z.string().optional(),
   imageUrl: z.string().url().optional().or(z.literal("")),

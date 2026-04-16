@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import styles from "../../admin.module.css";
+import { formatPrice } from "@/app/lib/utils";
 
 const statusMap = {
     PENDING: { label: "Mới", color: "#3b82f6", bg: "#eff6ff" },
@@ -94,12 +95,6 @@ export default function OrdersPage() {
         }
     };
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-        }).format(price);
-    };
 
     return (
         <div className={styles.pageContainer}>

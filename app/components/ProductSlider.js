@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "../lib/utils";
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -96,7 +97,7 @@ export default function ProductSlider() {
                   </div>
                   <div className="slider-overlay-content">
                     <h3 className="slider-product-name">{product.name}</h3>
-                    <p className="slider-product-price">Giá: {product.price}</p>
+                    <p className="slider-product-price">Giá: {formatPrice(product.price)}</p>
                     <div className="slider-action-btn">XEM CHI TIẾT</div>
                   </div>
                 </Link>

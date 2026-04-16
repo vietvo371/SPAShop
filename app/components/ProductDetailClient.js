@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Slider from "react-slick";
 import { useCart } from "../context/CartContext";
 import { toast } from "sonner";
+import { formatPrice } from "../lib/utils";
 
 function NextArrow(props) {
   const { className, style, onClick } = props;
@@ -125,8 +126,8 @@ export default function ProductDetailClient({ product, details, relatedProducts 
             <div className="detail-content">
               <h1 className="detail-title">{product.name}</h1>
               <div className="detail-pricing" style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "25px" }}>
-                <span className="price-current">{product.price}</span>
-                {product.oldPrice && <span className="price-old">{product.oldPrice}</span>}
+                <span className="price-current">{formatPrice(product.price)}</span>
+                {product.oldPrice && <span className="price-old">{formatPrice(product.oldPrice)}</span>}
               </div>
 
               <div className="description-preview" style={{ padding: "25px 0", borderTop: "1px solid var(--color-beige-dark)", borderBottom: "1px solid var(--color-beige-dark)", marginBottom: "30px" }}>
@@ -147,20 +148,47 @@ export default function ProductDetailClient({ product, details, relatedProducts 
               </div>
 
               <div className="action-buttons" style={{ display: "flex", gap: "15px", marginBottom: "30px" }}>
-                <button
-                  onClick={handleAddToCart}
-                  className="add-to-cart-btn"
-                  style={{ flex: 1, padding: "18px", borderRadius: "50px", border: "2px solid var(--color-primary)", background: "transparent", color: "var(--color-primary)", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
-                >
-                  THÊM VÀO GIỎ
-                </button>
-                <button
-                  onClick={handleBuyNow}
-                  className="order-now-btn"
-                  style={{ flex: 1.5, padding: "18px", borderRadius: "50px", border: "none", background: "var(--color-primary)", color: "#fff", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
-                >
-                  ĐẶT HÀNG NGAY
-                </button>
+                {Number(product.price) > 0 ? (
+                  <>
+                    <button
+                      onClick={handleAddToCart}
+                      className="add-to-cart-btn"
+                      style={{ flex: 1, padding: "18px", borderRadius: "50px", border: "2px solid var(--color-primary)", background: "transparent", color: "var(--color-primary)", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
+                    >
+                      THÊM VÀO GIỎ
+                    </button>
+                    <button
+                      onClick={handleBuyNow}
+                      className="order-now-btn"
+                      style={{ flex: 1.5, padding: "18px", borderRadius: "50px", border: "none", background: "var(--color-primary)", color: "#fff", fontWeight: 700, transition: "var(--transition)", cursor: "pointer" }}
+                    >
+                      ĐẶT HÀNG NGAY
+                    </button>
+                  </>
+                ) : (
+                  <a
+                    href="tel:0356308211"
+                    className="contact-now-btn"
+                    style={{
+                      flex: 1,
+                      padding: "18px",
+                      borderRadius: "50px",
+                      border: "none",
+                      background: "var(--color-primary)",
+                      color: "#fff",
+                      fontWeight: 700,
+                      textAlign: "center",
+                      textDecoration: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "10px"
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    LIÊN HỆ NGAY: 035 630 8211
+                  </a>
+                )}
               </div>
 
               {details?.specs && (
@@ -251,7 +279,7 @@ export default function ProductDetailClient({ product, details, relatedProducts 
                   </div>
                   <div className="slider-overlay-content">
                     <h3 className="slider-product-name">{p.name}</h3>
-                    <p className="slider-product-price">Giá: {p.price}</p>
+                    <p className="slider-product-price">Giá: {formatPrice(p.price)}</p>
                     <div className="slider-action-btn">XEM CHI TIẾT</div>
                   </div>
                 </Link>

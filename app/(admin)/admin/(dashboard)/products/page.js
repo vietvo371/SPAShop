@@ -13,6 +13,7 @@ import {
   X
 } from "lucide-react";
 import styles from "../../admin.module.css";
+import { formatPrice } from "@/app/lib/utils";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -218,7 +219,7 @@ export default function AdminProductsPage() {
                         )}
                       </td>
                       <td>
-                        <span className={styles.price}>{product.price}</span>
+                        <span className={styles.price}>{formatPrice(product.price)}</span>
                       </td>
                       <td>
                         {product.isFeatured ? (

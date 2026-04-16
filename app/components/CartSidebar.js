@@ -6,6 +6,7 @@ import Link from "next/link";
 import { X, ShoppingBag, Trash2, Plus, Minus, ArrowRight } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import styles from "./CartSidebar.module.css";
+import { formatPrice } from "../lib/utils";
 
 export default function CartSidebar({ isOpen, onClose }) {
     const { cartItems, removeFromCart, updateQuantity, cartTotal, cartCount } = useCart();
@@ -68,7 +69,7 @@ export default function CartSidebar({ isOpen, onClose }) {
                                         <Link href={`/san-pham/${item.slug}`} className={styles.itemName} onClick={handleClose}>
                                             {item.name}
                                         </Link>
-                                        <div className={styles.itemPrice}>{item.price}</div>
+                                        <div className={styles.itemPrice}>{formatPrice(item.price)}</div>
                                         <div className={styles.itemActions}>
                                             <div className={styles.quantityControls}>
                                                 <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
@@ -94,7 +95,7 @@ export default function CartSidebar({ isOpen, onClose }) {
                     <div className={styles.footer}>
                         <div className={styles.subtotal}>
                             <span>Tạm tính:</span>
-                            <span className={styles.totalAmount}>{cartTotal.toLocaleString("vi-VN")}đ</span>
+                            <span className={styles.totalAmount}>{formatPrice(cartTotal)}</span>
                         </div>
                         <p className={styles.taxNote}>Thuế và phí vận chuyển được tính lúc thanh toán</p>
                         <div className={styles.footerBtns}>

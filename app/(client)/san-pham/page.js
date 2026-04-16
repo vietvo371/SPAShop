@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { formatPrice } from "@/app/lib/utils";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -101,7 +102,7 @@ export default function ProductsPage() {
                   <div className="product-info">
                     <h3 className="product-name">{product.name}</h3>
                     <p className="product-desc">{product.description}</p>
-                    <p className="product-price">{product.price}</p>
+                    <p className="product-price">{formatPrice(product.price)}</p>
                   </div>
                 </Link>
               ))}

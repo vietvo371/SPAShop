@@ -188,8 +188,10 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
       newErrors.slug = "Slug chỉ chứa chữ thường, số và dấu gạch ngang";
     }
 
-    if (!formData.price.trim()) {
-      newErrors.price = "Giá không được trống";
+    if (formData.price === undefined || formData.price === null || formData.price === "") {
+      newErrors.price = "Giá không được trống (nhập 0 nếu muốn hiển thị 'Liên hệ')";
+    } else if (isNaN(Number(formData.price))) {
+      newErrors.price = "Giá phải là số";
     }
 
     setErrors(newErrors);
@@ -247,13 +249,14 @@ export default function ProductForm({ product, onSubmit, isSubmitting }) {
                 Giá <span className={styles.required}>*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
-                placeholder="1.000.000₫"
+                placeholder="Ví dụ: 1500000 (Để 0 nếu muốn hiện 'Liên hệ')"
                 className={`${styles.input} ${errors.price ? styles.inputError : ""}`}
               />
+              <span className={styles.hint}>Nhập số nguyên. Ví dụ: 1500000 = 1.500.000₫. Nhập 0 để ẩn nút đặt hàng.</span>
               {errors.price && <span className={styles.errorText}>{errors.price}</span>}
             </div>
 
