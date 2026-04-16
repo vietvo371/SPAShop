@@ -93,7 +93,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="vi" className={`${thRunalto.variable}`}>
+    <html lang="vi" className={`${thRunalto.variable}`} suppressHydrationWarning>
       <body className={thRunalto.className}>
         <CartProvider>
           {children}

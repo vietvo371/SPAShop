@@ -34,7 +34,7 @@ export default function ProductSlider() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/products?limit=6&isFeatured=true");
+        const res = await fetch("/api/products?limit=6&featured=true");
         const data = await res.json();
         if (data.success) {
           setProducts(data.data);
