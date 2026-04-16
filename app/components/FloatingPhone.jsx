@@ -19,16 +19,16 @@ export default function FloatingPhone() {
                 right: "20px",
                 bottom: "100px",
                 zIndex: 1000,
-                width: "60px",
-                height: "60px",
+                width: "50px",
+                height: "50px",
                 borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: "#fafafa",
-                boxShadow: "0 4px 20px rgba(37, 211, 102, 0.4)",
+                background: "var(--color-primary)",
+                boxShadow: "0 0 0 0 rgba(104, 10, 178, 0.4)",
                 textDecoration: "none",
-                animation: "pulse 2s ease infinite",
+                animation: "ripple-primary 2s infinite ease-in-out",
                 overflow: "hidden"
             }}
             aria-label="WhatsApp"
@@ -36,9 +36,9 @@ export default function FloatingPhone() {
             <img
                 src="/images/icon/whatsapp.png"
                 alt="WhatsApp"
-                width="60"
-                height="60"
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                width="50"
+                height="50"
+                style={{ width: "70%", height: "70%", objectFit: "contain" }}
             />
         </a>
     );

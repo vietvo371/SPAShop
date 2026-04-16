@@ -23,9 +23,17 @@ export default function ZaloWidget() {
         right: "20px",
         bottom: "170px",
         zIndex: 900,
+        width: "50px",
+        height: "50px",
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "var(--color-primary)",
+        boxShadow: "0 0 0 0 rgba(104, 10, 178, 0.4)",
         cursor: "pointer",
         transition: "transform 0.3s ease",
-        animation: "pulse 2s ease infinite",
+        animation: "ripple-primary 2s infinite ease-in-out",
       }}
       onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
       onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
@@ -34,12 +42,12 @@ export default function ZaloWidget() {
       <img
         src="/images/icon/iconzalo.png"
         alt="Zalo"
-        width="60"
-        height="60"
+        width="50"
+        height="50"
         style={{
-          borderRadius: "50%",
-          boxShadow: "0 4px 15px rgba(0, 104, 255, 0.3)",
-          backgroundColor: "white"
+          width: "75%",
+          height: "75%",
+          objectFit: "contain"
         }}
       />
     </div>

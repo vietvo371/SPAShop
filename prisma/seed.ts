@@ -78,80 +78,106 @@ async function main() {
   console.log(`✅ Created ${categories.length} categories`);
 
   // ============================================
-  // 4. Tạo Products
+  // 4. Tạo Products & Details từ JSON
   // ============================================
-  console.log("📦 Tạo products...");
-  const products = [
-    {
-      name: "Cây Trâm Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "cay-tram-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "3.800.000₫",
-      description: "Cây trâm massage thông kinh lạc, hỗ trợ tuần hoàn máu vùng đầu và cổ.",
-      category: { connect: { id: categories[1].id } },
-      isFeatured: true,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180590/chanan/ocjsylfhwfgjdnnmmy49.png",
-    },
-    {
-      name: "Mặt Gốm Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "mat-gom-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "2.600.000₫",
-      description: "Miếng gốm massage thông kinh lạc, ứng dụng công nghệ Nano phát tia hồng ngoại xa.",
-      category: { connect: { id: categories[1].id } },
-      isFeatured: true,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180594/chanan/to6t5fr6g1ri8k0bq9gl.png",
-    },
-    {
-      name: "Máy Nén Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "may-nen-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "7.800.000₫",
-      description: "Máy nén nhiệt công nghệ nano bán dẫn tia hồng ngoại xa là giải pháp hiện đại cho việc chăm sóc sức khỏe tại nhà.",
-      category: { connect: { id: categories[0].id } },
-      isFeatured: true,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180599/chanan/f3jnfgbexo6grp2smai2.png",
-    },
-    {
-      name: "Đai Mắt Nhiệt Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "dai-mat-nhiet-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "5.800.000₫",
-      description: "Giải pháp thư giãn mắt, giảm mệt mỏi và quầng thâm bằng nhiệt hồng ngoại xa.",
-      category: { connect: { id: categories[0].id } },
-      isFeatured: false,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180603/chanan/ee5zfdx4d9mwzbrfgz8j.png",
-    },
-    {
-      name: "Vòng Tay Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "vong-tay-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "3.400.000₫",
-      description: "Sản phẩm trang sức kết hợp công nghệ hiện đại giúp cân bằng năng lượng.",
-      category: { connect: { id: categories[2].id } },
-      isFeatured: false,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180608/chanan/o7gab0tnnhtdtn8ntwln.jpg",
-    },
-    {
-      name: "Đai Lưng Ánh Sáng Sinh Học Hồng Ngoại Xa",
-      slug: "dai-lung-anh-sang-sinh-hoc-hong-ngoai-xa",
-      price: "16.800.000₫",
-      description: "Đai lưng hồng ngoại xa hỗ trợ giảm đau lưng và cải thiện cột sống.",
-      category: { connect: { id: categories[0].id } },
-      isFeatured: false,
-      imageUrl: "https://res.cloudinary.com/dltbjoii4/image/upload/v1776180612/chanan/e3lkgdawa4ikkphw9ktq.png",
-    },
-  ];
+  console.log("📦 Đang nạp products từ data/products.json...");
+  const productsData = require("../data/products.json");
+  const productDetailsData = require("../data/product_details.json");
 
-  for (const product of products) {
-    // Convert string price (e.g., "3.800.000₫") to number
-    const numericPrice = Number(product.price.replace(/[^0-9]/g, ""));
+  for (const pData of productsData) {
+    // 1. Xác định Category
+    let categorySlug = "thiet-bi-fir-khong-dien"; // Mặc định
+    const lowerName = pData.name.toLowerCase();
+    const lowerSlug = pData.slug.toLowerCase();
 
-    await prisma.product.upsert({
-      where: { slug: product.slug },
-      update: {},
-      create: {
-        ...product,
+    if (lowerName.includes("máy") || lowerName.includes("đai") || lowerName.includes("sấy") || lowerName.includes("quạt")) {
+      categorySlug = "may-hong-ngoai-xa";
+    } else if (lowerName.includes("vòng") || lowerName.includes("lắc") || lowerName.includes("bao") || lowerName.includes("trang sức") || lowerName.includes("dây chuyền") || lowerName.includes("nón")) {
+      categorySlug = "trang-suc-hong-ngoai-xa";
+    }
+
+    const category = categories.find(c => c.slug === categorySlug) || categories[1];
+
+    // 2. Xử lý giá tiền
+    let numericPrice = 0;
+    if (typeof pData.price === "string" && pData.price !== "Liên hệ") {
+      numericPrice = Number(pData.price.replace(/[^0-9]/g, ""));
+    }
+
+    // 3. Lấy detail mở rộng (gallery)
+    const extraDetail = productDetailsData[pData.slug];
+
+    // 4. Tạo/Cập nhật Product
+    const product = await prisma.product.upsert({
+      where: { slug: pData.slug },
+      update: {
+        name: pData.name,
         price: numericPrice,
+        description: pData.description,
+        imageUrl: pData.image_url || pData.imageUrl,
+        categoryId: category.id,
+      },
+      create: {
+        name: pData.name,
+        slug: pData.slug,
+        price: numericPrice,
+        description: pData.description,
+        imageUrl: pData.image_url || pData.imageUrl,
+        categoryId: category.id,
+        isActive: true,
       },
     });
+
+    // 5. Cập nhật ProductDetail (Gallery & Specs)
+    if (extraDetail) {
+      await prisma.productDetail.upsert({
+        where: { productId: product.id },
+        update: {
+          galleryImages: extraDetail.gallery_images,
+          fullDescHtml: extraDetail.full_description,
+          specsDetailed: extraDetail.specs_detailed || {},
+          functionsHtml: extraDetail.functions_content,
+        },
+        create: {
+          productId: product.id,
+          galleryImages: extraDetail.gallery_images,
+          fullDescHtml: extraDetail.full_description,
+          specsDetailed: extraDetail.specs_detailed || {},
+          functionsHtml: extraDetail.functions_content,
+        },
+      });
+
+      // 6. Tạo các bản ghi ProductImage cho Gallery (nếu chưa có)
+      if (extraDetail.gallery_images && Array.isArray(extraDetail.gallery_images)) {
+        // Xóa ảnh cũ để sync lại hoặc upsert
+        await prisma.productImage.deleteMany({ where: { productId: product.id } });
+
+        await prisma.productImage.createMany({
+          data: extraDetail.gallery_images.map((url, index) => ({
+            productId: product.id,
+            url: url,
+            isPrimary: index === 0,
+            orderIndex: index
+          }))
+        });
+      }
+    } else {
+      // Nếu không có detail mở rộng, tạo 1 ảnh primary từ image_url
+      const imgUrl = pData.image_url || pData.imageUrl;
+      if (imgUrl) {
+        await prisma.productImage.deleteMany({ where: { productId: product.id } });
+        await prisma.productImage.create({
+          data: {
+            productId: product.id,
+            url: imgUrl,
+            isPrimary: true,
+            orderIndex: 0
+          }
+        });
+      }
+    }
   }
-  console.log(`✅ Created ${products.length} products`);
+  console.log(`✅ Đã nạp xong ${productsData.length} products`);
 
   // ============================================
   // 5. Tạo Services

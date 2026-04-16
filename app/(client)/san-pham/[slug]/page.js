@@ -37,6 +37,12 @@ export default async function ProductDetailPage({ params }) {
     notFound();
   }
 
+  // Convert Decimal to number for serialization
+  const sanitizedProduct = {
+    ...product,
+    price: Number(product.price)
+  };
+
   const relatedProducts = await prisma.product.findMany({
     where: {
       categoryId: product.categoryId,
@@ -52,10 +58,11 @@ export default async function ProductDetailPage({ params }) {
     }
   });
 
-  // Transform for ProductDetailClient format
+  // Transform for ProductDetailClient format and convert Decimal
   const sanitizedRelated = relatedProducts.map(p => ({
     ...p,
-    imageUrl: p.images[0]?.url || '/images/hero-banner.png'
+    price: Number(p.price),
+    imageUrl: p.images[0]?.url || p.imageUrl || '/images/hero-banner.png'
   }));
 
   return (
@@ -85,7 +92,7 @@ export default async function ProductDetailPage({ params }) {
       </section>
 
       <ProductDetailClient
-        product={product}
+        product={sanitizedProduct}
         details={product.details}
         relatedProducts={sanitizedRelated}
       />
