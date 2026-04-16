@@ -6,10 +6,10 @@ import { prisma } from "@/app/lib/prisma";
 // ============================================
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const { status, note } = body;
 
@@ -40,10 +40,10 @@ export async function PATCH(
 // ============================================
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     await prisma.consultationLead.delete({
       where: { id },
