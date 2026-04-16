@@ -5,17 +5,16 @@ import Image from "next/image";
 import {
     ShoppingCart,
     Search,
-    Filter,
     Eye,
-    CheckCircle,
-    XCircle,
-    Clock,
-    Phone,
+    X,
     User,
-    Hash,
+    Phone,
     MapPin,
     CreditCard,
-    Package,
+    Hash,
+    ChevronLeft,
+    ChevronRight,
+    XCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import styles from "../../admin.module.css";
@@ -59,8 +58,7 @@ export default function OrdersPage() {
         } catch (error) {
             toast.error("Lỗi khi tải danh sách đơn hàng");
         } finally {
-            setLoading(true);
-            setTimeout(() => setLoading(false), 300);
+            setLoading(false);
         }
     };
 
@@ -81,7 +79,6 @@ export default function OrdersPage() {
             if (result.success) {
                 toast.success("Cập nhật trạng thái thành công");
                 fetchOrders();
-                // If the selected order is the one being updated, refresh it too
                 if (selectedOrder && selectedOrder.id === id) {
                     setSelectedOrder({ ...selectedOrder, status, staffNote });
                 }
@@ -95,9 +92,9 @@ export default function OrdersPage() {
         }
     };
 
-
     return (
-        <div className={styles.pageContainer}>
+        <div>
+            {/* Header */}
             <div className={styles.pageHeader}>
                 <div>
                     <h1 className={styles.pageTitle}>Quản lý Đơn hàng</h1>
@@ -105,11 +102,12 @@ export default function OrdersPage() {
                 </div>
             </div>
 
-            <div className={styles.filterBar}>
-                <div className={styles.filterGroup}>
-                    <div className={styles.searchWrapper}>
-                        <Search size={18} className={styles.searchIcon} />
-                        <form onSubmit={handleSearch}>
+            {/* Filter Card */}
+            <div className={styles.card} style={{ marginBottom: "24px" }}>
+                <form onSubmit={handleSearch} className={styles.filterForm}>
+                    <div className={styles.filterRow}>
+                        <div className={styles.searchWrapper}>
+                            <Search size={18} className={styles.searchIcon} />
                             <input
                                 type="text"
                                 placeholder="Tìm mã đơn, tên, điện thoại..."
@@ -117,22 +115,26 @@ export default function OrdersPage() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className={styles.searchInput}
                             />
-                        </form>
+                        </div>
+                        <select
+                            className={styles.filterSelect}
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                        >
+                            <option value="">Tất cả trạng thái</option>
+                            {Object.entries(statusMap).map(([key, { label }]) => (
+                                <option key={key} value={key}>{label}</option>
+                            ))}
+                        </select>
+                        <button type="submit" className={`${styles.btn} ${styles.btnSecondary}`}>
+                            Tìm kiếm
+                        </button>
                     </div>
-                    <select
-                        className={styles.selectFilter}
-                        value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
-                    >
-                        <option value="">Tất cả trạng thái</option>
-                        {Object.entries(statusMap).map(([key, { label }]) => (
-                            <option key={key} value={key}>{label}</option>
-                        ))}
-                    </select>
-                </div>
+                </form>
             </div>
 
-            <div className={styles.tableCard}>
+            {/* Orders Table Card */}
+            <div className={styles.card}>
                 {loading ? (
                     <div className={styles.loadingState}>
                         <div className={styles.spinner}></div>
@@ -144,68 +146,72 @@ export default function OrdersPage() {
                         <p>Không có đơn hàng nào được tìm thấy.</p>
                     </div>
                 ) : (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Mã đơn hàng</th>
-                                <th>Khách hàng</th>
-                                <th>Tổng đơn</th>
-                                <th>Trạng thái</th>
-                                <th>Ngày đặt</th>
-                                <th style={{ textAlign: "right" }}>Thao tác</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orders.map((order) => (
-                                <tr key={order.id}>
-                                    <td>
-                                        <span style={{ fontWeight: 700, color: "#333" }}>#{order.orderNumber}</span>
-                                    </td>
-                                    <td>
-                                        <div style={{ display: "flex", flexDirection: "column" }}>
-                                            <span style={{ fontWeight: 600 }}>{order.customerName}</span>
-                                            <span style={{ fontSize: "0.8rem", color: "#666" }}>{order.customerPhone}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span style={{ fontWeight: 700, color: "var(--color-primary)" }}>
-                                            {formatPrice(order.totalAmount)}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span
-                                            className={styles.statusBadge}
-                                            style={{
-                                                backgroundColor: statusMap[order.status]?.bg,
-                                                color: statusMap[order.status]?.color,
-                                            }}
-                                        >
-                                            {statusMap[order.status]?.label}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div style={{ fontSize: "0.85rem", color: "#666" }}>
-                                            {new Date(order.createdAt).toLocaleDateString("vi-VN")}
-                                        </div>
-                                    </td>
-                                    <td style={{ textAlign: "right" }}>
-                                        <button
-                                            className={styles.actionIconButton}
-                                            onClick={() => {
-                                                setSelectedOrder(order);
-                                                setStaffNote(order.staffNote || "");
-                                            }}
-                                        >
-                                            <Eye size={18} />
-                                        </button>
-                                    </td>
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Khách hàng</th>
+                                    <th>Tổng đơn</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày đặt</th>
+                                    <th style={{ width: "80px", textAlign: "right" }}>Thao tác</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {orders.map((order) => (
+                                    <tr key={order.id}>
+                                        <td>
+                                            <span style={{ fontWeight: 700, color: "#333" }}>#{order.orderNumber}</span>
+                                        </td>
+                                        <td>
+                                            <div style={{ display: "flex", flexDirection: "column" }}>
+                                                <span style={{ fontWeight: 600 }}>{order.customerName}</span>
+                                                <span style={{ fontSize: "0.8rem", color: "#666" }}>{order.customerPhone}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span style={{ fontWeight: 700, color: "var(--color-primary)" }}>
+                                                {formatPrice(order.totalAmount)}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                className={styles.statusBadge}
+                                                style={{
+                                                    backgroundColor: statusMap[order.status]?.bg,
+                                                    color: statusMap[order.status]?.color,
+                                                }}
+                                            >
+                                                {statusMap[order.status]?.label}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div style={{ fontSize: "0.85rem", color: "#666" }}>
+                                                {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                                            </div>
+                                        </td>
+                                        <td style={{ textAlign: "right" }}>
+                                            <button
+                                                className={styles.actionBtn}
+                                                onClick={() => {
+                                                    setSelectedOrder(order);
+                                                    setStaffNote(order.staffNote || "");
+                                                }}
+                                                title="Xem chi tiết"
+                                            >
+                                                <Eye size={18} />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </div>
 
+            {/* Detail Modal */}
             {selectedOrder && (
                 <div className={styles.modalOverlay} onClick={() => setSelectedOrder(null)}>
                     <div className={styles.modal} style={{ maxWidth: "800px", width: "95%" }} onClick={(e) => e.stopPropagation()}>
@@ -215,7 +221,7 @@ export default function OrdersPage() {
                                 Đơn hàng #{selectedOrder.orderNumber}
                             </h3>
                             <button className={styles.modalClose} onClick={() => setSelectedOrder(null)}>
-                                <XCircle size={20} />
+                                <X size={20} />
                             </button>
                         </div>
                         <div className={styles.modalBody} style={{ maxHeight: "80vh", overflowY: "auto" }}>
@@ -281,16 +287,17 @@ export default function OrdersPage() {
                                 <div>
                                     <label style={{ fontSize: "0.75rem", color: "#999", textTransform: "uppercase", fontWeight: 700, display: "block", marginBottom: "10px" }}>Ghi chú nội bộ</label>
                                     <textarea
-                                        className={styles.textarea}
+                                        className={styles.formTextarea}
                                         placeholder="Nhập ghi chú sau khi xử lý đơn..."
                                         rows={3}
                                         value={staffNote}
                                         onChange={(e) => setStaffNote(e.target.value)}
+                                        style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #ddd" }}
                                     />
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder.id, selectedOrder.status)}
-                                        style={{ marginTop: "10px", fontSize: "0.8rem", padding: "8px 15px" }}
-                                        className={styles.btnOutline}
+                                        style={{ marginTop: "10px" }}
+                                        className={`${styles.btn} ${styles.btnSecondary}`}
                                         disabled={isUpdating}
                                     >
                                         Lưu ghi chú
@@ -304,32 +311,32 @@ export default function OrdersPage() {
                                 <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder.id, "CONFIRMED")}
-                                        className={`${styles.statusBadgeBtn}`}
-                                        style={{ background: "#f59e0b", color: "#fff", border: "none" }}
+                                        className={styles.btn}
+                                        style={{ background: "#f59e0b", color: "#fff" }}
                                         disabled={isUpdating || selectedOrder.status === "CONFIRMED"}
                                     >
                                         Xác nhận chốt đơn
                                     </button>
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder.id, "SHIPPING")}
-                                        className={`${styles.statusBadgeBtn}`}
-                                        style={{ background: "#8b5cf6", color: "#fff", border: "none" }}
+                                        className={styles.btn}
+                                        style={{ background: "#8b5cf6", color: "#fff" }}
                                         disabled={isUpdating || selectedOrder.status === "SHIPPING"}
                                     >
                                         Đang giao hàng
                                     </button>
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder.id, "COMPLETED")}
-                                        className={`${styles.statusBadgeBtn}`}
-                                        style={{ background: "#10b981", color: "#fff", border: "none" }}
+                                        className={styles.btn}
+                                        style={{ background: "#10b981", color: "#fff" }}
                                         disabled={isUpdating || selectedOrder.status === "COMPLETED"}
                                     >
                                         Hoàn thành
                                     </button>
                                     <button
                                         onClick={() => updateOrderStatus(selectedOrder.id, "CANCELLED")}
-                                        className={`${styles.statusBadgeBtn}`}
-                                        style={{ background: "#ef4444", color: "#fff", border: "none" }}
+                                        className={styles.btn}
+                                        style={{ background: "#ef4444", color: "#fff" }}
                                         disabled={isUpdating || selectedOrder.status === "CANCELLED"}
                                     >
                                         Hủy đơn hàng

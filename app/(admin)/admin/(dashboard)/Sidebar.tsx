@@ -32,7 +32,7 @@ const adminNavItems = [
             { href: "/admin/appointments", label: "Lịch hẹn", icon: CalendarDays },
             { href: "/admin/contact", label: "Liên hệ", icon: MessageSquare },
             { href: "/admin/consultations", label: "Khách Tư Vấn", icon: FileText },
-            { href: "/admin/settings", label: "Cài đặt", icon: Settings },
+            // { href: "/admin/settings", label: "Cài đặt", icon: Settings },
         ],
     },
 ];
@@ -82,12 +82,11 @@ export default function Sidebar() {
                             <ul className={styles.navList}>
                                 {section.items.map((item) => (
                                     <li key={item.href}>
-                                        <Link 
-                                            href={item.href} 
-                                            className={`${styles.navLink} ${
-                                                (item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href)) 
-                                                ? styles.active : ""
-                                            }`}
+                                        <Link
+                                            href={item.href}
+                                            className={`${styles.navLink} ${(item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href))
+                                                    ? styles.active : ""
+                                                }`}
                                         >
                                             <item.icon className={styles.navIcon} size={20} />
                                             <span className={styles.navLabel}>{item.label}</span>

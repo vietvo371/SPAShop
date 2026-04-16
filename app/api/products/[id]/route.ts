@@ -169,10 +169,9 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Soft delete - set isActive to false
-    await prisma.product.update({
+    // Hard delete
+    await prisma.product.delete({
       where: { id },
-      data: { isActive: false },
     });
 
     return NextResponse.json({

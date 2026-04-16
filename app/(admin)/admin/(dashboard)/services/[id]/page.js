@@ -4,6 +4,7 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
+import { Save, ArrowLeft } from "lucide-react";
 
 export default function EditServicePage({ params }) {
   const { id } = use(params);
@@ -207,11 +208,12 @@ export default function EditServicePage({ params }) {
         </div>
 
         <div className={styles.formActions}>
-          <a href="/admin/services" className={`${styles.btn} ${styles.btnSecondary}`}>
-            ← Hủy
-          </a>
+          <Link href="/admin/services" className={`${styles.btn} ${styles.btnSecondary}`}>
+            <ArrowLeft size={18} /> Hủy
+          </Link>
           <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={isSubmitting}>
-            {isSubmitting ? "Đang lưu..." : "💾 Cập nhật dịch vụ"}
+            <Save size={18} />
+            {isSubmitting ? "Đang lưu..." : "Cập nhật dịch vụ"}
           </button>
         </div>
       </form>

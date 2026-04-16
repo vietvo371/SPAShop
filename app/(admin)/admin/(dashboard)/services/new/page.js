@@ -3,6 +3,8 @@
 import { useState } from "react";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
+import { Plus, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function NewServicePage() {
   const [formData, setFormData] = useState({
@@ -161,11 +163,12 @@ export default function NewServicePage() {
         </div>
 
         <div className={styles.formActions}>
-          <a href="/admin/services" className={`${styles.btn} ${styles.btnSecondary}`}>
-            ← Hủy
-          </a>
+          <Link href="/admin/services" className={`${styles.btn} ${styles.btnSecondary}`}>
+            <ArrowLeft size={18} /> Hủy
+          </Link>
           <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
-            💾 Tạo dịch vụ
+            <Plus size={18} />
+            Tạo dịch vụ
           </button>
         </div>
       </form>

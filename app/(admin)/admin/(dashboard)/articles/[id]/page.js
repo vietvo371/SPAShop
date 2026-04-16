@@ -4,6 +4,8 @@ import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
+import { Save, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function EditArticlePage({ params }) {
   const { id } = use(params);
@@ -198,11 +200,12 @@ export default function EditArticlePage({ params }) {
         </div>
 
         <div className={styles.formActions}>
-          <a href="/admin/articles" className={`${styles.btn} ${styles.btnSecondary}`}>
-            ← Hủy
-          </a>
+          <Link href="/admin/articles" className={`${styles.btn} ${styles.btnSecondary}`}>
+            <ArrowLeft size={18} /> Hủy
+          </Link>
           <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={isSubmitting}>
-            {isSubmitting ? "Đang lưu..." : "💾 Cập nhật bài viết"}
+            <Save size={18} />
+            {isSubmitting ? "Đang lưu..." : "Cập nhật bài viết"}
           </button>
         </div>
       </form>

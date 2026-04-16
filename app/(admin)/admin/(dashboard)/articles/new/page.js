@@ -3,6 +3,8 @@
 import { useState } from "react";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
+import { Plus, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function NewArticlePage() {
   const [formData, setFormData] = useState({
@@ -150,11 +152,12 @@ export default function NewArticlePage() {
         </div>
 
         <div className={styles.formActions}>
-          <a href="/admin/articles" className={`${styles.btn} ${styles.btnSecondary}`}>
-            ← Hủy
-          </a>
+          <Link href="/admin/articles" className={`${styles.btn} ${styles.btnSecondary}`}>
+            <ArrowLeft size={18} /> Hủy
+          </Link>
           <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}>
-            💾 Tạo bài viết
+            <Plus size={18} />
+            Tạo bài viết
           </button>
         </div>
       </form>

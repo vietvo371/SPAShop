@@ -3,6 +3,14 @@
 import { useState, useEffect } from "react";
 import styles from "../../admin.module.css";
 import { toast } from "sonner";
+import { 
+  Save, 
+  Lock, 
+  Settings as SettingsIcon, 
+  CreditCard, 
+  User as UserIcon,
+  ShieldCheck
+} from "lucide-react";
 
 const tabs = [
   { id: "general", label: "Thông tin cơ sở" },
@@ -123,7 +131,12 @@ export default function SettingsPage() {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.pageHeader}>
-        <h1>Cài đặt</h1>
+        <div>
+          <h1 className={styles.pageTitle}>Cài đặt hệ thống</h1>
+          <p className={styles.pageSubtitle}>
+            Quản lý thông tin doanh nghiệp, tài khoản và các thiết lập website.
+          </p>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -134,7 +147,12 @@ export default function SettingsPage() {
             className={`${styles.tabBtn} ${activeTab === tab.id ? styles.active : ""}`}
             onClick={() => setActiveTab(tab.id)}
           >
-            {tab.label}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                {tab.id === "general" && <SettingsIcon size={16} />}
+                {tab.id === "account" && <UserIcon size={16} />}
+                {tab.id === "banner" && <CreditCard size={16} />}
+                {tab.label}
+            </div>
           </button>
         ))}
       </div>
@@ -223,8 +241,10 @@ export default function SettingsPage() {
                 <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSaveGeneral}
+                  disabled={saving}
                 >
-                  💾 Lưu thay đổi
+                  <Save size={18} />
+                  {saving ? "Đang lưu..." : "Lưu thay đổi"}
                 </button>
               </div>
             </div>
@@ -279,8 +299,10 @@ export default function SettingsPage() {
                 <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSavePassword}
+                  disabled={saving}
                 >
-                  🔒 Đổi mật khẩu
+                  <ShieldCheck size={18} />
+                  {saving ? "Đang xử lý..." : "Đổi mật khẩu"}
                 </button>
               </div>
             </div>
@@ -337,8 +359,10 @@ export default function SettingsPage() {
                 <button
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   onClick={handleSaveVoucher}
+                  disabled={saving}
                 >
-                  💾 Lưu voucher
+                  <Save size={18} />
+                  {saving ? "Đang lưu..." : "Lưu voucher"}
                 </button>
               </div>
             </div>
