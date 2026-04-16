@@ -139,10 +139,16 @@ async function main() {
   ];
 
   for (const product of products) {
+    // Convert string price (e.g., "3.800.000₫") to number
+    const numericPrice = Number(product.price.replace(/[^0-9]/g, ""));
+
     await prisma.product.upsert({
       where: { slug: product.slug },
       update: {},
-      create: product,
+      create: {
+        ...product,
+        price: numericPrice,
+      },
     });
   }
   console.log(`✅ Created ${products.length} products`);
