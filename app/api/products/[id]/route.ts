@@ -56,6 +56,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // ============================================
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const body = await request.json();
     const validatedData = productSchema.partial().parse(body);
@@ -156,6 +161,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 // ============================================
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
 
     const existing = await prisma.product.findUnique({

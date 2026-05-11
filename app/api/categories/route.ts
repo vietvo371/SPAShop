@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { categorySchema } from "@/app/lib/validations";
+import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
 // GET /api/categories - Lấy danh sách danh mục
@@ -38,6 +39,11 @@ export async function GET(request: NextRequest) {
 // ============================================
 export async function POST(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const validatedData = categorySchema.parse(body);
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/app/lib/prisma";
 import { consultationLeadSchema } from "@/app/lib/validations";
+import { getCurrentUser } from "@/app/lib/auth";
 // import { sendConsultationNotification } from "@/app/lib/email"; // Optional: Add later if needed
 
 // ============================================
@@ -8,9 +9,16 @@ import { consultationLeadSchema } from "@/app/lib/validations";
 // ============================================
 export async function GET(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    const pageParam = parseInt(searchParams.get("page") || "1", 10);
+    const limitParam = parseInt(searchParams.get("limit") || "20", 10);
+    const page = Number.isNaN(pageParam) ? 1 : Math.max(1, pageParam);
+    const limit = Number.isNaN(limitParam) ? 20 : Math.min(100, Math.max(1, limitParam));
     const status = searchParams.get("status");
 
     const where = {

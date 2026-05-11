@@ -9,7 +9,10 @@ export const loginSchema = z.object({
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-change-me";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
 const TOKEN_NAME = "chanan_auth_token";
 
 export interface JWTPayload {
@@ -74,17 +77,6 @@ export async function getCurrentUser() {
 
   const payload = verifyToken(token);
   if (!payload) return null;
-
-  // Handle fallback admin user
-  if (payload.userId === "dev-1") {
-    return {
-      id: "dev-1",
-      email: payload.email,
-      name: "Admin",
-      role: payload.role,
-      avatarUrl: null,
-    };
-  }
 
   try {
     const user = await prisma.user.findUnique({

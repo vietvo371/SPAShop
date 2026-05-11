@@ -9,8 +9,10 @@ import { getCurrentUser } from "@/app/lib/auth";
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    const pageParam = parseInt(searchParams.get("page") || "1", 10);
+    const limitParam = parseInt(searchParams.get("limit") || "20", 10);
+    const page = Number.isNaN(pageParam) ? 1 : Math.max(1, pageParam);
+    const limit = Number.isNaN(limitParam) ? 20 : Math.min(100, Math.max(1, limitParam));
     const search = searchParams.get("search") || "";
     const categoryId = searchParams.get("categoryId");
     const featured = searchParams.get("featured");
@@ -82,6 +84,11 @@ export async function GET(request: NextRequest) {
 // ============================================
 export async function POST(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const validatedData = productSchema.parse(body);
 

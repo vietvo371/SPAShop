@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
+import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
 // UPLOAD CONFIGURATION
@@ -28,6 +29,11 @@ function generateUUID() {
 // ============================================
 export async function POST(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
     const folder = formData.get("folder") as string || "misc";
@@ -103,8 +109,6 @@ async function uploadLocal(file: File, folder: string) {
 // ============================================
 async function uploadToCloudinary(file: File, folder: string) {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME!;
-  const apiKey = process.env.CLOUDINARY_API_KEY!;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET!;
 
   // Build FormData for Cloudinary
   const cloudFormData = new FormData();
@@ -145,6 +149,11 @@ async function uploadToCloudinary(file: File, folder: string) {
 // ============================================
 export async function DELETE(request: NextRequest) {
   try {
+    const user = await getCurrentUser();
+    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const filepath = searchParams.get("filepath");
 

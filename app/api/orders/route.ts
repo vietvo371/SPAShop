@@ -100,8 +100,10 @@ export async function GET(request: NextRequest) {
         }
 
         const { searchParams } = new URL(request.url);
-        const page = parseInt(searchParams.get("page") || "1");
-        const limit = parseInt(searchParams.get("limit") || "10");
+        const pageParam = parseInt(searchParams.get("page") || "1", 10);
+        const limitParam = parseInt(searchParams.get("limit") || "10", 10);
+        const page = Number.isNaN(pageParam) ? 1 : Math.max(1, pageParam);
+        const limit = Number.isNaN(limitParam) ? 10 : Math.min(100, Math.max(1, limitParam));
         const status = searchParams.get("status");
         const search = searchParams.get("search") || "";
 

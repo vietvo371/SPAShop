@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rg --files)",
+      "Bash(rg -E \"package.json|pnpm-lock|yarn.lock|package-lock.json|docker-compose|compose|prisma|test|vitest|jest|playwright|cypress\")",
+      "Bash(rg *)",
+      "Bash(yarn build *)",
+      "Bash(yarn lint *)",
+      "Bash(yarn dev *)",
+      "Bash(curl *)",
+      "Bash(git *)",
+      "Bash(npm run *)"
+    ]
+  }
+}

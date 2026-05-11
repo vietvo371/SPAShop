@@ -43,7 +43,8 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const serviceId = searchParams.get("serviceId");
     const productId = searchParams.get("productId");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limitParam = parseInt(searchParams.get("limit") || "10", 10);
+    const limit = Number.isNaN(limitParam) ? 10 : Math.min(100, Math.max(1, limitParam));
 
     // TODO: Thay bằng query thật khi kết nối database
     // const reviews = await prisma.review.findMany({
