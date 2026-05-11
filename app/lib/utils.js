@@ -5,11 +5,14 @@
  * @returns {string} Formatted price or fallback
  */
 export const formatPrice = (price, fallback = "Liên hệ") => {
-    if (!price || Number(price) === 0) return fallback;
+    if (price === null || price === undefined || price === "") return fallback;
 
     const numericPrice = Number(price);
+    if (Number.isNaN(numericPrice)) return String(price).trim();
+    if (numericPrice === 0) return fallback;
+
     return new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND",
-    }).format(numericPrice).replace("₫", "₫").trim();
+    }).format(numericPrice).trim();
 };
