@@ -2,9 +2,8 @@
 // Next.js Full-Stack với Prisma ORM
 
 generator client {
-  provider   = "prisma-client-js"
-  output     = "../app/generated/prisma"
-  engineType = "library"
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
