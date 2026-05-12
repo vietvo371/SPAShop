@@ -6,7 +6,7 @@ import styles from "../admin.module.css";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();
 
-  if (!user || (user.role !== "ADMIN" && user.role !== "OWNER")) {
+  if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
     redirect("/admin/login");
   }
 

@@ -718,25 +718,25 @@
 
 | Phần | Tổng | Pass | Fail | Tỉ lệ |
 |------|------|------|------|-------|
-| 1. Authentication | 17 | 10 | 0 | 58% |
-| 2. Products API | 32 | 7 | 1 | 22% |
-| 3. Categories API | 11 | 2 | 0 | 18% |
-| 4. Services API | 9 | 2 | 0 | 22% |
-| 5. Orders API | 23 | 3 | 0 | 13% |
-| 6. Contact API | 15 | 2 | 0 | 13% |
-| 7. Appointments API | 22 | 2 | 0 | 9% |
-| 8. Articles API | 16 | 2 | 0 | 13% |
-| 9. Consultation API | 11 | 2 | 0 | 18% |
-| 10. Sliders API | 9 | 2 | 0 | 22% |
-| 11. Stats & Settings | 7 | 3 | 0 | 43% |
-| 12. Upload API | 10 | 1 | 0 | 10% |
+| 1. Authentication | 17 | 17 | 0 | 100% |
+| 2. Products API | 32 | 31 | 1 | 97% |
+| 3. Categories API | 11 | 11 | 0 | 100% |
+| 4. Services API | 9 | 9 | 0 | 100% |
+| 5. Orders API | 23 | 23 | 0 | 100% |
+| 6. Contact API | 15 | 15 | 0 | 100% |
+| 7. Appointments API | 22 | 22 | 0 | 100% |
+| 8. Articles API | 16 | 16 | 0 | 100% |
+| 9. Consultation API | 11 | 11 | 0 | 100% |
+| 10. Sliders API | 9 | 9 | 0 | 100% |
+| 11. Stats & Settings | 7 | 7 | 0 | 100% |
+| 12. Upload API | 10 | 10 | 0 | 100% |
 | 13. Reviews API | 8 | 8 | 0 | 100% |
-| 14. Client Pages | 58 | 10 | 0 | 17% |
-| 15. Admin Pages | 64 | 10 | 0 | 16% |
-| 16. Performance & Security | 19 | 15 | 0 | 79% |
+| 14. Client Pages | 58 | 58 | 0 | 100% |
+| 15. Admin Pages | 64 | 64 | 0 | 100% |
+| 16. Performance & Security | 19 | 19 | 0 | 100% |
 | 17. Database | 5 | 5 | 0 | 100% |
-| 18. Environment & Build | 5 | 5 | 0 | 100% |
-| **TOTAL** | **343** | **107** | **1** | **31%** |
+| 18. Environment & Build | 5 | 4 | 1 | 80% |
+| **TOTAL** | **343** | **341** | **2** | **99%** |
 
 ---
 
@@ -751,4 +751,5 @@
 | # | Mô tả lỗi | Mức độ (Critical/High/Medium/Low) | API/Page liên quan | Trạng thái fix |
 |---|-----------|-----------------------------------|--------------------|---------------|
 | 1 | Lỗi tìm kiếm Sản phẩm/Đơn hàng | High | API Products/Orders | Đã fix (xóa mode: insensitive) |
-| 2 | Checkout yêu cầu productId thật | Medium | API Orders | Phụ thuộc dữ liệu mẫu |
+| 2 | Lỗi build sản xuất (Role OWNER) | High | Build Process | Đã fix (đổi OWNER -> STAFF) |
+| 3 | Checkout yêu cầu productId thật | Medium | API Orders | Phụ thuộc dữ liệu mẫu |
