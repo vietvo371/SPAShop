@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { formatPrice } from "@/app/lib/utils";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -119,7 +119,7 @@ export default function ProductsPage() {
                 {products.map((product) => (
                   <Link href={`/san-pham/${product.slug}`} key={product.id} className="product-card">
                     <div className="product-image-wrapper">
-                      <Image
+                      <ImageWithSkeleton
                         src={product.primaryImage || product.imageUrl}
                         alt={product.name}
                         fill

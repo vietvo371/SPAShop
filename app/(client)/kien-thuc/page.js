@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 
 export const metadata = {
   title: "Kiến Thức Sức Khỏe - Tâm An Energy Healing",
@@ -56,7 +56,7 @@ export default function KnowledgePage() {
                 height: "100%"
               }}>
                 <div className="blog-card-image" style={{ height: "240px", position: "relative" }}>
-                  <Image
+                  <ImageWithSkeleton
                     src={article.image || "/images/hero-banner.png"}
                     alt={article.title}
                     fill

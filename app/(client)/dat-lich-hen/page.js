@@ -1,5 +1,4 @@
 import BookingForm from "@/app/components/BookingForm";
-import Image from "next/image";
 
 export const metadata = {
   title: "Đặt Lịch Hẹn - Tâm An Energy Healing",

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 
 export const metadata = {
   title: "Dịch Vụ Chăm Sóc - Tâm An Energy Healing",
@@ -111,10 +111,10 @@ export default function ServicesPage() {
                 </a>
               </div>
               <div className="page-image-wrapper" style={{ height: "400px" }}>
-                <Image 
-                  src={service.image} 
-                  alt={service.title} 
-                  fill 
+                <ImageWithSkeleton
+                  src={service.image}
+                  alt={service.title}
+                  fill
                   style={{ objectFit: "cover" }}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />

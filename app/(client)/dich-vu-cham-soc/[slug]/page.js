@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 import { notFound } from "next/navigation";
 import services from "@/data/services.json";
 import styles from "./service-detail.module.css";
@@ -77,7 +77,7 @@ export default async function ServiceDetailPage({ params }) {
               overflow: "hidden",
               boxShadow: "var(--shadow-lg)"
             }}>
-              <Image
+              <ImageWithSkeleton
                 src={service.image}
                 alt={service.name}
                 fill
@@ -268,7 +268,7 @@ export default async function ServiceDetailPage({ params }) {
             {relatedServices.map((s) => (
               <div key={s.slug} className="service-card">
                 <div className="service-card-image">
-                  <Image
+                  <ImageWithSkeleton
                     src={s.image}
                     alt={s.name}
                     fill

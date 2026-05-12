@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
-import Image from "next/image";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronRight, Truck, CreditCard, ShieldCheck, ShoppingBag, Trash2, MapPin, User, Phone, Mail, FileText } from "lucide-react";
@@ -370,7 +370,7 @@ function CheckoutContent() {
                                 {displayItems.map((item) => (
                                     <div key={item.id} className={styles.cartItem}>
                                         <div className={styles.itemImage}>
-                                            <Image src={item.imageUrl} alt={item.name} fill style={{ objectFit: "cover" }} />
+                                            <ImageWithSkeleton src={item.imageUrl} alt={item.name} fill style={{ objectFit: "cover" }} />
                                         </div>
                                         <div className={styles.itemInfo}>
                                             <h3 className={styles.itemName}>{item.name}</h3>

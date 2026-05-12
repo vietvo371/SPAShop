@@ -1,4 +1,4 @@
-import Image from "next/image";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 
 export const metadata = {
   title: "Về Tâm An - Câu Chuyện Của Chúng Tôi",
@@ -31,7 +31,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="page-image-wrapper">
-              <Image
+              <ImageWithSkeleton
                 src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776184763/chanan/nesb9ha795fnlokag6i2.jpg"
                 alt="Tâm An Center"
                 fill
@@ -74,9 +74,9 @@ export default function AboutPage() {
             ].map((url, index) => (
               <div key={index} className="certificate-card">
                 <div className="certificate-image-wrapper">
-                  <Image 
-                    src={url} 
-                    alt={`Chứng nhận ${index + 1}`} 
+                  <ImageWithSkeleton
+                    src={url}
+                    alt={`Chứng nhận ${index + 1}`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 968px) 50vw, 33vw"
                   />

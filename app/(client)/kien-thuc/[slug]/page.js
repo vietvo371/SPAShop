@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 import { notFound } from "next/navigation";
 import articles from "@/data/articles.json";
 import styles from "./knowledge-detail.module.css";
@@ -97,7 +97,7 @@ export default async function ArticleDetailPage({ params }) {
       {/* Hero Image */}
       <div className="container">
         <div className={styles.heroImageContainer}>
-          <Image
+          <ImageWithSkeleton
             src={article.image || "/images/hero-banner.png"}
             alt={article.title}
             fill
@@ -152,7 +152,7 @@ export default async function ArticleDetailPage({ params }) {
               {relatedArticles.map((a) => (
                 <article key={a.slug} className="blog-card">
                   <div className="blog-card-image">
-                    <Image
+                    <ImageWithSkeleton
                       src={a.image || "/images/hero-banner.png"}
                       alt={a.title}
                       fill
