@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
       ...(isAdminMode ? {} : { isActive: true }),
       ...(search && {
         OR: [
-          { name: { contains: search, mode: "insensitive" as const } },
-          { description: { contains: search, mode: "insensitive" as const } },
+          { name: { contains: search } },
+          { description: { contains: search } },
         ],
       }),
       ...(categoryId && { categoryId }),

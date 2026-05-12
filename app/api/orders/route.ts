@@ -111,9 +111,9 @@ export async function GET(request: NextRequest) {
             ...(status && { status: status as any }),
             ...(search && {
                 OR: [
-                    { customerName: { contains: search, mode: "insensitive" as const } },
-                    { customerPhone: { contains: search, mode: "insensitive" as const } },
-                    { orderNumber: { contains: search, mode: "insensitive" as const } },
+                    { customerName: { contains: search } },
+                    { customerPhone: { contains: search } },
+                    { orderNumber: { contains: search } },
                 ],
             }),
         };
