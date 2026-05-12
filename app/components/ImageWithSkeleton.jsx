@@ -52,16 +52,6 @@ export default function ImageWithSkeleton({
           transition: "opacity 200ms ease",
         }}
       />
-      <style jsx global>{`
-        @keyframes image-skeleton-shimmer {
-          0% {
-            background-position: 200% 0;
-          }
-          100% {
-            background-position: -200% 0;
-          }
-        }
-      `}</style>
     </>
   );
 }

@@ -58,6 +58,9 @@ export async function GET() {
                 },
             }),
             prisma.contactMessage.findMany({
+                where: {
+                    status: "NEW",
+                },
                 take: 5,
                 orderBy: {
                     createdAt: "desc",

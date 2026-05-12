@@ -3,19 +3,26 @@
 import { useState, useEffect } from "react";
 import styles from "../../admin.module.css";
 import { toast } from "sonner";
-import { 
-  Save, 
-  Lock, 
-  Settings as SettingsIcon, 
-  CreditCard, 
+import {
+  Save,
+  Lock,
+  Settings as SettingsIcon,
+  CreditCard,
   User as UserIcon,
-  ShieldCheck
+  ShieldCheck,
+  Image,
+  Plus,
+  Pencil,
+  Trash2,
+  X,
+  Upload,
 } from "lucide-react";
 
 const tabs = [
   { id: "general", label: "Thông tin cơ sở" },
   { id: "account", label: "Tài khoản" },
   { id: "banner", label: "Banner & Voucher" },
+  { id: "sliders", label: "Slider trang chủ" },
 ];
 
 export default function SettingsPage() {
@@ -37,6 +44,22 @@ export default function SettingsPage() {
     voucherExpiry: "",
   });
 
+  // Slider state
+  const [sliders, setSliders] = useState([]);
+  const [sliderLoading, setSliderLoading] = useState(false);
+  const [showSliderForm, setShowSliderForm] = useState(false);
+  const [editingSliderId, setEditingSliderId] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [sliderForm, setSliderForm] = useState({
+    title: "",
+    subtitle: "",
+    imageUrl: "",
+    linkUrl: "",
+    buttonText: "",
+    orderIndex: 0,
+    isActive: true,
+  });
+
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -56,7 +79,130 @@ export default function SettingsPage() {
     };
 
     fetchSettings();
+    fetchSliders();
   }, []);
+
+  // Slider functions
+  const fetchSliders = async () => {
+    setSliderLoading(true);
+    try {
+      const res = await fetch("/api/admin/sliders");
+      const result = await res.json();
+      if (result.success) {
+        setSliders(result.data);
+      }
+    } catch (error) {
+      toast.error("Không thể tải danh sách slider");
+    } finally {
+      setSliderLoading(false);
+    }
+  };
+
+  const resetSliderForm = () => {
+    setSliderForm({ title: "", subtitle: "", imageUrl: "", linkUrl: "", buttonText: "", orderIndex: 0, isActive: true });
+    setEditingSliderId(null);
+    setShowSliderForm(false);
+  };
+
+  const handleEditSlider = (slider) => {
+    setSliderForm({
+      title: slider.title || "",
+      subtitle: slider.subtitle || "",
+      imageUrl: slider.imageUrl || "",
+      linkUrl: slider.linkUrl || "",
+      buttonText: slider.buttonText || "",
+      orderIndex: slider.orderIndex || 0,
+      isActive: slider.isActive,
+    });
+    setEditingSliderId(slider.id);
+    setShowSliderForm(true);
+  };
+
+  const handleUploadSliderImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: formDataUpload });
+      const result = await res.json();
+      if (result.success) {
+        setSliderForm((prev) => ({ ...prev, imageUrl: result.url }));
+        toast.success("Đã tải ảnh lên");
+      } else {
+        toast.error(result.error || "Tải ảnh thất bại");
+      }
+    } catch (error) {
+      toast.error("Lỗi khi tải ảnh");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleSaveSlider = async (e) => {
+    e.preventDefault();
+    if (!sliderForm.imageUrl.trim()) {
+      toast.error("Vui lòng chọn hình ảnh cho slider");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      if (editingSliderId) {
+        const res = await fetch(`/api/admin/sliders/${editingSliderId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(sliderForm),
+        });
+        const result = await res.json();
+        if (result.success) {
+          toast.success("Đã cập nhật slider");
+          fetchSliders();
+          resetSliderForm();
+        } else {
+          toast.error(result.error || "Lỗi khi cập nhật");
+        }
+      } else {
+        const res = await fetch("/api/admin/sliders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(sliderForm),
+        });
+        const result = await res.json();
+        if (result.success) {
+          toast.success("Đã tạo slider mới");
+          fetchSliders();
+          resetSliderForm();
+        } else {
+          toast.error(result.error || "Lỗi khi tạo slider");
+        }
+      }
+    } catch (error) {
+      toast.error("Đã xảy ra lỗi");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteSlider = async (id) => {
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/admin/sliders/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setSliders((prev) => prev.filter((s) => s.id !== id));
+        toast.success("Đã xóa slider");
+      } else {
+        const result = await res.json();
+        toast.error(result.error || "Không thể xóa slider");
+      }
+    } catch (error) {
+      toast.error("Đã xảy ra lỗi khi xóa");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -151,6 +297,7 @@ export default function SettingsPage() {
                 {tab.id === "general" && <SettingsIcon size={16} />}
                 {tab.id === "account" && <UserIcon size={16} />}
                 {tab.id === "banner" && <CreditCard size={16} />}
+                {tab.id === "sliders" && <Image size={16} />}
                 {tab.label}
             </div>
           </button>
@@ -366,6 +513,214 @@ export default function SettingsPage() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Sliders Settings */}
+        {activeTab === "sliders" && (
+          <div className={styles.settingsSection}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+              <div>
+                <h2>Slider trang chủ</h2>
+                <p className={styles.settingsDesc}>
+                  Quản lý banner/slider hiển thị trên trang chủ
+                </p>
+              </div>
+              <button
+                className={`${styles.btn} ${styles.btnPrimary}`}
+                onClick={() => {
+                  resetSliderForm();
+                  setShowSliderForm(!showSliderForm);
+                }}
+              >
+                <Plus size={18} />
+                Thêm slider
+              </button>
+            </div>
+
+            {/* Add/Edit Slider Form */}
+            {showSliderForm && (
+              <div className={styles.card} style={{ marginBottom: "24px", padding: "20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+                  <h3 style={{ margin: 0, fontSize: "1rem", fontWeight: 600 }}>
+                    {editingSliderId ? "Chỉnh sửa slider" : "Thêm slider mới"}
+                  </h3>
+                  <button onClick={resetSliderForm} className={styles.modalClose}>
+                    <X size={20} />
+                  </button>
+                </div>
+                <form onSubmit={handleSaveSlider}>
+                  <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Tiêu đề</label>
+                      <input
+                        type="text"
+                        value={sliderForm.title}
+                        onChange={(e) => setSliderForm((prev) => ({ ...prev, title: e.target.value }))}
+                        className={styles.formInput}
+                        placeholder="Tiêu đề chính"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Phụ đề</label>
+                      <input
+                        type="text"
+                        value={sliderForm.subtitle}
+                        onChange={(e) => setSliderForm((prev) => ({ ...prev, subtitle: e.target.value }))}
+                        className={styles.formInput}
+                        placeholder="Mô tả ngắn"
+                      />
+                    </div>
+                    <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                      <label className={styles.formLabel}>Hình ảnh</label>
+                      <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                        <input
+                          type="text"
+                          value={sliderForm.imageUrl}
+                          onChange={(e) => setSliderForm((prev) => ({ ...prev, imageUrl: e.target.value }))}
+                          className={styles.formInput}
+                          placeholder="URL hình ảnh"
+                          style={{ flex: 1 }}
+                        />
+                        <label className={`${styles.btn} ${styles.btnSecondary}`} style={{ cursor: "pointer", whiteSpace: "nowrap" }}>
+                          <Upload size={16} />
+                          {uploadingImage ? "Đang tải..." : "Tải ảnh"}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleUploadSliderImage}
+                            style={{ display: "none" }}
+                          />
+                        </label>
+                      </div>
+                      {sliderForm.imageUrl && (
+                        <img
+                          src={sliderForm.imageUrl}
+                          alt="Preview"
+                          style={{ marginTop: "8px", maxWidth: "300px", maxHeight: "150px", borderRadius: "8px", objectFit: "cover" }}
+                        />
+                      )}
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>URL liên kết</label>
+                      <input
+                        type="text"
+                        value={sliderForm.linkUrl}
+                        onChange={(e) => setSliderForm((prev) => ({ ...prev, linkUrl: e.target.value }))}
+                        className={styles.formInput}
+                        placeholder="/san-pham/..."
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Nút bấm</label>
+                      <input
+                        type="text"
+                        value={sliderForm.buttonText}
+                        onChange={(e) => setSliderForm((prev) => ({ ...prev, buttonText: e.target.value }))}
+                        className={styles.formInput}
+                        placeholder="Xem ngay"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel}>Thứ tự</label>
+                      <input
+                        type="number"
+                        value={sliderForm.orderIndex}
+                        onChange={(e) => setSliderForm((prev) => ({ ...prev, orderIndex: parseInt(e.target.value) || 0 }))}
+                        className={styles.formInput}
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label className={styles.formLabel} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <input
+                          type="checkbox"
+                          checked={sliderForm.isActive}
+                          onChange={(e) => setSliderForm((prev) => ({ ...prev, isActive: e.target.checked }))}
+                        />
+                        Hiển thị
+                      </label>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: "20px", display: "flex", gap: "12px" }}>
+                    <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={saving}>
+                      <Save size={18} />
+                      {saving ? "Đang lưu..." : editingSliderId ? "Cập nhật" : "Tạo mới"}
+                    </button>
+                    <button type="button" onClick={resetSliderForm} className={`${styles.btn} ${styles.btnSecondary}`}>
+                      Hủy
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Sliders List */}
+            {sliderLoading ? (
+              <div className={styles.loadingState}>
+                <div className={styles.spinner}></div>
+                <p>Đang tải...</p>
+              </div>
+            ) : sliders.length === 0 ? (
+              <div className={styles.emptyState}>
+                <Image size={48} opacity="0.3" />
+                <p>Chưa có slider nào</p>
+              </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "120px" }}>Hình ảnh</th>
+                      <th>Tiêu đề</th>
+                      <th>Thứ tự</th>
+                      <th>Trạng thái</th>
+                      <th style={{ width: "120px" }}>Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {sliders.map((slider) => (
+                      <tr key={slider.id}>
+                        <td>
+                          <div className={styles.productImage} style={{ width: "80px", height: "50px" }}>
+                            <img src={slider.imageUrl} alt={slider.title || "Slider"} className={styles.thumbnail} />
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.productName}>{slider.title || "Không tiêu đề"}</div>
+                          {slider.subtitle && <div className={styles.productSlug}>{slider.subtitle}</div>}
+                        </td>
+                        <td>{slider.orderIndex}</td>
+                        <td>
+                          {slider.isActive ? (
+                            <span className={`${styles.badge} ${styles.badgeSuccess}`}>Hiển thị</span>
+                          ) : (
+                            <span className={`${styles.badge} ${styles.badgeDefault}`}>Ẩn</span>
+                          )}
+                        </td>
+                        <td>
+                          <div className={styles.actionButtons}>
+                            <button
+                              onClick={() => handleEditSlider(slider)}
+                              className={styles.actionBtn}
+                              title="Chỉnh sửa"
+                            >
+                              <Pencil size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteSlider(slider.id)}
+                              className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
+                              title="Xóa"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </div>

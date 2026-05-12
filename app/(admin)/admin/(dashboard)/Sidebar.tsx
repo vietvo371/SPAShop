@@ -15,6 +15,7 @@ import {
     LogOut,
     Cross,
     Settings,
+    Tags,
     X
 } from "lucide-react";
 import { toast } from "sonner";
@@ -26,13 +27,14 @@ const adminNavItems = [
         items: [
             { href: "/admin", label: "Tổng quan", icon: LayoutDashboard },
             { href: "/admin/products", label: "Sản phẩm", icon: Package },
+            { href: "/admin/categories", label: "Danh mục", icon: Tags },
             { href: "/admin/orders", label: "Đơn hàng", icon: ShoppingCart },
             { href: "/admin/services", label: "Dịch vụ", icon: Wrench },
             { href: "/admin/articles", label: "Bài viết", icon: FileText },
             { href: "/admin/appointments", label: "Lịch hẹn", icon: CalendarDays },
             { href: "/admin/contact", label: "Liên hệ", icon: MessageSquare },
             { href: "/admin/consultations", label: "Khách Tư Vấn", icon: FileText },
-            // { href: "/admin/settings", label: "Cài đặt", icon: Settings },
+            { href: "/admin/settings", label: "Cài đặt", icon: Settings },
         ],
     },
 ];

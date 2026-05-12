@@ -211,6 +211,15 @@ button {
   }
 }
 
+@keyframes image-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .animate-fadeInUp {
   animation: fadeInUp 0.8s ease forwards;
 }
@@ -747,7 +756,7 @@ button {
   }
 
   100% {
-    transform: translateX(-20%);
+    transform: translateX(-50%);
   }
 }
 

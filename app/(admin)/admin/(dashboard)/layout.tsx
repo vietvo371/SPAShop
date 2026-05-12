@@ -18,7 +18,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       <main className={styles.mainContent}>
         <header className={styles.contentHeader}>
-          <h1 className={styles.pageTitle}>Dashboard</h1>
+          <h1 className={styles.pageTitle}>Tâm An Quản Trị</h1>
           <div className={styles.headerActions}>
             <span className={styles.adminBadge}>{userName}</span>
           </div>
