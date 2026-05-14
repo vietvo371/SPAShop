@@ -2210,7 +2210,10 @@ button {
 .banner-cta {
   position: relative;
   padding: 120px 0;
-  background: url('/images/banner-cta.png') no-repeat center center/cover;
+  background: url('/images/banner-cta-new.jpg'), url('/images/banner-cta.png');
+  background-repeat: no-repeat;
+  background-position: center top, center center;
+  background-size: cover, cover;
   background-attachment: fixed;
   color: white;
   text-align: center;
@@ -2223,7 +2226,7 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(139, 61, 43, 0.9), rgba(58, 28, 93, 0.85));
+  background: linear-gradient(135deg, rgba(139, 61, 43, 0.6), rgba(58, 28, 93, 0.55));
 }
 
 .banner-container {

@@ -281,7 +281,7 @@ export default function SettingsPage() {
     
     setSaving(true);
     try {
-      const res = await fetch("/api/auth/change-password", {
+      const res = await fetch("/api/admin/settings/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

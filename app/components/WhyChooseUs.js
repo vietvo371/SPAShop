@@ -16,7 +16,7 @@ export default function WhyChooseUs() {
           <div className="why-choose-image">
             <div className="image-circle">
               <img
-                src="https://res.cloudinary.com/dltbjoii4/image/upload/v1776180743/chanan/iuwrmz65gqmh66lww9vm.jpg"
+                src="/images/banner-cta-new.jpg"
                 alt="Tại sao chọn Tâm An"
               />
             </div>
