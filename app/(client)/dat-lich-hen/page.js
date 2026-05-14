@@ -1,11 +1,17 @@
-import BookingForm from "@/app/components/BookingForm";
+"use client";
 
-export const metadata = {
-  title: "Đặt Lịch Hẹn - Tâm An Energy Healing",
-  description: "Đặt lịch hẹn dịch vụ chăm sóc sức khỏe tại Tâm An Energy Healing. Điều trị Gout, Soi mạch máu, Đo 12 đường kinh lạc bằng công nghệ FIR.",
-};
+import BookingForm from "@/app/components/BookingForm";
+import { useSettings } from "@/app/context/SettingsContext";
 
 export default function DatLichHenPage() {
+  const { settings } = useSettings();
+
+  const infoItems = [
+    { icon: "📍", label: "Địa chỉ", value: settings.address || "02 Phan Long Bằng, Quảng Ngãi" },
+    { icon: "📞", label: "Hotline", value: settings.phone || "035 630 8211" },
+    { icon: "🕐", label: "Giờ làm việc", value: settings.openHours || "Thứ 2 - Chủ nhật: 8:00 - 20:00" },
+  ];
+
   return (
     <>
       <section className="page-hero">
@@ -25,11 +31,7 @@ export default function DatLichHenPage() {
               </h2>
               
               <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "32px" }}>
-                {[
-                  { icon: "📍", label: "Địa chỉ", value: "02 Phan Long Bằng, Quảng Ngãi" },
-                  { icon: "📞", label: "Hotline", value: "035 630 8211" },
-                  { icon: "🕐", label: "Giờ làm việc", value: "Thứ 2 - Chủ nhật: 8:00 - 20:00" },
-                ].map((item, i) => (
+                {infoItems.map((item, i) => (
                   <div key={i} style={{
                     display: "flex",
                     gap: "16px",
@@ -53,7 +55,7 @@ export default function DatLichHenPage() {
               {/* Map */}
               <div style={{ borderRadius: "var(--radius-md)", overflow: "hidden", boxShadow: "var(--shadow-sm)" }}>
                 <iframe
-                  src="https://www.google.com/maps?q=02+Phan+Long+Băng,+Quảng+Ngãi&output=embed"
+                  src={settings.mapsUrl || "https://www.google.com/maps?q=02+Phan+Long+Băng,+Quảng+Ngãi&output=embed"}
                   width="100%"
                   height="250"
                   style={{ border: 0 }}

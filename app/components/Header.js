@@ -54,7 +54,10 @@ function SocialIcon({ type }) {
   }
 }
 
+import { useSettings } from "@/app/context/SettingsContext";
+
 export default function Header() {
+  const { settings } = useSettings();
   const [menuOpen, setMenuOpen] = useState(false);
   const scrolled = useScrolled(60);
   const pathname = usePathname();
@@ -68,6 +71,8 @@ export default function Header() {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  const cleanPhone = settings.phone ? settings.phone.replace(/\s+/g, "") : "0356308211";
 
   return (
     <>
@@ -90,11 +95,11 @@ export default function Header() {
                 </a>
               ))}
             </div>
-            <a href="tel:0356308211" className="hotline">
+            <a href={`tel:${cleanPhone}`} className="hotline">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
               </svg>
-              035 630 8211
+              {settings.phone || "035 630 8211"}
             </a>
           </div>
         </div>

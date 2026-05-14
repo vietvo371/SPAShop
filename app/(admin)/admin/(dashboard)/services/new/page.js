@@ -150,15 +150,19 @@ export default function NewServicePage() {
           </div>
 
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-            <label className={styles.checkboxLabel}>
+            <div className="checkboxWrapper">
               <input
                 type="checkbox"
+                id="isActive"
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleChange}
+                className="checkboxInput"
               />
-              <span>Đang hiển thị</span>
-            </label>
+              <label htmlFor="isActive" className="checkboxLabelText">
+                Hiển thị dịch vụ này trên trang chủ
+              </label>
+            </div>
           </div>
         </div>
 
@@ -175,39 +179,52 @@ export default function NewServicePage() {
 
       <style jsx>{`
         .formTextarea {
-          padding: 10px 14px;
+          padding: 12px 16px;
           border: 1px solid #d1d5db;
           border-radius: 8px;
-          font-size: 0.9rem;
-          font-family: inherit;
+          font-size: 0.95rem;
+          font-family: 'Inter', sans-serif;
           resize: vertical;
-          transition: var(--transition);
+          transition: all 0.2s;
         }
 
         .formTextarea:focus {
           outline: none;
-          border-color: var(--color-primary);
-          box-shadow: 0 0 0 3px rgba(104, 10, 178, 0.1);
+          border-color: #6d28d9;
+          box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
         }
 
-        .checkboxLabel {
+        .checkboxWrapper {
           display: flex;
           align-items: center;
-          gap: 8px;
-          cursor: pointer;
-          font-size: 0.9rem;
-          color: #374151;
+          gap: 12px;
+          margin-top: 12px;
+          padding: 8px 12px;
+          background: #f9fafb;
+          border-radius: 8px;
+          width: fit-content;
         }
 
-        .checkboxLabel input {
-          width: 18px;
-          height: 18px;
+        .checkboxInput {
+          width: 20px;
+          height: 20px;
+          cursor: pointer;
+          accent-color: #6d28d9;
+        }
+
+        .checkboxLabelText {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #374151;
+          cursor: pointer;
+          font-family: sans-serif;
         }
 
         .formActions {
           display: flex;
-          gap: 12px;
-          margin-top: 24px;
+          align-items: center;
+          gap: 16px;
+          margin-top: 32px;
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         }
@@ -215,8 +232,8 @@ export default function NewServicePage() {
         .settingsContent {
           background: white;
           border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          padding: 32px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
       `}</style>
     </div>

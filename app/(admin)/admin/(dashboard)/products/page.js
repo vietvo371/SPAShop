@@ -207,7 +207,7 @@ export default function AdminProductsPage() {
                               className={styles.thumbnail}
                             />
                           ) : (
-                            <div className={styles.noImage}>No Image</div>
+                            <div className={styles.noImage}>Chưa có ảnh</div>
                           )}
                         </div>
                       </td>

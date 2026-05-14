@@ -221,7 +221,7 @@ export default function ConsultationsAdminPage() {
                       </div>
                       <div className={styles.inboxPhone}>{lead.phone}</div>
                       <div style={{ fontSize: "0.75rem", color: "var(--color-primary)", fontWeight: 600, marginTop: "4px" }}>
-                        Mục tiêu: {optionLabels[lead.answers?.goal] || "N/A"}
+                        Mục tiêu: {optionLabels[lead.answers?.goal] || "Chưa cập nhật"}
                       </div>
                       <span className={`${styles.badge} ${getStatusBadge(lead.status)}`} style={{ marginTop: "8px" }}>
                         {getStatusLabel(lead.status)}

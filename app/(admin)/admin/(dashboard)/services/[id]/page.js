@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "../../../admin.module.css";
 import { toast } from "sonner";
 import { Save, ArrowLeft } from "lucide-react";
@@ -195,15 +196,19 @@ export default function EditServicePage({ params }) {
           </div>
 
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-            <label className={styles.checkboxLabel}>
+            <div className="checkboxWrapper">
               <input
                 type="checkbox"
+                id="isActive"
                 name="isActive"
                 checked={formData.isActive}
                 onChange={handleChange}
+                className="checkboxInput"
               />
-              <span>Đang hiển thị</span>
-            </label>
+              <label htmlFor="isActive" className="checkboxLabelText">
+                Hiển thị dịch vụ này trên trang chủ
+              </label>
+            </div>
           </div>
         </div>
 
@@ -229,18 +234,37 @@ export default function EditServicePage({ params }) {
           transition: var(--transition);
         }
 
-        .checkboxLabel {
+        .checkboxWrapper {
           display: flex;
           align-items: center;
-          gap: 8px;
+          gap: 12px;
+          margin-top: 12px;
+          padding: 8px 12px;
+          background: #f9fafb;
+          border-radius: 8px;
+          width: fit-content;
+        }
+
+        .checkboxInput {
+          width: 20px;
+          height: 20px;
           cursor: pointer;
-          font-size: 0.9rem;
+          accent-color: #6d28d9;
+        }
+
+        .checkboxLabelText {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #374151;
+          cursor: pointer;
+          font-family: sans-serif;
         }
 
         .formActions {
           display: flex;
-          gap: 12px;
-          margin-top: 24px;
+          align-items: center;
+          gap: 16px;
+          margin-top: 32px;
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         }
@@ -248,14 +272,14 @@ export default function EditServicePage({ params }) {
         .settingsContent {
           background: white;
           border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          padding: 32px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         .formGrid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
+          gap: 24px;
         }
 
         .fullWidth {
@@ -265,20 +289,27 @@ export default function EditServicePage({ params }) {
         .formGroup {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
         }
 
         .formLabel {
-          font-size: 0.85rem;
+          font-size: 0.9rem;
           font-weight: 600;
-          color: #374151;
+          color: #4b5563;
         }
 
         .formInput {
-          padding: 10px 14px;
+          padding: 12px 16px;
           border: 1px solid #d1d5db;
           border-radius: 8px;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+        }
+
+        .formInput:focus {
+          border-color: #6d28d9;
+          box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+          outline: none;
         }
       `}</style>
     </div>

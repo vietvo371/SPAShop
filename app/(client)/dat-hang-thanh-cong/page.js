@@ -7,7 +7,10 @@ import { CheckCircle, Phone, ShoppingBag } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 
+import { useSettings } from "@/app/context/SettingsContext";
+
 function OrderSuccessContent() {
+    const { settings } = useSettings();
     const searchParams = useSearchParams();
     const orderId = searchParams.get("id");
     const [orderNum, setOrderNum] = useState("");
@@ -15,6 +18,8 @@ function OrderSuccessContent() {
     useEffect(() => {
         setOrderNum(orderId ? orderId.substring(orderId.length - 8).toUpperCase() : "---");
     }, [orderId]);
+
+    const cleanPhone = settings.phone ? settings.phone.replace(/\s+/g, "") : "0356308211";
 
     return (
         <main style={{ maxWidth: "600px", margin: "80px auto", padding: "0 20px", textAlign: "center" }}>
@@ -49,8 +54,8 @@ function OrderSuccessContent() {
                 <Link href="/san-pham" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "16px", background: "var(--color-primary)", color: "white", textDecoration: "none", borderRadius: "50px", fontWeight: 700 }}>
                     <ShoppingBag size={18} /> TIẾP TỤC MUA SẮM
                 </Link>
-                <a href="tel:0356308211" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "16px", background: "#f0f0f0", color: "#333", textDecoration: "none", borderRadius: "50px", fontWeight: 700 }}>
-                    <Phone size={18} /> HỖ TRỢ: 035 630 8211
+                <a href={`tel:${cleanPhone}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", padding: "16px", background: "#f0f0f0", color: "#333", textDecoration: "none", borderRadius: "50px", fontWeight: 700 }}>
+                    <Phone size={18} /> HỖ TRỢ: {settings.phone || "035 630 8211"}
                 </a>
             </div>
         </main>

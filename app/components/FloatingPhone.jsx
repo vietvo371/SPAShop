@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSettings } from "@/app/context/SettingsContext";
 
 export default function FloatingPhone() {
+    const { settings } = useSettings();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -11,9 +13,11 @@ export default function FloatingPhone() {
 
     if (!mounted) return null;
 
+    const cleanPhone = settings.phone ? settings.phone.replace(/\s+/g, "") : "0356308211";
+
     return (
         <a
-            href="tel:+84356308211"
+            href={`tel:${cleanPhone}`}
             style={{
                 position: "fixed",
                 right: "20px",
@@ -31,11 +35,11 @@ export default function FloatingPhone() {
                 animation: "ripple-primary 2s infinite ease-in-out",
                 overflow: "hidden"
             }}
-            aria-label="WhatsApp"
+            aria-label="Gọi điện thoại"
         >
             <img
                 src="/images/icon/whatsapp.png"
-                alt="WhatsApp"
+                alt="Phone"
                 width="50"
                 height="50"
                 style={{ width: "70%", height: "70%", objectFit: "contain" }}

@@ -143,7 +143,7 @@ export default function ServicesAdminPage() {
                     <td>
                       <span className={styles.price}>{formatPrice(service.price)}</span>
                     </td>
-                    <td>{service.duration || "N/A"}</td>
+                    <td>{service.duration || "Chưa cập nhật"}</td>
                     <td>
                       <span className={`${styles.badge} ${service.isActive ? styles.badgeSuccess : styles.badgeDefault}`}>
                         {service.isActive ? "Đang hiển thị" : "Đã ẩn"}

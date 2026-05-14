@@ -14,7 +14,8 @@ import {
   Filter,
   CheckCircle,
   Hash,
-  Save
+  Save,
+  Trash2
 } from "lucide-react";
 
 export default function ContactAdminPage() {
@@ -63,6 +64,12 @@ export default function ContactAdminPage() {
   const selectedContact = contacts.find(c => c.id === selectedId);
 
   useEffect(() => {
+    if (selectedContact && selectedContact.status === "NEW") {
+      handleUpdateStatus(selectedContact.id, "READ");
+    }
+  }, [selectedId, selectedContact]);
+
+  useEffect(() => {
     if (selectedContact) {
       setAdminNote(selectedContact.replyNote || "");
     }
@@ -85,6 +92,24 @@ export default function ContactAdminPage() {
       }
     } catch (error) {
       toast.error("Lỗi khi cập nhật");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm("Bạn có chắc chắn muốn xóa tin nhắn này?")) return;
+    
+    try {
+      const res = await fetch(`/api/contact/${id}`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      if (result.success) {
+        toast.success("Đã xóa tin nhắn");
+        setSelectedId(null);
+        fetchContacts(pagination.page);
+      }
+    } catch (error) {
+      toast.error("Lỗi khi xóa");
     }
   };
 
@@ -247,6 +272,12 @@ export default function ContactAdminPage() {
                     >
                         <Phone size={18} /> Gọi điện
                     </a>
+                    <button
+                        className={`${styles.btn} ${styles.btnDanger}`}
+                        onClick={() => handleDelete(selectedContact.id)}
+                    >
+                        <Trash2 size={18} /> Xóa
+                    </button>
                 </div>
               </div>
 

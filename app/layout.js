@@ -91,15 +91,19 @@ export const metadata = {
   },
 };
 
+import { SettingsProvider } from "./context/SettingsContext";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="vi" className={`${thRunalto.variable}`} suppressHydrationWarning>
       <body className={thRunalto.className}>
-        <CartProvider>
-          {children}
-          <Toaster position="top-right" richColors />
-          <GlobalCart />
-        </CartProvider>
+        <SettingsProvider>
+          <CartProvider>
+            {children}
+            <Toaster position="top-right" richColors />
+            <GlobalCart />
+          </CartProvider>
+        </SettingsProvider>
       </body>
     </html>
   );

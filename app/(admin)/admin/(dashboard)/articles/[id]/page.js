@@ -21,6 +21,7 @@ export default function EditArticlePage({ params }) {
     category: "Kiến thức FIR",
     status: "DRAFT",
   });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -64,6 +65,40 @@ export default function EditArticlePage({ params }) {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
     setFormData(prev => ({ ...prev, slug }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Vui lòng chỉ chọn file hình ảnh");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("folder", "articles");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setFormData(prev => ({ ...prev, imageUrl: result.url }));
+        toast.success("Upload ảnh thành công");
+      } else {
+        toast.error(result.error || "Lỗi khi upload ảnh");
+      }
+    } catch (error) {
+      toast.error("Lỗi kết nối khi upload ảnh");
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -188,14 +223,40 @@ export default function EditArticlePage({ params }) {
           </div>
 
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-            <label className={styles.formLabel}>URL hình ảnh đại diện</label>
-            <input
-              type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              className={styles.formInput}
-            />
+            <label className={styles.formLabel}>Hình ảnh đại diện</label>
+            <div className="imageUploadSection">
+              <label className="uploadBox">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="fileInput"
+                  disabled={uploading}
+                />
+                <div className="uploadPlaceholder">
+                  {uploading ? (
+                    <div className="spinner"></div>
+                  ) : formData.imageUrl ? (
+                    <img src={formData.imageUrl} alt="Preview" className="previewImage" />
+                  ) : (
+                    <div className="uploadText">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
+                        <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                      </svg>
+                      <span>Chọn ảnh bài viết</span>
+                    </div>
+                  )}
+                </div>
+              </label>
+              <input
+                type="url"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                className={styles.formInput}
+                placeholder="Hoặc dán URL ảnh tại đây..."
+              />
+            </div>
           </div>
         </div>
 
@@ -231,23 +292,107 @@ export default function EditArticlePage({ params }) {
 
         .formActions {
           display: flex;
-          gap: 12px;
-          margin-top: 24px;
+          align-items: center;
+          gap: 16px;
+          margin-top: 32px;
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         }
 
         .settingsContent {
           background: white;
+          border-radius: 16px;
+          padding: 32px;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .imageUploadSection {
+          display: flex;
+          flex-direction: row;
+          align-items: flex-start;
+          gap: 20px;
+          background: #f8fafc;
+          padding: 20px;
           border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e2e8f0;
+        }
+
+        .uploadBox {
+          position: relative;
+          width: 180px;
+          height: 120px;
+          flex-shrink: 0;
+          border: 2px dashed #cbd5e1;
+          border-radius: 10px;
+          overflow: hidden;
+          cursor: pointer;
+          transition: all 0.3s;
+          background: white;
+        }
+
+        .uploadBox:hover {
+          border-color: #6d28d9;
+          background: #f5f3ff;
+          transform: translateY(-2px);
+        }
+
+        .fileInput {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          cursor: pointer;
+          z-index: 10;
+        }
+
+        .uploadPlaceholder {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+        }
+
+        .uploadText {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          color: #64748b;
+          font-size: 0.75rem;
+          padding: 10px;
+        }
+
+        .previewImage {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .urlInputWrapper {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .spinner {
+          width: 20px;
+          height: 20px;
+          border: 2px solid #f3f3f3;
+          border-top: 2px solid #6d28d9;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         .formGrid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
+          gap: 24px;
         }
 
         .fullWidth {
@@ -257,20 +402,28 @@ export default function EditArticlePage({ params }) {
         .formGroup {
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 8px;
         }
 
         .formLabel {
-          font-size: 0.85rem;
+          font-size: 0.9rem;
           font-weight: 600;
-          color: #374151;
+          color: #334155;
         }
 
-        .formInput {
-          padding: 10px 14px;
-          border: 1px solid #d1d5db;
+        .formInput, .formSelect, .formTextarea {
+          padding: 12px 16px;
+          border: 1px solid #e2e8f0;
           border-radius: 8px;
-          font-size: 0.9rem;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+          background: #fff;
+        }
+
+        .formInput:focus, .formSelect:focus, .formTextarea:focus {
+          border-color: #6d28d9;
+          box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.1);
+          outline: none;
         }
       `}</style>
     </div>

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSettings } from "@/app/context/SettingsContext";
 
 export default function ZaloWidget() {
+  const { settings } = useSettings();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -10,7 +12,8 @@ export default function ZaloWidget() {
   }, []);
 
   const handleClick = () => {
-    window.open("https://zalo.me/0356308211", "_blank");
+    const cleanPhone = settings.phone ? settings.phone.replace(/\s+/g, "") : "0356308211";
+    window.open(`https://zalo.me/${cleanPhone}`, "_blank");
   };
 
   if (!mounted) return null;

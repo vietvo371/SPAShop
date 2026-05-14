@@ -4,7 +4,7 @@ import { sliderSchema } from "@/app/lib/validations";
 import { getCurrentUser } from "@/app/lib/auth";
 
 // ============================================
-// GET /api/admin/sliders - Lấy danh sách slider
+// GET /api/admin/sliders - Lấy danh sách slider (Admin)
 // ============================================
 export async function GET() {
   try {
@@ -36,7 +36,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    if (!user || (user.role !== "ADMIN" && user.role !== "STAFF")) {
+    if (!user || user.role !== "ADMIN") {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
@@ -47,12 +47,16 @@ export async function POST(request: NextRequest) {
       data: validatedData,
     });
 
-    return NextResponse.json(
-      { success: true, data: slider, message: "Tạo slider thành công" },
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Sliders POST error:", error);
+    return NextResponse.json({
+      success: true,
+      data: slider,
+      message: "Tạo slider thành công",
+    });
+  } catch (error: any) {
+    console.error("Slider POST error:", error);
+    if (error.name === "ZodError") {
+      return NextResponse.json({ success: false, error: "Dữ liệu không hợp lệ" }, { status: 400 });
+    }
     return NextResponse.json(
       { success: false, error: "Lỗi khi tạo slider" },
       { status: 500 }
