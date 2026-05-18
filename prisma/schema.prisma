@@ -1,6 +1,3 @@
-// Tâm An Energy Healing - Database Schema
-// Next.js Full-Stack với Prisma ORM
-
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -11,9 +8,260 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// ENUMS
-// ============================================
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  passwordHash    String
+  name            String
+  phone           String?
+  role            UserRole         @default(CUSTOMER)
+  avatarUrl       String?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  appointments    Appointment[]
+  articles        Article[]
+  contactMessages ContactMessage[] @relation("UserReplies")
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  orderIndex  Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String         @id @default(cuid())
+  categoryId  String?
+  name        String
+  slug        String         @unique
+  price       Decimal        @default(0.00) @db.Decimal(15, 2)
+  description String?        @db.Text
+  specs       String?        @db.Text
+  imageUrl    String?
+  isFeatured  Boolean        @default(false)
+  isActive    Boolean        @default(true)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  orderItems  OrderItem[]
+  details     ProductDetail?
+  images      ProductImage[]
+  category    Category?      @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId], map: "products_categoryId_fkey")
+  @@map("products")
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     String        @unique
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  customerAddress String?       @db.Text
+  province        String?
+  district        String?
+  ward            String?
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod @default(COD)
+  totalAmount     Decimal       @db.Decimal(15, 2)
+  notes           String?       @db.Text
+  staffNote       String?       @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String?
+  productName String
+  price       Decimal  @db.Decimal(15, 2)
+  quantity    Int      @default(1)
+  imageUrl    String?
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product? @relation(fields: [productId], references: [id])
+
+  @@index([orderId], map: "order_items_orderId_fkey")
+  @@index([productId], map: "order_items_productId_fkey")
+  @@map("order_items")
+}
+
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  url        String
+  isPrimary  Boolean  @default(false)
+  orderIndex Int      @default(0)
+  createdAt  DateTime @default(now())
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId], map: "product_images_productId_fkey")
+  @@map("product_images")
+}
+
+model ProductDetail {
+  id            String   @id @default(cuid())
+  productId     String   @unique
+  galleryImages Json?
+  fullDescHtml  String?  @db.Text
+  specsDetailed Json?
+  functionsHtml String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_details")
+}
+
+model Service {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  description  String?       @db.Text
+  process      String?
+  duration     String?
+  price        String?
+  priceMin     Int?
+  priceMax     Int?
+  comboNote    String?
+  icon         String?
+  imageUrl     String?
+  isActive     Boolean       @default(true)
+  orderIndex   Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+
+  @@map("services")
+}
+
+model Article {
+  id          String        @id @default(cuid())
+  title       String
+  slug        String        @unique
+  excerpt     String?       @db.Text
+  contentHtml String?       @db.Text
+  imageUrl    String?
+  category    String?
+  authorId    String?
+  publishedAt DateTime?
+  status      ArticleStatus @default(DRAFT)
+  viewCount   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  author      User?         @relation(fields: [authorId], references: [id])
+
+  @@index([authorId], map: "articles_authorId_fkey")
+  @@map("articles")
+}
+
+model ContactMessage {
+  id          String        @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  message     String        @db.Text
+  status      MessageStatus @default(NEW)
+  repliedById String?
+  repliedAt   DateTime?
+  replyNote   String?       @db.Text
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  repliedBy   User?         @relation("UserReplies", fields: [repliedById], references: [id])
+
+  @@index([repliedById], map: "contact_messages_repliedById_fkey")
+  @@map("contact_messages")
+}
+
+model Appointment {
+  id              String            @id @default(cuid())
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  serviceId       String?
+  appointmentDate DateTime
+  appointmentTime String?
+  status          AppointmentStatus @default(PENDING)
+  notes           String?           @db.Text
+  staffId         String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  service         Service?          @relation(fields: [serviceId], references: [id])
+  staff           User?             @relation(fields: [staffId], references: [id])
+
+  @@index([serviceId], map: "appointments_serviceId_fkey")
+  @@index([staffId], map: "appointments_staffId_fkey")
+  @@map("appointments")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String?  @db.Text
+  group     String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model Slider {
+  id         String   @id @default(cuid())
+  title      String?
+  subtitle   String?
+  imageUrl   String
+  linkUrl    String?
+  buttonText String?
+  orderIndex Int      @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("sliders")
+}
+
+model Testimonial {
+  id           String   @id @default(cuid())
+  customerName String
+  content      String   @db.Text
+  rating       Int      @default(5)
+  avatarUrl    String?
+  isActive     Boolean  @default(true)
+  orderIndex   Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model ConsultationLead {
+  id        String        @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  answers   Json?
+  status    MessageStatus @default(NEW)
+  note      String?       @db.Text
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("consultation_leads")
+}
 
 enum UserRole {
   ADMIN
@@ -41,329 +289,15 @@ enum ArticleStatus {
 }
 
 enum OrderStatus {
-  PENDING    // Chờ xử lý (Mới)
-  CONFIRMED  // Đã xác nhận / Đang xử lý
-  SHIPPING   // Đang giao hàng
-  COMPLETED  // Đã hoàn thành
-  CANCELLED  // Đã hủy
+  PENDING
+  CONFIRMED
+  SHIPPING
+  COMPLETED
+  CANCELLED
 }
 
 enum PaymentMethod {
-  COD       // Thanh toán khi nhận hàng
-  TRANSFER  // Chuyển khoản ngân hàng
-  OFFLINE   // Thanh toán tại cửa hàng / Khác
-}
-
-// ============================================
-// USER MODEL - Người dùng hệ thống
-// ============================================
-model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  passwordHash  String
-  name          String
-  phone         String?
-  role          UserRole  @default(CUSTOMER)
-  avatarUrl     String?
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  // Relations
-  appointments      Appointment[]
-  contactMessages    ContactMessage[] @relation("UserReplies")
-  articles           Article[]
-
-  @@map("users")
-}
-
-// ============================================
-// CATEGORY MODEL - Danh mục sản phẩm
-// ============================================
-model Category {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  description String?
-  imageUrl    String?
-  orderIndex  Int       @default(0)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  // Relations
-  products Product[]
-
-  @@map("categories")
-}
-
-// ============================================
-// PRODUCT MODEL - Sản phẩm
-// ============================================
-model Product {
-  id          String    @id @default(cuid())
-  categoryId  String?
-  name        String
-  slug        String    @unique
-  price       Decimal   @default(0) @db.Decimal(15, 2)
-  description String?   @db.Text
-  specs       String?   @db.Text
-  imageUrl    String?
-  isFeatured  Boolean   @default(false)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  // Relations
-  category       Category?       @relation(fields: [categoryId], references: [id])
-  images         ProductImage[]
-  details        ProductDetail?
-  orderItems     OrderItem[]
-
-  @@map("products")
-}
-
-// ============================================
-// ORDER MODEL - Đơn hàng
-// ============================================
-model Order {
-  id              String        @id @default(cuid())
-  orderNumber     String        @unique // Số đơn hàng (VD: CA123456)
-  customerName    String
-  customerPhone   String
-  customerEmail   String?
-  customerAddress String?       @db.Text
-  province        String?       // Tỉnh/Thành
-  district        String?       // Quận/Huyện
-  ward            String?       // Phường/Xã
-  status          OrderStatus   @default(PENDING)
-  paymentMethod   PaymentMethod @default(COD)
-  totalAmount     Decimal       @db.Decimal(15, 2)
-  notes           String?       @db.Text
-  staffNote       String?       @db.Text
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  // Relations
-  items           OrderItem[]
-
-  @@map("orders")
-}
-
-// ============================================
-// ORDER ITEM MODEL - Chi tiết đơn hàng
-// ============================================
-model OrderItem {
-  id          String   @id @default(cuid())
-  orderId     String
-  productId   String?
-  productName String
-  price       Decimal  @db.Decimal(15, 2)
-  quantity    Int      @default(1)
-  imageUrl    String?
-
-  // Relations
-  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-
-  @@map("order_items")
-}
-
-// ============================================
-// PRODUCT IMAGE MODEL - Hình ảnh sản phẩm
-// ============================================
-model ProductImage {
-  id          String    @id @default(cuid())
-  productId   String
-  url         String
-  isPrimary   Boolean   @default(false)
-  orderIndex  Int       @default(0)
-  createdAt   DateTime  @default(now())
-
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@map("product_images")
-}
-
-// ============================================
-// PRODUCT DETAIL MODEL - Chi tiết sản phẩm (mở rộng)
-// ============================================
-model ProductDetail {
-  id              String   @id @default(cuid())
-  productId       String   @unique
-  galleryImages   Json?    // Mảng URL images
-  fullDescHtml    String?  @db.Text
-  specsDetailed   Json?    // Object { key: value }
-  functionsHtml   String?  @db.Text
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@map("product_details")
-}
-
-// ============================================
-// SERVICE MODEL - Dịch vụ chăm sóc sức khỏe
-// ============================================
-model Service {
-  id          String    @id @default(cuid())
-  name        String
-  slug        String    @unique
-  description String?    @db.Text
-  process     String?
-  duration   String?
-  price      String?
-  priceMin   Int?       // Giá lẻ (VNĐ)
-  priceMax   Int?       // Giá combo cao nhất
-  comboNote  String?    // Ghi chú combo (VD: "Combo 5 buổi: 1.500.000₫")
-  icon        String?
-  imageUrl    String?
-  isActive    Boolean   @default(true)
-  orderIndex  Int       @default(0)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  // Relations
-  appointments Appointment[]
-
-  @@map("services")
-}
-
-// ============================================
-// ARTICLE MODEL - Bài viết kiến thức
-// ============================================
-model Article {
-  id            String        @id @default(cuid())
-  title         String
-  slug          String        @unique
-  excerpt       String?       @db.Text
-  contentHtml   String?       @db.Text
-  imageUrl      String?
-  category      String?
-  authorId      String?
-  publishedAt   DateTime?
-  status        ArticleStatus @default(DRAFT)
-  viewCount     Int           @default(0)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-
-  // Relations
-  author User? @relation(fields: [authorId], references: [id])
-
-  @@map("articles")
-}
-
-// ============================================
-// CONTACT MESSAGE MODEL - Tin nhắn liên hệ
-// ============================================
-model ContactMessage {
-  id          String         @id @default(cuid())
-  name        String
-  phone       String
-  email       String?
-  message     String         @db.Text
-  status      MessageStatus @default(NEW)
-  repliedById String?
-  repliedAt   DateTime?
-  replyNote   String?        @db.Text
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-
-  // Relations
-  repliedBy User? @relation("UserReplies", fields: [repliedById], references: [id])
-
-  @@map("contact_messages")
-}
-
-// ============================================
-// APPOINTMENT MODEL - Lịch hẹn
-// ============================================
-model Appointment {
-  id               String             @id @default(cuid())
-  customerName     String
-  customerPhone    String
-  customerEmail    String?
-  serviceId        String?
-  appointmentDate  DateTime
-  appointmentTime  String?
-  status           AppointmentStatus  @default(PENDING)
-  notes            String?            @db.Text
-  staffId          String?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-
-  // Relations
-  service Service? @relation(fields: [serviceId], references: [id])
-  staff   User?    @relation(fields: [staffId], references: [id])
-
-  @@map("appointments")
-}
-
-// ============================================
-// SETTING MODEL - Cấu hình hệ thống
-// ============================================
-model Setting {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String?  @db.Text
-  group     String   @default("general")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("settings")
-}
-
-// ============================================
-// SLIDER MODEL - Banner/Slider trang chủ
-// ============================================
-model Slider {
-  id          String   @id @default(cuid())
-  title       String?
-  subtitle    String?
-  imageUrl    String
-  linkUrl     String?
-  buttonText  String?
-  orderIndex  Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("sliders")
-}
-
-// ============================================
-// TESTIMONIAL MODEL - Đánh giá khách hàng
-// ============================================
-model Testimonial {
-  id          String   @id @default(cuid())
-  customerName String
-  content     String   @db.Text
-  rating      Int      @default(5)
-  avatarUrl   String?
-  isActive    Boolean  @default(true)
-  orderIndex  Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@map("testimonials")
-}
-
-// ============================================
-// CONSULTATION LEAD MODEL - Khách hàng tư vấn liệu trình
-// ============================================
-model ConsultationLead {
-  id          String         @id @default(cuid())
-  name        String
-  phone       String
-  email       String?
-  answers     Json?          // Lưu các câu trả lời Quiz dưới dạng JSON
-  status      MessageStatus  @default(NEW)
-  note        String?        @db.Text
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-
-  @@map("consultation_leads")
+  COD
+  TRANSFER
+  OFFLINE
 }

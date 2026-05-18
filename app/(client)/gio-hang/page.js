@@ -200,7 +200,6 @@ function CheckoutContent() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header />
 
             <main className={styles.mainContainer}>
                 {/* Breadcrumb */}
@@ -444,7 +443,7 @@ function CheckoutContent() {
                 </div>
             </main>
 
-            <Footer />
+
         </div>
     );
 }

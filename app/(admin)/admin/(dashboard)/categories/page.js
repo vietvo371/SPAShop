@@ -24,6 +24,7 @@ export default function AdminCategoriesPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     slug: "",
@@ -32,6 +33,40 @@ export default function AdminCategoriesPage() {
     orderIndex: 0,
     isActive: true,
   });
+  
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Vui lòng chỉ chọn file hình ảnh");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("folder", "categories");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setFormData(prev => ({ ...prev, imageUrl: result.url }));
+        toast.success("Upload ảnh thành công");
+      } else {
+        toast.error(result.error || "Lỗi khi upload ảnh");
+      }
+    } catch (error) {
+      toast.error("Lỗi kết nối khi upload ảnh");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -219,15 +254,44 @@ export default function AdminCategoriesPage() {
                   placeholder="Mô tả ngắn"
                 />
               </div>
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>URL hình ảnh</label>
-                <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))}
-                  className={styles.formInput}
-                  placeholder="https://..."
-                />
+              <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                <label className={styles.formLabel}>Hình ảnh danh mục</label>
+                <div className="imageUploadSection">
+                  {formData.imageUrl ? (
+                    <div className="previewContainer">
+                      <img src={formData.imageUrl} alt="Preview" className="previewImage" />
+                      <button 
+                        type="button" 
+                        className="deleteImageBtn"
+                        onClick={() => setFormData(prev => ({ ...prev, imageUrl: "" }))}
+                      >
+                        Xóa ảnh
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="uploadBox">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="fileInput"
+                        disabled={uploading}
+                      />
+                      <div className="uploadPlaceholder">
+                        {uploading ? (
+                          <div className="spinner"></div>
+                        ) : (
+                          <div className="uploadText">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
+                              <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                            </svg>
+                            <span>Kéo thả hoặc click để chọn ảnh danh mục từ máy tính</span>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                  )}
+                </div>
               </div>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Thứ tự</label>
@@ -412,6 +476,98 @@ export default function AdminCategoriesPage() {
           </div>
         </div>
       )}
+
+      <style jsx>{`
+        .imageUploadSection {
+          margin-top: 8px;
+        }
+
+        .uploadBox {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 180px;
+          border: 2px dashed #d1d5db;
+          border-radius: 12px;
+          cursor: pointer;
+          background: #f9fafb;
+          transition: all 0.2s;
+        }
+
+        .uploadBox:hover {
+          border-color: #6d28d9;
+          background: #f5f3ff;
+        }
+
+        .fileInput {
+          display: none;
+        }
+
+        .uploadPlaceholder {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          color: #6b7280;
+        }
+
+        .uploadText {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          font-weight: 500;
+          font-size: 0.95rem;
+          text-align: center;
+          padding: 20px;
+        }
+
+        .previewContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .previewImage {
+          width: 100%;
+          max-width: 320px;
+          height: auto;
+          max-height: 200px;
+          object-fit: cover;
+          border-radius: 12px;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .deleteImageBtn {
+          padding: 8px 16px;
+          background: #fee2e2;
+          color: #dc2626;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .deleteImageBtn:hover {
+          background: #fecaca;
+        }
+
+        .spinner {
+          width: 24px;
+          height: 24px;
+          border: 3px solid #f3f4f6;
+          border-top-color: #6d28d9;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }

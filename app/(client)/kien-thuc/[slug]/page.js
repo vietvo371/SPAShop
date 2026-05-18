@@ -7,15 +7,26 @@ import { Calendar, Eye, Share2, ArrowLeft } from "lucide-react";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 
-export async function generateStaticParams() {
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
+import { prisma } from "@/app/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
+  let article = await prisma.article.findUnique({
+    where: { slug }
+  });
+
+  if (!article) {
+    const staticArticle = articles.find((a) => a.slug === slug);
+    if (staticArticle) {
+      article = {
+        title: staticArticle.title,
+        excerpt: staticArticle.excerpt,
+        imageUrl: staticArticle.image,
+      };
+    }
+  }
 
   if (!article) {
     return { title: "Bài viết không tìm thấy" };
@@ -23,37 +34,98 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${article.title} - Tâm An Energy Healing`,
-    description: article.excerpt,
+    description: article.excerpt || "",
     openGraph: {
       title: article.title,
-      description: article.excerpt,
-      images: article.image ? [article.image] : [],
+      description: article.excerpt || "",
+      images: article.imageUrl ? [article.imageUrl] : [],
     },
   };
 }
 
 export default async function ArticleDetailPage({ params }) {
   const { slug } = await params;
-  const article = articles.find((a) => a.slug === slug);
+  
+  // 1. Try to find this specific article in DB first (regardless of status, so drafts are viewable too!)
+  let dbArticle = await prisma.article.findUnique({
+    where: { slug }
+  });
+  
+  let article = null;
+  if (dbArticle) {
+    article = {
+      title: dbArticle.title,
+      slug: dbArticle.slug,
+      category: dbArticle.category || "Chưa phân loại",
+      image: dbArticle.imageUrl || "/images/hero-banner.png",
+      date: new Date(dbArticle.createdAt).toLocaleDateString("vi-VN"),
+      content: dbArticle.contentHtml || "",
+      excerpt: dbArticle.excerpt || "",
+      viewCount: dbArticle.viewCount || 0,
+    };
+  } else {
+    // Check static JSON
+    const staticArticle = articles.find((a) => a.slug === slug);
+    if (staticArticle) {
+      article = {
+        title: staticArticle.title,
+        slug: staticArticle.slug,
+        category: staticArticle.category,
+        image: staticArticle.image,
+        date: staticArticle.date,
+        content: staticArticle.content,
+        excerpt: staticArticle.excerpt,
+        viewCount: staticArticle.viewCount || 0,
+      };
+    }
+  }
 
   if (!article) {
     notFound();
   }
 
-  const relatedArticles = articles
-    .filter((a) => a.slug !== slug && a.category === article.category)
+  // 2. Fetch published articles for related sidebar items
+  const dbRelated = await prisma.article.findMany({
+    where: { 
+      status: "PUBLISHED",
+      slug: { not: slug }
+    },
+    take: 3
+  });
+
+  const formattedDbRelated = dbRelated.map(a => ({
+    title: a.title,
+    slug: a.slug,
+    category: a.category || "Chưa phân loại",
+    image: a.imageUrl || "/images/hero-banner.png",
+    date: new Date(a.createdAt).toLocaleDateString("vi-VN"),
+    excerpt: a.excerpt || "",
+  }));
+
+  const staticRelated = articles
+    .filter((a) => a.slug !== slug)
+    .map(a => ({
+      title: a.title,
+      slug: a.slug,
+      category: a.category,
+      image: a.image,
+      date: a.date,
+      excerpt: a.excerpt,
+    }));
+
+  const relatedArticles = [...formattedDbRelated, ...staticRelated]
+    .filter(a => a.category === article.category)
     .slice(0, 3);
 
   if (relatedArticles.length < 3) {
-    const moreArticles = articles
-      .filter((a) => a.slug !== slug && !relatedArticles.find(r => r.slug === a.slug))
+    const moreRelated = [...formattedDbRelated, ...staticRelated]
+      .filter(a => !relatedArticles.find(r => r.slug === a.slug))
       .slice(0, 3 - relatedArticles.length);
-    relatedArticles.push(...moreArticles);
+    relatedArticles.push(...moreRelated);
   }
 
   return (
     <div className={styles.articlePage}>
-      <Header />
 
       {/* Breadcrumb Section */}
       <section className={styles.breadcrumbSection}>
@@ -180,7 +252,7 @@ export default async function ArticleDetailPage({ params }) {
         </section>
       )}
 
-      <Footer />
+
     </div>
   );
 }

@@ -22,6 +22,41 @@ export default function EditServicePage({ params }) {
     imageUrl: "",
     isActive: true,
   });
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Vui lòng chỉ chọn file hình ảnh");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+      formDataUpload.append("folder", "services");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataUpload,
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        setFormData(prev => ({ ...prev, imageUrl: result.url }));
+        toast.success("Upload ảnh thành công");
+      } else {
+        toast.error(result.error || "Lỗi khi upload ảnh");
+      }
+    } catch (error) {
+      toast.error("Lỗi kết nối khi upload ảnh");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchService = async () => {
@@ -185,14 +220,43 @@ export default function EditServicePage({ params }) {
           </div>
 
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-            <label className={styles.formLabel}>URL hình ảnh</label>
-            <input
-              type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              className={styles.formInput}
-            />
+            <label className={styles.formLabel}>Hình ảnh dịch vụ</label>
+            <div className="imageUploadSection">
+              {formData.imageUrl ? (
+                <div className="previewContainer">
+                  <img src={formData.imageUrl} alt="Preview" className="previewImage" />
+                  <button 
+                    type="button" 
+                    className="deleteImageBtn"
+                    onClick={() => setFormData(prev => ({ ...prev, imageUrl: "" }))}
+                  >
+                    Xóa ảnh
+                  </button>
+                </div>
+              ) : (
+                <label className="uploadBox">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="fileInput"
+                    disabled={uploading}
+                  />
+                  <div className="uploadPlaceholder">
+                    {uploading ? (
+                      <div className="spinner"></div>
+                    ) : (
+                      <div className="uploadText">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
+                          <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                        </svg>
+                        <span>Kéo thả hoặc click để chọn ảnh dịch vụ từ máy tính</span>
+                      </div>
+                    )}
+                  </div>
+                </label>
+              )}
+            </div>
           </div>
 
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
@@ -274,6 +338,109 @@ export default function EditServicePage({ params }) {
           border-radius: 12px;
           padding: 32px;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .imageUploadSection {
+          background: #f8fafc;
+          padding: 20px;
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+
+        .previewContainer {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .previewImage {
+          width: 200px;
+          height: 140px;
+          object-fit: cover;
+          border-radius: 8px;
+          border: 1px solid #cbd5e1;
+        }
+
+        .deleteImageBtn {
+          background: #ef4444;
+          color: white;
+          border: none;
+          padding: 6px 14px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .deleteImageBtn:hover {
+          background: #dc2626;
+        }
+
+        .uploadBox {
+          position: relative;
+          width: 100%;
+          max-width: 400px;
+          height: 120px;
+          border: 2px dashed #cbd5e1;
+          border-radius: 10px;
+          overflow: hidden;
+          cursor: pointer;
+          transition: all 0.3s;
+          background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .uploadBox:hover {
+          border-color: #6d28d9;
+          background: #f5f3ff;
+        }
+
+        .fileInput {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          cursor: pointer;
+          z-index: 10;
+        }
+
+        .uploadPlaceholder {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          text-align: center;
+        }
+
+        .uploadText {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          color: #64748b;
+          font-size: 0.85rem;
+          padding: 10px;
+        }
+
+        .spinner {
+          width: 28px;
+          height: 28px;
+          border: 3px solid #f3f3f3;
+          border-top: 3px solid #6d28d9;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         .formGrid {

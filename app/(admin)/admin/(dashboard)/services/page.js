@@ -122,6 +122,7 @@ export default function ServicesAdminPage() {
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th style={{ width: "60px" }}>Hình ảnh</th>
                   <th>Tên dịch vụ</th>
                   <th>Giá (VNĐ)</th>
                   <th>Thời gian</th>
@@ -132,6 +133,15 @@ export default function ServicesAdminPage() {
               <tbody>
                 {filteredServices.map((service) => (
                   <tr key={service.id}>
+                    <td>
+                      <div className={styles.productImage}>
+                        <img
+                          src={service.imageUrl || "/images/hero-banner.png"}
+                          alt={service.name}
+                          className={styles.thumbnail}
+                        />
+                      </div>
+                    </td>
                     <td>
                       <div className={styles.productName}>
                         <Link href={`/dich-vu-cham-soc/${service.slug}`} target="_blank" className={styles.serviceLink}>

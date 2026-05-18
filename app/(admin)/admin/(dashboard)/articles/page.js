@@ -154,6 +154,7 @@ export default function ArticlesAdminPage() {
               <table className={styles.table}>
                 <thead>
                   <tr>
+                    <th style={{ width: "60px" }}>Hình ảnh</th>
                     <th>Tiêu đề</th>
                     <th>Danh mục</th>
                     <th>Trạng thái</th>
@@ -165,6 +166,15 @@ export default function ArticlesAdminPage() {
                 <tbody>
                   {articles.map((article) => (
                     <tr key={article.id}>
+                      <td>
+                        <div className={styles.productImage}>
+                            <img
+                              src={article.imageUrl || "/images/hero-banner.png"}
+                              alt={article.title}
+                              className={styles.thumbnail}
+                            />
+                        </div>
+                      </td>
                       <td>
                         <Link href={`/kien-thuc/${article.slug}`} target="_blank" className={styles.articleLink}>
                           <div className={styles.productName}>{article.title}</div>

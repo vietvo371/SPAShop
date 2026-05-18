@@ -17,10 +17,9 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { href: "https://youtube.com", label: "YouTube", icon: "youtube" },
-  { href: "https://facebook.com", label: "Facebook", icon: "facebook" },
-  { href: "https://tiktok.com", label: "TikTok", icon: "tiktok" },
-  { href: "https://instagram.com", label: "Instagram", icon: "instagram" },
+  { href: "https://www.youtube.com/@bichphuongyoga788", label: "YouTube", icon: "youtube" },
+  { href: "https://www.facebook.com/bphuong.yoga", label: "Facebook", icon: "facebook" },
+  { href: "https://www.tiktok.com/@phuonghongngoaixa?_r=1&_t=ZS-96LuSS9Kcrs", label: "TikTok", icon: "tiktok" },
 ];
 
 function SocialIcon({ type }) {

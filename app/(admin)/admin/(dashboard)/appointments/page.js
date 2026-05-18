@@ -331,7 +331,7 @@ export default function AppointmentsAdminPage() {
                         <th>Dịch vụ</th>
                         <th>Thời gian</th>
                         <th>Trạng thái</th>
-                        <th style={{ textAlign: "right", width: "160px" }}>Thao tác</th>
+                        <th style={{ textAlign: "right", width: "200px" }}>Thao tác</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -364,11 +364,11 @@ export default function AppointmentsAdminPage() {
                             </span>
                           </td>
                           <td style={{ textAlign: "right" }}>
-                            <div className={styles.actionButtons} style={{ justifyContent: "flex-end", gap: 6 }}>
+                            <div className={styles.actionBtns} style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "6px" }}>
                               {apt.status === "PENDING" && (
                                 <button
                                   className={`${styles.btn} ${styles.btnPrimary}`}
-                                  style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                                  style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                                   onClick={() => handleStatusUpdate(apt.id, "CONFIRMED")}
                                 >
                                   Xác nhận
@@ -377,7 +377,7 @@ export default function AppointmentsAdminPage() {
                               {apt.status === "CONFIRMED" && (
                                 <button
                                   className={`${styles.btn} ${styles.btnSuccess}`}
-                                  style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                                  style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                                   onClick={() => handleStatusUpdate(apt.id, "COMPLETED")}
                                 >
                                   Hoàn thành
@@ -386,19 +386,19 @@ export default function AppointmentsAdminPage() {
                               {apt.status !== "CANCELLED" && apt.status !== "COMPLETED" && (
                                 <button
                                   className={`${styles.btn} ${styles.btnSecondary}`}
-                                  style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                                  style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                                   onClick={() => handleStatusUpdate(apt.id, "CANCELLED")}
                                 >
                                   Hủy
                                 </button>
                               )}
                               <button
-                                className={styles.actionBtn}
-                                style={{ color: "#dc2626" }}
+                                className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
+                                style={{ color: "#dc2626", background: "#fee2e2", borderRadius: "6px", width: "30px", height: "30px" }}
                                 onClick={() => handleDelete(apt.id)}
                                 title="Xóa"
                               >
-                                <Trash2 size={16} />
+                                <Trash2 size={15} />
                               </button>
                             </div>
                           </td>
@@ -536,34 +536,34 @@ export default function AppointmentsAdminPage() {
                         {apt.status === "PENDING" && (
                           <button
                             className={`${styles.btn} ${styles.btnPrimary}`}
-                            style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                            style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                             onClick={() => handleStatusUpdate(apt.id, "CONFIRMED")}
                           >Xác nhận</button>
                         )}
                         {apt.status === "CONFIRMED" && (
                           <button
                             className={`${styles.btn} ${styles.btnSuccess}`}
-                            style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                            style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                             onClick={() => handleStatusUpdate(apt.id, "COMPLETED")}
                           >Hoàn thành</button>
                         )}
                         {apt.status !== "CANCELLED" && apt.status !== "COMPLETED" && (
                           <button
                             className={`${styles.btn} ${styles.btnSecondary}`}
-                            style={{ padding: "4px 10px", fontSize: "0.75rem" }}
+                            style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px" }}
                             onClick={() => handleStatusUpdate(apt.id, "CANCELLED")}
                           >Hủy</button>
                         )}
                         <button
-                          className={styles.actionBtn}
-                          style={{ color: "#dc2626" }}
+                          className={`${styles.actionBtn} ${styles.actionBtnDanger}`}
+                          style={{ color: "#dc2626", background: "#fee2e2", borderRadius: "6px", width: "30px", height: "30px" }}
                           onClick={() => handleDelete(apt.id)}
                           title="Xóa"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
-                        <a href={`tel:${apt.customerPhone}`} className={`${styles.btn} ${styles.btnSecondary}`} style={{ padding: "4px 10px", fontSize: "0.75rem" }}>
-                          <Phone size={13} /> Gọi
+                        <a href={`tel:${apt.customerPhone}`} className={`${styles.btn} ${styles.btnSecondary}`} style={{ padding: "6px 12px", fontSize: "0.75rem", borderRadius: "6px", display: "inline-flex", alignItems: "center" }}>
+                          <Phone size={13} style={{ marginRight: "4px" }} /> Gọi
                         </a>
                       </div>
                     </div>

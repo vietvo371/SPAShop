@@ -4,15 +4,25 @@ import { notFound } from "next/navigation";
 import services from "@/data/services.json";
 import styles from "./service-detail.module.css";
 
-export async function generateStaticParams() {
-  return services.map((service) => ({
-    slug: service.slug,
-  }));
-}
+import { prisma } from "@/app/lib/prisma";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  let service = await prisma.service.findUnique({
+    where: { slug }
+  });
+
+  if (!service) {
+    const staticService = services.find((s) => s.slug === slug);
+    if (staticService) {
+      service = {
+        name: staticService.name,
+        description: staticService.description,
+      };
+    }
+  }
 
   if (!service) {
     return { title: "Dịch vụ không tìm thấy" };
@@ -20,22 +30,77 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${service.name} - Tâm An Energy Healing`,
-    description: service.description,
+    description: service.description || "",
   };
 }
 
 export default async function ServiceDetailPage({ params }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  
+  // 1. Try to find the service in the database first
+  let dbService = await prisma.service.findUnique({
+    where: { slug }
+  });
+
+  let service = null;
+  if (dbService) {
+    const featuresList = dbService.process
+      ? dbService.process.split("\n").map(f => f.trim()).filter(Boolean)
+      : [];
+
+    service = {
+      name: dbService.name,
+      slug: dbService.slug,
+      description: dbService.description || "",
+      image: dbService.imageUrl || "/images/services/head_face_detox.png",
+      features: featuresList,
+      process: null
+    };
+  } else {
+    // Fall back to static JSON
+    const staticService = services.find((s) => s.slug === slug);
+    if (staticService) {
+      service = {
+        name: staticService.name,
+        slug: staticService.slug,
+        description: staticService.description,
+        image: staticService.image,
+        features: staticService.features,
+        process: staticService.process
+      };
+    }
+  }
 
   if (!service) {
     notFound();
   }
 
-  // Related services (other than current)
-  const relatedServices = services
+  // 2. Fetch related services
+  const dbRelated = await prisma.service.findMany({
+    where: { 
+      isActive: true,
+      slug: { not: slug }
+    },
+    take: 3
+  });
+
+  const formattedDbRelated = dbRelated.map(s => ({
+    name: s.name,
+    slug: s.slug,
+    description: s.description || "",
+    image: s.imageUrl || "/images/services/head_face_detox.png",
+  }));
+
+  const staticRelated = services
     .filter((s) => s.slug !== slug)
-    .slice(0, 3);
+    .map(s => ({
+      name: s.name,
+      slug: s.slug,
+      description: s.description,
+      image: s.image,
+    }));
+
+  const relatedServices = [...formattedDbRelated, ...staticRelated].slice(0, 3);
 
   return (
     <div className="service-detail-page">

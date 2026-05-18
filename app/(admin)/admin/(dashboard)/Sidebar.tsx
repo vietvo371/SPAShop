@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -44,6 +44,40 @@ export default function Sidebar() {
     const pathname = usePathname();
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [notifications, setNotifications] = useState({
+        appointments: 0,
+        orders: 0,
+        contact: 0,
+        consultations: 0,
+    });
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const res = await fetch("/api/admin/notifications");
+                if (res.ok) {
+                    const result = await res.json();
+                    if (result.success && result.data) {
+                        setNotifications(result.data);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch notifications:", error);
+            }
+        };
+
+        fetchNotifications();
+        const interval = setInterval(fetchNotifications, 15000); // Poll every 15s
+        return () => clearInterval(interval);
+    }, []);
+
+    const getNotificationCount = (href: string) => {
+        if (href === "/admin/orders") return notifications.orders;
+        if (href === "/admin/appointments") return notifications.appointments;
+        if (href === "/admin/contact") return notifications.contact;
+        if (href === "/admin/consultations") return notifications.consultations;
+        return 0;
+    };
 
     const handleLogout = async () => {
         setIsLoggingOut(true);
@@ -82,19 +116,27 @@ export default function Sidebar() {
                         <div key={section.section} className={styles.navSection}>
                             <h3 className={styles.navSectionTitle}>{section.section}</h3>
                             <ul className={styles.navList}>
-                                {section.items.map((item) => (
-                                    <li key={item.href}>
-                                        <Link
-                                            href={item.href}
-                                            className={`${styles.navLink} ${(item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href))
-                                                    ? styles.active : ""
-                                                }`}
-                                        >
-                                            <item.icon className={styles.navIcon} size={20} />
-                                            <span className={styles.navLabel}>{item.label}</span>
-                                        </Link>
-                                    </li>
-                                ))}
+                                {section.items.map((item) => {
+                                    const count = getNotificationCount(item.href);
+                                    return (
+                                        <li key={item.href}>
+                                            <Link
+                                                href={item.href}
+                                                className={`${styles.navLink} ${(item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href))
+                                                        ? styles.active : ""
+                                                    }`}
+                                            >
+                                                <item.icon className={styles.navIcon} size={20} />
+                                                <span className={styles.navLabel}>{item.label}</span>
+                                                {count > 0 && (
+                                                    <span className={styles.notificationBadge}>
+                                                        {count}
+                                                    </span>
+                                                )}
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     ))}

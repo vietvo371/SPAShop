@@ -65,11 +65,9 @@ function OrderSuccessContent() {
 export default function OrderSuccessPage() {
     return (
         <div className="min-h-screen bg-white">
-            <Header />
             <Suspense fallback={<div style={{ padding: "100px 0", textAlign: "center" }}>Đang tải thông tin đơn hàng...</div>}>
                 <OrderSuccessContent />
             </Suspense>
-            <Footer />
         </div>
     );
 }

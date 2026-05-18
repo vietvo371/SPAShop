@@ -7,15 +7,33 @@ export const metadata = {
 };
 
 import articles from "@/data/articles.json";
+import { prisma } from "@/app/lib/prisma";
 
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import { MoveRight } from "lucide-react";
 
-export default function KnowledgePage() {
+export const dynamic = "force-dynamic";
+
+export default async function KnowledgePage() {
+  const dbArticles = await prisma.article.findMany({
+    where: { status: "PUBLISHED" },
+    orderBy: { createdAt: "desc" }
+  });
+
+  const formattedDbArticles = dbArticles.map(a => ({
+    title: a.title,
+    slug: a.slug,
+    category: a.category || "Chưa phân loại",
+    image: a.imageUrl || "/images/hero-banner.png",
+    date: new Date(a.createdAt).toLocaleDateString("vi-VN"),
+    excerpt: a.excerpt || "",
+  }));
+
+  const allArticles = [...formattedDbArticles, ...articles];
   return (
     <div className="knowledge-page">
-      <Header />
+
 
       <section className="blog-hero" style={{
         padding: "180px 0 80px",
@@ -44,7 +62,7 @@ export default function KnowledgePage() {
       <section className="blog-section" style={{ padding: "80px 0", background: "#fafafa" }}>
         <div className="container">
           <div className="blog-grid">
-            {articles.map((article) => (
+            {allArticles.map((article) => (
               <article key={article.slug} className="blog-card" style={{
                 background: "white",
                 borderRadius: "var(--radius-lg)",
@@ -128,7 +146,7 @@ export default function KnowledgePage() {
         </div>
       </section>
 
-      <Footer />
+
     </div>
   );
 }

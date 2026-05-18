@@ -225,37 +225,40 @@ export default function EditArticlePage({ params }) {
           <div className={`${styles.formGroup} ${styles.fullWidth}`}>
             <label className={styles.formLabel}>Hình ảnh đại diện</label>
             <div className="imageUploadSection">
-              <label className="uploadBox">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="fileInput"
-                  disabled={uploading}
-                />
-                <div className="uploadPlaceholder">
-                  {uploading ? (
-                    <div className="spinner"></div>
-                  ) : formData.imageUrl ? (
-                    <img src={formData.imageUrl} alt="Preview" className="previewImage" />
-                  ) : (
-                    <div className="uploadText">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
-                        <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
-                      </svg>
-                      <span>Chọn ảnh bài viết</span>
-                    </div>
-                  )}
+              {formData.imageUrl ? (
+                <div className="previewContainer">
+                  <img src={formData.imageUrl} alt="Preview" className="previewImage" />
+                  <button 
+                    type="button" 
+                    className="deleteImageBtn"
+                    onClick={() => setFormData(prev => ({ ...prev, imageUrl: "" }))}
+                  >
+                    Xóa ảnh
+                  </button>
                 </div>
-              </label>
-              <input
-                type="url"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                className={styles.formInput}
-                placeholder="Hoặc dán URL ảnh tại đây..."
-              />
+              ) : (
+                <label className="uploadBox">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="fileInput"
+                    disabled={uploading}
+                  />
+                  <div className="uploadPlaceholder">
+                    {uploading ? (
+                      <div className="spinner"></div>
+                    ) : (
+                      <div className="uploadText">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" opacity="0.5">
+                          <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+                        </svg>
+                        <span>Kéo thả hoặc click để chọn ảnh bài viết từ máy tính</span>
+                      </div>
+                    )}
+                  </div>
+                </label>
+              )}
             </div>
           </div>
         </div>
@@ -307,33 +310,66 @@ export default function EditArticlePage({ params }) {
         }
 
         .imageUploadSection {
-          display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 20px;
           background: #f8fafc;
           padding: 20px;
           border-radius: 12px;
           border: 1px solid #e2e8f0;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+
+        .previewContainer {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .previewImage {
+          width: 200px;
+          height: 140px;
+          object-fit: cover;
+          border-radius: 8px;
+          border: 1px solid #cbd5e1;
+        }
+
+        .deleteImageBtn {
+          background: #ef4444;
+          color: white;
+          border: none;
+          padding: 6px 14px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+
+        .deleteImageBtn:hover {
+          background: #dc2626;
         }
 
         .uploadBox {
           position: relative;
-          width: 180px;
+          width: 100%;
+          max-width: 400px;
           height: 120px;
-          flex-shrink: 0;
           border: 2px dashed #cbd5e1;
           border-radius: 10px;
           overflow: hidden;
           cursor: pointer;
           transition: all 0.3s;
           background: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .uploadBox:hover {
           border-color: #6d28d9;
           background: #f5f3ff;
-          transform: translateY(-2px);
         }
 
         .fileInput {
@@ -356,23 +392,10 @@ export default function EditArticlePage({ params }) {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 4px;
+          gap: 6px;
           color: #64748b;
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           padding: 10px;
-        }
-
-        .previewImage {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .urlInputWrapper {
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
         }
 
         .spinner {
