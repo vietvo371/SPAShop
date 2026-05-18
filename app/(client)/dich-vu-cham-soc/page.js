@@ -88,7 +88,9 @@ export default async function ServicesPage() {
     desc: s.description || "",
     image: s.imageUrl || "/images/hero-banner.png",
     features: s.process ? s.process.split("\n").map(f => f.trim()).filter(Boolean) : [],
-    slug: s.slug
+    slug: s.slug,
+    price: s.price,
+    duration: s.duration
   }));
 
   const allServices = dbServices.length > 0 ? formattedDbServices : staticServices;
@@ -103,7 +105,7 @@ export default async function ServicesPage() {
       </section>
 
       <section className="page-content">
-        <div className="container" style={{ display: "flex", flexDirection: "column", gap: "80px" }}>
+        <div className="container" style={{ display: "flex", flexDirection: "column", gap: "80px", padding: "40px 0" }}>
           {allServices.map((service, index) => (
             <div 
               key={service.id} 
@@ -111,9 +113,27 @@ export default async function ServicesPage() {
               style={{ direction: index % 2 === 1 ? "rtl" : "ltr", borderBottom: index < allServices.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none", paddingBottom: index < allServices.length - 1 ? "80px" : "0" }}
             >
               <div className="mission-text" style={{ direction: "ltr" }}>
-                <h2 style={{ fontSize: "1.8rem", color: "var(--color-primary)", marginBottom: "20px" }}>
+                <h2 style={{ fontSize: "1.8rem", color: "var(--color-primary)", marginBottom: "15px" }}>
                   {service.title}
                 </h2>
+                
+                {(service.price || service.duration) && (
+                  <div style={{ display: "flex", gap: "24px", marginBottom: "20px", padding: "12px 20px", background: "var(--color-beige-light)", borderRadius: "10px", borderLeft: "4px solid var(--color-primary)" }}>
+                    {service.price && (
+                      <div>
+                        <span style={{ display: "block", fontSize: "0.85rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Giá dịch vụ</span>
+                        <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--color-primary)" }}>{service.price}</span>
+                      </div>
+                    )}
+                    {service.duration && (
+                      <div>
+                        <span style={{ display: "block", fontSize: "0.85rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Thời gian</span>
+                        <span style={{ fontSize: "1rem", fontWeight: 600, color: "var(--color-dark)" }}>{service.duration}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <p style={{ color: "var(--color-text-main)", lineHeight: 1.8, marginBottom: "24px" }}>
                   {service.desc}
                 </p>

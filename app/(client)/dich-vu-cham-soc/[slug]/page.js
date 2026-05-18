@@ -54,7 +54,9 @@ export default async function ServiceDetailPage({ params }) {
       description: dbService.description || "",
       image: dbService.imageUrl || "/images/services/head_face_detox.png",
       features: featuresList,
-      process: null
+      process: null,
+      price: dbService.price,
+      duration: dbService.duration
     };
   } else {
     // Fall back to static JSON
@@ -66,7 +68,9 @@ export default async function ServiceDetailPage({ params }) {
         description: staticService.description,
         image: staticService.image,
         features: staticService.features,
-        process: staticService.process
+        process: staticService.process,
+        price: staticService.price,
+        duration: staticService.duration
       };
     }
   }
@@ -164,6 +168,31 @@ export default async function ServiceDetailPage({ params }) {
               }}>
                 {service.name}
               </h1>
+
+              {(service.price || service.duration) && (
+                <div style={{
+                  display: "flex",
+                  gap: "24px",
+                  marginBottom: "20px",
+                  padding: "16px 24px",
+                  background: "var(--color-beige-light)",
+                  borderRadius: "var(--radius-md)",
+                  borderLeft: "4px solid var(--color-primary)"
+                }}>
+                  {service.price && (
+                    <div>
+                      <span style={{ display: "block", fontSize: "0.85rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Giá dịch vụ</span>
+                      <span style={{ fontSize: "1.2rem", fontWeight: 700, color: "var(--color-primary)" }}>{service.price}</span>
+                    </div>
+                  )}
+                  {service.duration && (
+                    <div>
+                      <span style={{ display: "block", fontSize: "0.85rem", color: "var(--color-text-muted)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "4px" }}>Thời gian</span>
+                      <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "var(--color-dark)" }}>{service.duration}</span>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <p style={{
                 fontSize: "1.1rem",
