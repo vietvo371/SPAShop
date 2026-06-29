@@ -87,7 +87,7 @@ export const metadata = {
     canonical: "https://www.chanan.vn",
   },
   verification: {
-    google: "google-site-verification-code",
+    google: "_-fn-JHZPKazkNkp84kKX9pMPMksfdo28W8gUFNgW-g",
   },
 };
 
