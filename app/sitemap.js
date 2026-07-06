@@ -2,7 +2,7 @@ import products from "@/data/products.json";
 import services from "@/data/services.json";
 import articles from "@/data/articles.json";
 
-const BASE_URL = "https://chanan.vn";
+const BASE_URL = "https://suckhoetaman.com";
 
 export default async function sitemap() {
   const productUrls = products.map((product) => ({

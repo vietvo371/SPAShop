@@ -1,4 +1,4 @@
-const BASE_URL = "https://chanan.vn";
+const BASE_URL = "https://suckhoetaman.com";
 
 export default function robots() {
   return {

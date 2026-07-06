@@ -18,7 +18,7 @@ const thRunalto = localFont({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://www.chanan.vn"),
+  metadataBase: new URL("https://suckhoetaman.com"),
   title: {
     default: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     template: "%s | Tâm An Energy Healing",
@@ -62,7 +62,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://www.chanan.vn",
+    url: "https://suckhoetaman.com",
     siteName: "Tâm An Energy Healing",
     title: "Tâm An Energy Healing - Khỏe Từ Bên Trong",
     description:
@@ -84,7 +84,7 @@ export const metadata = {
     images: ["/images/hero-banner.png"],
   },
   alternates: {
-    canonical: "https://www.chanan.vn",
+    canonical: "https://suckhoetaman.com",
   },
   verification: {
     google: "_-fn-JHZPKazkNkp84kKX9pMPMksfdo28W8gUFNgW-g",

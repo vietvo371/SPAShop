@@ -81,7 +81,7 @@ export async function sendAppointmentConfirmation(appointment) {
           <p style="margin-top: 30px;">Trân trọng,<br/><strong>Tâm An Energy Healing</strong></p>
         </div>
         <div class="footer">
-          <p>Email này được gửi tự động từ chanan.vn</p>
+          <p>Email này được gửi tự động từ suckhoetaman.com</p>
         </div>
       </div>
     </body>
@@ -139,7 +139,7 @@ export async function sendNewContactNotification(contact) {
             ${contact.message}
           </div>
           
-          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://chanan.vn"}/admin/contact" class="btn">
+          <a href="${process.env.NEXT_PUBLIC_SITE_URL || "https://suckhoetaman.com"}/admin/contact" class="btn">
             Xem chi tiết trong Admin
           </a>
         </div>
