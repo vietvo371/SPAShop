@@ -8,7 +8,7 @@ import { ShoppingBag } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Trang chủ" },
-  { href: "/cau-chuyen-chan-an", label: "Về Tâm An" },
+  { href: "/gioi-thieu", label: "Về Tâm An" },
   { href: "/dich-vu-cham-soc", label: "Dịch vụ chăm sóc" },
   { href: "/san-pham", label: "Sản phẩm công nghệ" },
   { href: "/kien-thuc", label: "Kiến thức" },

@@ -51,7 +51,7 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="footer-heading">Liên Kết</h3>
-            <Link href="/cau-chuyen-chan-an" className="footer-link">Về Tâm An</Link>
+            <Link href="/gioi-thieu" className="footer-link">Về Tâm An</Link>
             <Link href="/dich-vu-cham-soc" className="footer-link">Dịch Vụ Chăm Sóc</Link>
             <Link href="/san-pham" className="footer-link">Sản Phẩm Công Nghệ</Link>
             <Link href="/kien-thuc" className="footer-link">Kiến Thức</Link>

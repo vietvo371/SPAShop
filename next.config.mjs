@@ -26,6 +26,12 @@ const nextConfig = {
         destination: '/admin/login',
         permanent: true,
       },
+      // Route cũ đã được Google index — giữ 301 để không mất SEO.
+      {
+        source: '/cau-chuyen-chan-an',
+        destination: '/gioi-thieu',
+        permanent: true,
+      },
     ];
   },
 };

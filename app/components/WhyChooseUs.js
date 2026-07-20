@@ -33,7 +33,7 @@ export default function WhyChooseUs() {
                 </div>
               ))}
             </div>
-            <Link href="/cau-chuyen-chan-an" className="btn-view-more">
+            <Link href="/gioi-thieu" className="btn-view-more">
               XEM CHI TIẾT
             </Link>
           </div>
