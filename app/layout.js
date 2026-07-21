@@ -83,9 +83,9 @@ export const metadata = {
       "Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa (FIR) tại Quảng Ngãi.",
     images: ["/images/hero-banner.png"],
   },
-  alternates: {
-    canonical: "https://suckhoetaman.com",
-  },
+  // Không đặt canonical ở đây: metadata của layout gốc được kế thừa xuống mọi
+  // trang con, nên một canonical cố định sẽ khiến mọi trang tự khai là bản sao
+  // của trang chủ và Google bỏ qua toàn bộ. Canonical đặt riêng ở từng trang.
   verification: {
     google: "_-fn-JHZPKazkNkp84kKX9pMPMksfdo28W8gUFNgW-g",
   },

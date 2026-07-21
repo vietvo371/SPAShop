@@ -4,6 +4,7 @@ import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 export const metadata = {
   title: "Kiến Thức Sức Khỏe - Tâm An Energy Healing",
   description: "Cập nhật kiến thức về công nghệ hồng ngoại xa (FIR), tips chăm sóc sức khỏe và bài viết hữu ích từ chuyên gia.",
+  alternates: { canonical: "/kien-thuc" },
 };
 
 import articles from "@/data/articles.json";

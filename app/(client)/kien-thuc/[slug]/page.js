@@ -35,6 +35,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${article.title} - Tâm An Energy Healing`,
     description: article.excerpt || "",
+    alternates: { canonical: `/kien-thuc/${slug}` },
     openGraph: {
       title: article.title,
       description: article.excerpt || "",

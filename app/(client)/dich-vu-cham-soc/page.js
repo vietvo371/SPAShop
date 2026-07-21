@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Dịch Vụ Chăm Sóc - Tâm An Energy Healing",
   description: "Khám phá các dịch vụ chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Tâm An: Điều trị Gout, Soi mạch máu, Đo 12 đường kinh lạc.",
+  alternates: { canonical: "/dich-vu-cham-soc" },
 };
 
 const staticServices = [

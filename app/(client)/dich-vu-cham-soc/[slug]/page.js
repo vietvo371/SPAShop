@@ -31,6 +31,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${service.name} - Tâm An Energy Healing`,
     description: service.description || "",
+    alternates: { canonical: `/dich-vu-cham-soc/${slug}` },
   };
 }
 

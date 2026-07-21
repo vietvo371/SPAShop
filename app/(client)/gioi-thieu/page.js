@@ -3,6 +3,7 @@ import ImageWithSkeleton from "@/app/components/ImageWithSkeleton";
 export const metadata = {
   title: "Về Tâm An - Câu Chuyện Của Chúng Tôi",
   description: "Tìm hiểu về Tâm An Energy Healing - Trung tâm chăm sóc sức khỏe bằng công nghệ hồng ngoại xa tại Vũng Tàu.",
+  alternates: { canonical: "/gioi-thieu" },
 };
 
 export default function AboutPage() {

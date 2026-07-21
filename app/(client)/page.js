@@ -9,6 +9,11 @@ import BannerCTA from "../components/BannerCTA";
 import FAQ from "../components/FAQ";
 import PromotionPopup from "../components/PromotionPopup";
 
+// Title/description dùng mặc định từ layout gốc; chỉ cần khai canonical riêng.
+export const metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>

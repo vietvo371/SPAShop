@@ -16,6 +16,34 @@ export async function generateStaticParams() {
   }
 }
 
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+
+  const product = await prisma.product.findUnique({
+    where: { slug, isActive: true },
+    select: { name: true, description: true, imageUrl: true },
+  });
+
+  if (!product) {
+    return { title: "Sản phẩm không tìm thấy" };
+  }
+
+  const description =
+    product.description?.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 160) ||
+    `${product.name} - sản phẩm công nghệ hồng ngoại xa (FIR) tại Tâm An Energy Healing.`;
+
+  return {
+    title: product.name,
+    description,
+    alternates: { canonical: `/san-pham/${slug}` },
+    openGraph: {
+      title: product.name,
+      description,
+      images: product.imageUrl ? [product.imageUrl] : [],
+    },
+  };
+}
+
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
 
